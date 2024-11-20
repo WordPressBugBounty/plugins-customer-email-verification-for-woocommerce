@@ -4,14 +4,15 @@
  * Plugin Name: Customer Email Verification for WooCommerce 
  * Plugin URI: https://www.zorem.com/products/customer-email-verification-for-woocommerce/ 
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.0
+ * Version: 2.1
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
  * License URI: 
  * Text Domain: customer-email-verification-for-woocommerce
  * Domain Path: /lang/
- * WC tested up to: 8.9.1
+ * WC tested up to: 9.4.2
+ * Requires Plugins: woocommerce
 */
 
 
@@ -21,7 +22,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.0';
+	public $version = '2.1';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
@@ -201,9 +202,81 @@ class Zorem_Woo_Customer_Email_Verification {
 		
 		//callback for add action link for plugin page	
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this , 'my_plugin_action_links' ));
+
+		add_action( 'admin_notices', array( $this, 'cev_black_friday_notice' ) );
+		add_action( 'admin_init', array( $this, 'cev_black_friday_notice_ignore' ) );
 	}
 	
-	
+	/*
+	* Dismiss admin notice for return
+	*/
+	public function cev_black_friday_notice_ignore() {
+		// Automatically dismiss the notice after 2024-12-03
+        if (strtotime( current_time('Y-m-d') ) > strtotime('2024-12-03')) {
+            update_option('cev_black_friday_dismiss_notice', 'true');
+        }
+		if ( isset( $_GET['cev-return-for-woocommerce-notice'] ) ) {
+			
+			if (isset($_GET['nonce'])) {
+				$nonce = sanitize_text_field($_GET['nonce']);
+				if (wp_verify_nonce($nonce, 'cev_black_friday_dismiss_notice')) {
+					update_option('cev_black_friday_notice_ignore', 'true');
+				}
+			}
+			
+		}
+	}
+
+	/*
+	* Display admin notice on plugin install or update
+	*/
+	public function cev_black_friday_notice() { 	
+		
+		if ( get_option('cev_black_friday_notice_ignore') ) {
+			return;
+		}	
+		
+		$nonce = wp_create_nonce('cev_black_friday_dismiss_notice');
+		$dismissable_url = esc_url(add_query_arg(['cev-return-for-woocommerce-notice' => 'true', 'nonce' => $nonce]));
+
+		?>
+		<style>		
+		.wp-core-ui .notice.cev-dismissable-notice{
+			position: relative;
+			padding-right: 38px;
+			border-left-color: #005B9A;
+		}
+		.wp-core-ui .notice.cev-dismissable-notice h3{
+			margin-bottom: 5px;
+		} 
+		.wp-core-ui .notice.cev-dismissable-notice a.notice-dismiss{
+			padding: 9px;
+			text-decoration: none;
+		} 
+		.wp-core-ui .button-primary.cev_notice_btn {
+			background: #005B9A;
+			color: #fff;
+			border-color: #005B9A;
+			text-transform: uppercase;
+			padding: 0 11px;
+			font-size: 12px;
+			height: 30px;
+			line-height: 28px;
+			margin: 5px 0 15px;
+		}
+		.cev-dismissable-notice strong{
+			font-weight: bold;
+		}
+		</style>
+		<div class="notice updated notice-success cev-dismissable-notice">			
+			<a href="<?php esc_html_e( $dismissable_url ); ?>" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></a>			
+			<h3>Black Friday & Cyber Monday: 40% Off All Plugins!</h3>
+			<p>Get 40% off all plugins from <strong>November 27th to December 2nd</strong> on the Zorem website. Don’t miss our biggest sale of the year to boost your store’s performance!</p>
+			<a class="button-primary cev_notice_btn" target="blank" href="<?php echo esc_url( 'https://zorem.com/products' ); ?>">Shop Now</a>
+			<a class="button-primary cev_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>">Dismiss</a>				
+		</div>	
+		<?php 				
+	}
 	
 	/*** Method load Language file ***/
 	public function customer_email_verification_load_textdomain() {

@@ -3,8 +3,8 @@ Contributors: zorem,gaurav1092,eranzorem,gehorsam,yashpatel1007
 Tags: woocommerce, email address verification, customer verification, registration verification, woocommerce signup spam
 Requires at least: 5.3
 Requires PHP: 7.2
-Tested up to: 6.5.3
-Stable tag: 2.0
+Tested up to: 6.7
+Stable tag: 2.1
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,10 +31,15 @@ Reduce WooCommerce registration spam by requiring customers to verify their emai
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+= 2.1 =
+* Enhancement - Test with WPML 4.7 and update the documentation
+* Dev - tested with WordPress 6.7
+* Dev - tested with WooCommerce 9.4.2
+
 = 2.0 =
 * Enhancement - Add UTM link for all the external links to zorem.com
 * Enhancement - Add the text domain in all the strings in customizer
-* Dev - tested with WooCommerc 6.5.3
+* Dev - tested with WordPress 6.5.3
 * Dev - tested with WooCommerce 8.9.1
 
 = 1.8 =
