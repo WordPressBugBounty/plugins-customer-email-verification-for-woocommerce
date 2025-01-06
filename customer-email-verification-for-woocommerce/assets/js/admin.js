@@ -31,14 +31,7 @@ function toggle_accordion( accordion ){
 		accordion.siblings( '.panel' ).addClass( 'active' );
 		accordion.find('span.dashicons').removeClass('dashicons-arrow-right-alt2');
 		accordion.find('.cev_settings_save').show();				
-		accordion.siblings( '.panel' ).slideDown( 'slow', function() {
-			var visible = accordion.isInViewport();
-			if ( !visible ) {
-				jQuery('html, body').animate({
-					scrollTop: accordion.prev().offset().top - 35
-				}, 1000);	
-			}
-		} );		
+		accordion.siblings( '.panel' ).slideDown( 'slow' );		
 		/**/		
 	}
 }

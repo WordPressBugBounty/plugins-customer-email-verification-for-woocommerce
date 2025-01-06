@@ -50,7 +50,7 @@ $cev_button_text_header_font_size = get_option( 'cev_button_text_header_font_siz
 							<div class="cev-pin-verification__row">
 								<div class="cev-field cev-field_size_extra-large cev-field_icon_left cev-field_event_right cev-field_text_center">
 									<h5 class="required-filed"><?php esc_html_e( apply_filters( 'cev_verification_code_length', __( '4-digits code', 'customer-email-verification-for-woocommerce' ) ) ); ?>*</h5>
-									<input class="cev_pin_box" id="cev_pin1" name="cev_pin1" type="text" placeholder="Enter <?php esc_html_e( apply_filters( 'cev_verification_code_length', __( '4-digits code', 'customer-email-verification-for-woocommerce' ) ) ); ?>">
+									<input class="cev_pin_box" id="cev_pin1" name="cev_pin1" type="text" placeholder="<?php esc_html_e( 'Enter', 'customer-email-verification-for-woocommerce' ); ?> <?php esc_html_e( apply_filters( 'cev_verification_code_length', __( '4-digits code', 'customer-email-verification-for-woocommerce' ) ) ); ?>">
 								</div>
 							</div>
 							<div class="cev-pin-verification__failure js-pincode-invalid" style="display: none;">

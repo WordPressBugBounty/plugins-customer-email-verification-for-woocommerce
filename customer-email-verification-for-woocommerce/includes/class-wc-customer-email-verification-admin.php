@@ -98,7 +98,7 @@ class WC_Customer_Email_Verification_Admin {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'customer_email_verification_styles', woo_customer_email_verification()->plugin_dir_url() . 'assets/css/admin.css', array(), time() );
 				
-		wp_enqueue_script( 'customer_email_verification_script', woo_customer_email_verification()->plugin_dir_url() . 'assets/js/admin.js', array( 'jquery','wp-util' ),  time() , true);
+		wp_enqueue_script( 'customer_email_verification_script', woo_customer_email_verification()->plugin_dir_url() . 'assets/js/admin.js', array( 'jquery','wp-util' ), time() , true);
 		
 		wp_localize_script( 'customer_email_verification_script', 'customer_email_verification_script', array() );
 		
@@ -722,47 +722,36 @@ class WC_Customer_Email_Verification_Admin {
 	}
 
 	public function filter_user_by_verified( $which ) {
-		
-		$true_selected = '';
-		$false_selected = '';
-		
-		// figure out which button was clicked. The $which in filter_by_job_role()
-		if ( isset( $_GET['customer_email_verified_top'] ) ) {
-			$top = wc_clean( $_GET['customer_email_verified_top'] ) ? wc_clean( $_GET['customer_email_verified_top'] ) : null;
-		}
-		
-		if ( isset( $_GET['customer_email_verified_bottom']) ) {
-			$bottom = wc_clean( $_GET['customer_email_verified_bottom'] ) ? wc_clean( $_GET['customer_email_verified_bottom'] ) : null;
-		}
-		
-		if ( !empty($top) || !empty($bottom) ) {
+		if ( 'top' === $which ) {
+			$top = ( isset($_GET['customer_email_verified_top']) ) ? wc_clean( $_GET['customer_email_verified_top'] ) : null;
+			$bottom = ( isset($_GET['customer_email_verified_bottom']) ) ? wc_clean( $_GET['customer_email_verified_bottom'] ) : null;	
 			
-			$section = !empty($top) ? $top : $bottom;
+			$true_selected = '';
+			$false_selected = '';
 			
-			if ( 'true' == $section ) {
-				$true_selected = 'selected';	
+			if (!empty($top) || !empty($bottom)) {
+				
+				$section = !empty($top) ? $top : $bottom;
+				if ( 'true' == $section ) {
+					$true_selected = 'selected';	
+				}
+				if ( 'false' == $section ) {
+					$false_selected = 'selected';	
+				}
 			}
-			
-			if ( 'false' == $section ) {
-				$false_selected = 'selected';	
-			}
+
+			?>
+			<select name="customer_email_verified_<?php esc_html_e( $which ); ?>" style="float:none;margin-left:10px;">
+				<option value=''><?php esc_html_e( 'User verification', 'customer-email-verification-pro' ); ?></option>
+				<option <?php esc_html_e( $true_selected ); ?> value='true'><?php esc_html_e( 'Verified', 'customer-email-verification-pro' ); ?></option>
+				<option <?php esc_html_e( $false_selected ); ?> value='false'><?php esc_html_e( 'Non verified', 'customer-email-verification-pro' ); ?></option>
+			</select>
+			<?php
+			submit_button( __( 'Filter' ), null, $which, false );
+		
 		}
 		
-		// template for filtering
-		$st = '<select name="customer_email_verified_%s" style="float:none;margin-left:10px;">
-			<option value="">%s</option>%s</select>';
-		
-		
-		// generate options
-		$options = '<option value="true" ' . $true_selected . '>' . __( 'Verified', 'customer-email-verification-for-woocommerce' ) . '</option>
-			<option value="false" ' . $false_selected . '>' . __( 'Non verified', 'customer-email-verification-for-woocommerce' ) . '</option>';
-		
-		// combine template and options
-		$select = sprintf( $st, $which, __( 'User verification', 'customer-email-verification-for-woocommerce' ), $options );
-		
-		// output <select> and submit button
-		echo ( $select );
-		submit_button(__( 'Filter' ), null, $which, false);	
+			
 	}
 	
 	public function filter_users_by_user_by_verified_section( $query ) {
