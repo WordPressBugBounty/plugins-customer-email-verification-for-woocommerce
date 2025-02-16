@@ -1,5 +1,5 @@
-=== Customer verification for WooCommerce   ===
-Contributors: zorem,gaurav1092,eranzorem,gehorsam,yashpatel1007
+=== Customer Email Verification for WooCommerce   ===
+Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: woocommerce, email address verification, customer verification, registration verification, woocommerce signup spam
 Requires at least: 5.3
 Requires PHP: 7.2
@@ -8,22 +8,67 @@ Stable tag: 2.2
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Reduce WooCommerce registration spam by requiring customers to verify their email through a link sent to their registered address or OTP.
+Secure WooCommerce registrations with OTP-based email verification, reducing spam and ensuring only valid email addresses are used.
 
 == Key Features==
 
-* Require email verification for new user registrations
-* Option to add the verification link in the WooCommerce new account email or to send the verification in a separate email
-* Option to resend the verification link on login form in cases that the customer lost the first verification email.
-* Customize the separate email verification header/subject/message
-* Option to customize the verification message
-* Option to allow the customer to enter his account after the first time he registered without email verification.
-* Skip email verification for selected user roles
-* Customize the frontend messages
-* Redirect users to any page on your website after successful validation
-* Option for manual email verification from admin
-* Email verification status will display for each user on admin
-* Option to bulk actions resend verification email and verify user email address
+* **🔑 OTP-Based Email Verification:** Customers must verify their email with an OTP before completing registration.
+* **📩 Email Verification Popup:** The verification popup appears instantly after entering an email address and clicking the verify button.
+* **❌ No Account Creation Without Verification:** Users cannot create an account unless they verify their email.
+* **🎨 Customizable Verification Popup:** Modify the popup's design and messages to match your brand.
+* **✉️ Customizable Verification Email:** Customize the OTP email template, subject, and message.
+* **🔄 Resend OTP Option:** Customers can resend the OTP if they didn't receive the initial email.
+* **🛠 Admin Verification Control:** View and manage email verification statuses from the WordPress admin panel.
+* **🔓 Role-Based Verification Skipping:** Skip email verification for selected user roles. Redirect users to any page after successful email verification.
+
+== Compatibility ==
+
+Customer Email Verification for WooCommerce is built to integrate smoothly with plugins that follow WooCommerce’s standard registration and checkout templates. It also works with various social media login plugins, providing flexibility and convenience for users.
+
+The following plugins have been tested and confirmed to be fully compatible:
+
+* Checkout WC
+* WooCommerce Social Login
+* Nextend Social Login and Register
+* WooCommerce Memberships
+* WooCommerce Checkout & Funnel Builder by CartFlows
+* Affiliate For WooCommerce
+* Smart Manager
+* Cashier
+
+For a complete list of compatible plugins and more details, please visit our [documentation](https://docs.zorem.com/docs/customer-email-verification-pro/compatibility/).
+
+### We also offer a Pro version! ###
+
+== Customer Email Verification PRO ==
+
+* **📦 OTP Verification for Checkout:** Enforce email verification for guest users before completing a purchase.
+* **🛍️ Enable Checkout Verification:** Choose to verify emails on the cart page or only for free orders.
+* **🔢 OTP Length Customization:** Select between 4-digit or 6-digit OTP codes for verification.
+* **⏳ OTP Expiration Control:** Set expiration time for OTPs (e.g., 72 hours) to enhance security.
+* **🔄 Verification Email Resend Limit:** Restrict the number of OTP resend attempts to prevent abuse.
+* **🔐 Login Authentication Options:**
+  * Notify users when they log in from a new device or browser.
+  * Require OTP verification for logins from an unrecognized device, location, or after a set period.
+  * Define specific conditions for unrecognized logins, such as logging in from a new device or a location not used before.
+* **🛠 Advanced Customization:** More control over email templates and verification popups.
+
+[Get CEV PRO >](https://www.zorem.com/product/customer-email-verification/)
+
+== Other Plugins by zorem ==
+
+Optimize your WooCommerce store with our plugins:
+
+* [Advanced Shipment Tracking Pro](https://www.zorem.com/product/woocommerce-advanced-shipment-tracking/)
+* [Zorem Local Pickup Pro](https://zorem.com/plugins/zorem-local-pickup-pro/)
+* [SMS for WooCommerce](https://zorem.com/plugins/sms-for-woocommerce/)
+* [Country Based Restriction for WooCommerce](https://zorem.com/plugins/country-based-restriction-for-woocommerce/)
+* [Sales By Country for WooCommerce](https://zorem.com/plugins/sales-by-country-for-woocommerce/)
+* [Zorem Returns](https://zorem.com/plugins/zorem-returns/)
+* [Email Reports for WooCommerce](https://zorem.com/plugins/email-reports-for-woocommerce/)
+* [View as Customer for WooCommerce](https://zorem.com/plugins/view-as-customer-for-woocommerce/)
+
+Explore more at [zorem.com](https://www.zorem.com/)
  
 == Installation ==
 
