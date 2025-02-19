@@ -49,7 +49,7 @@ class Cev_Initialise_Customizer_Settings {
 	 * Add css and js for preview
 	*/	
 	public function enqueue_preview_scripts() {		 
-		 wp_enqueue_style('cev-preview-styles', woo_customer_email_verification()->plugin_dir_url() . 'assets/css/preview-styles.css', array(), woo_customer_email_verification()->version  );		 
+		 wp_enqueue_style('cev-preview-styles', woo_customer_email_verification()->plugin_dir_url() . 'assets/css/preview-styles.css', array(), time()  );		 
 	}
 	
 	/**
@@ -188,7 +188,7 @@ class Cev_Initialise_Customizer_Settings {
 		$wp_customize->add_control( new WP_Customize_cev_codeinfoblock_Control( $wp_customize, 'cev_email_code_block',
 			array(
 				'label' => __( 'Available variables', 'customer-email-verification-for-woocommerce' ),
-				'description' => '<code>{site_title}<br>{cev_user_verification_pin}<br>{cev_user_verification_link}</code>','You can use HTML tag : <strong>, <i>',
+				'description' => '<code>{site_title}<br>{cev_user_verification_pin}</code>','You can use HTML tag : <strong>, <i>',
 				'section' => 'cev_controls_section',				
 			)
 		) );			

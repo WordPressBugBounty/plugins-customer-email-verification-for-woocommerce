@@ -1,53 +1,30 @@
-<div class="woocommerce-layout__activity-panel">
-	<div class="woocommerce-layout__activity-panel-tabs">
-		<button type="button" id="activity-panel-tab-help" class="components-button woocommerce-layout__activity-panel-tab">
+<?php
+$support_link = class_exists( 'customer_email_verification_pro' ) ? 'https://www.zorem.com/?support=1' : 'https://wordpress.org/support/plugin/customer-email-verification-for-woocommerce/#new-topic-0' ;
+?>
+<div class="menu-container">
+	<button class="menu-button">
+		<span class="menu-icon">
 			<span class="dashicons dashicons-menu-alt"></span>
-		</button>
-	</div>
-	<div class="woocommerce-layout__activity-panel-wrapper">
-		<div class="woocommerce-layout__activity-panel-content" id="activity-panel-true">
-			<div class="woocommerce-layout__activity-panel-header">
-				<div class="woocommerce-layout__inbox-title">
-					<p class="css-activity-panel-Text">Documentation</p>            
-				</div>								
-			</div>
-			<div>
-				<ul class="woocommerce-list woocommerce-quick-links__list">
-					<li class="woocommerce-list__item has-action">
-						<?php
-						$support_link = class_exists( 'customer_email_verification_pro' ) ? 'https://www.zorem.com/?support=1' : 'https://wordpress.org/support/plugin/customer-email-verification-for-woocommerce/#new-topic-0' ;
-						?>
-						<a href="<?php echo esc_url( $support_link ); ?>" class="woocommerce-list__item-inner" target="_blank" >
-							<div class="woocommerce-list__item-before">
-								<span class="dashicons dashicons-media-document"></span>	
-							</div>
-							<div class="woocommerce-list__item-text">
-								<span class="woocommerce-list__item-title">
-									<div class="woocommerce-list-Text">Get Support</div>
-								</span>
-							</div>
-							<div class="woocommerce-list__item-after">
-								<span class="dashicons dashicons-arrow-right-alt2"></span>
-							</div>
-						</a>
-					</li>            						
-					<li class="woocommerce-list__item has-action">
-						<a href="https://www.zorem.com/product/customer-verification-for-woocommerce/" class="woocommerce-list__item-inner" target="_blank">
-							<div class="woocommerce-list__item-before">
-								<span class="dashicons dashicons-media-document"></span>
-							</div>
-							<div class="woocommerce-list__item-text">
-								<span class="woocommerce-list__item-title">
-									<div class="woocommerce-list-Text">Upgrade To Pro</div>
-								</span>
-							</div>
-							<div class="woocommerce-list__item-after">
-								<span class="dashicons dashicons-arrow-right-alt2"></span>
-							</div>
-						</a>
-					</li>						
-				</ul>
-			</div>
-		</div>
+		</span>
+	</button>
+	<div class="popup-menu">
+		<?php
+		// Define the support link
+		$support_link = 'https://www.zorem.com/?support=1';
+		// Plugin directory URL
+		$plugin_url = esc_url( woo_customer_email_verification()->plugin_dir_url() );
+		?>
+		<a href="<?php echo esc_url( $support_link ); ?>" class="menu-item" target="_blank">
+			<span class="menu-icon">
+				<img src="<?php echo esc_url( $plugin_url ); ?>assets/images/get-support-icon-20.svg" alt="Get Support">
+			</span>
+			Get Support
+		</a>
+		<a href="https://docs.zorem.com/docs/customer-email-verification-free/" class="menu-item" target="_blank">
+		<span class="menu-icon">
+			<img src="<?php echo esc_url( $plugin_url ); ?>assets/images/documentation-icon-20.svg" alt="Documentation">
+		</span>
+			Documentation
+		</a>
 	</div>
 </div>

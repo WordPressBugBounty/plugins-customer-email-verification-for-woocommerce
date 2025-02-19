@@ -106,9 +106,10 @@ class WC_Customer_Email_Verification_Email {
 		
 		$user_role = get_userdata( $user_id );
 		
-		$verified = get_user_meta( $user_id, 'customer_email_verified', true );
-		
+		// $verified = get_user_meta( $user_id, 'customer_email_verified', true );
+		update_user_meta( (int) $user_id, 'customer_email_verified', 'true' );
 		$cev_enable_email_verification = get_option( 'cev_enable_email_verification', 1 );		
+		
 		
 		if ( !woo_customer_email_verification()->is_admin_user( $user_id )  && !woo_customer_email_verification()->is_verification_skip_for_user( $user_id ) && 1 == $cev_enable_email_verification && 'true' != $verified ) {
 			
@@ -127,11 +128,13 @@ class WC_Customer_Email_Verification_Email {
 				update_user_meta( $user_id, 'customer_email_verification_code', $secret_code );
 			}
 			
-			$cev_email_for_verification = get_option( 'cev_email_for_verification', 0 );
-			//echo $secret_code;exit;
-			if ( 0 == $cev_email_for_verification ) {
-				WC_customer_email_verification_email_Common()->code_mail_sender( $current_user->user_email );
-			}
+			$verification_data = array(
+				'pin' => '', 
+				'startdate' => time(),
+				'enddate' => time() + ( int ) $expire_time,
+			);		
+	
+			update_user_meta( $user_id, 'cev_email_verification_pin', $verification_data );
 			$this->is_new_user_email_sent = true;
 		} else {
 			update_user_meta( (int) $user_id, 'customer_email_verified', 'true' );

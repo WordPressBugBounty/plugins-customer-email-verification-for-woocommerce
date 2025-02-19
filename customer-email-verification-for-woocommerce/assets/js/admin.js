@@ -10,31 +10,6 @@
 	};
 })( jQuery );
 
-jQuery(document).on("click", ".accordion-label, .accordion-open", function(){
-	var accordion = jQuery(this).closest('.accordion');	
-	toggle_accordion(accordion);	
-});
-
-function toggle_accordion( accordion ){
-	if ( accordion.hasClass( 'active' ) ) {				
-		accordion.removeClass( 'active' );
-		accordion.siblings( '.panel' ).removeClass( 'active' );
-		accordion.siblings( '.panel' ).slideUp( 'slow' );
-		jQuery( '.accordion' ).find('span.dashicons').addClass('dashicons-arrow-right-alt2');
-		jQuery( '.accordion' ).find('.cev_settings_save').hide();		
-	} else {		
-		jQuery( '.accordion' ).removeClass( 'active' );
-		jQuery(".accordion").find('.cev_settings_save').hide();
-		jQuery(".accordion").find('span.dashicons').addClass('dashicons-arrow-right-alt2');	
-		jQuery( '.panel' ).slideUp('slow');
-		accordion.addClass( 'active' );
-		accordion.siblings( '.panel' ).addClass( 'active' );
-		accordion.find('span.dashicons').removeClass('dashicons-arrow-right-alt2');
-		accordion.find('.cev_settings_save').show();				
-		accordion.siblings( '.panel' ).slideDown( 'slow' );		
-		/**/		
-	}
-}
 
 jQuery(document).on("change", "#cev_enable_email_verification", function(){
 	
@@ -53,16 +28,6 @@ jQuery(document).on("change", "#cev_enable_email_verification", function(){
 			console.log(response);			
 		}
 	});
-
-	if (jQuery(this).is(':checked')) {
-		accordion.find('.accordion-open').removeClass( 'disable_toggle' );		
-		toggle_accordion(accordion);
-	} else {
-		if ( accordion.hasClass( 'active' ) ) {	
-			toggle_accordion(accordion);
-		}
-		accordion.find('.accordion-open').addClass( 'disable_toggle' );		
-	}
 });
 
 (function( $ ){
@@ -87,8 +52,6 @@ jQuery(document).on("change", "#cev_enable_email_verification", function(){
 jQuery(document).on("click", ".cev_settings_save", function(){
 	
 	var form = jQuery("#cev_settings_form");	
-	var accordion = jQuery(this).closest('.accordion');
-	accordion.find(".spinner").addClass("active");	
 	
 	jQuery.ajax({
 		url: ajaxurl,
@@ -98,10 +61,6 @@ jQuery(document).on("click", ".cev_settings_save", function(){
 		success: function() {	
 			form.find(".spinner").removeClass("active");
 			jQuery("#cev_settings_form").zorem_snackbar( 'Your Settings have been successfully saved.' );
-			jQuery( '.accordion' ).removeClass( 'active' );
-			jQuery( '.accordion' ).find( '.cev_settings_save' ).hide();
-			jQuery( '.accordion' ).find( 'span.dashicons' ).addClass( 'dashicons-arrow-right-alt2' );
-			jQuery( '.panel' ).slideUp( 'slow' );		
 		},
 		error: function(response) {
 			console.log(response);			
@@ -226,36 +185,190 @@ jQuery(document).click(function(){
 jQuery( document ).on( "click", ".close_btn", function() {
 	jQuery( '.cev_pro_banner' ).hide();
 });
-// jQuery(document).ready(function() {
 
-//     checkHideData();
-	
-//     // Handle button click
-//     jQuery("#btn_dismiss").click(function() {
-//       // Store the current timestamp in localStorage
-//       var now = new Date().getTime();
-//       localStorage.setItem("hideDataTimestamp", now);
+  var table; // Define the DataTable variable
+  jQuery(document).ready(function() {
+	  var table = jQuery('#userLogTable').DataTable({
+		  searching: false,
+		  lengthChange: false,
+		  pageLength: 50, // Show only five entries per page
+		  columnDefs: [
+			  { 
+				  orderable: false, 
+				  targets: [0, 1, 2, 3] // Disable sorting on these columns
+			  },
+			  { 
+				  width: '20px',
+				  orderable: false, 
+				  targets: 0 // Set width for the first column
+			  },
+			  { 
+				  className: 'text-right', 
+				  targets: -1 // Align the last column to the right
+			  },
+			  {
+				  targets: '_all', // Apply to all columns
+				  createdCell: function (td, cellData, rowData, row, col) {
+					  if (col === 3) {
+						  jQuery(td).css('text-align', 'right');
+					  }
+					  if (row === 0) { // Target only header cells
+						  if (col === 0) {
+							  jQuery(td).css('width', '20px');
+						  }  else {
+							  jQuery(td).css('width', '300px');
+						  }
+					  }
+				  }
+			  }
+		  ],
+		  rowCallback: function(row, data, index) {
+			  jQuery(row).hover(
+				  function() {
+					  jQuery(this).addClass('hover-row');
+				  },
+				  function() {
+					  jQuery(this).removeClass('hover-row');
+				  }
+			  );
+		  }
+	  });
+	  
+	  
+	  jQuery(document).on("click", ".cev_tab_input", function(){
+		  "use strict";
+		  var tab = jQuery(this).data('tab');
+		  var url = window.location.protocol + "//" + window.location.host + window.location.pathname+"?page=customer-email-verification-for-woocommerce&tab="+tab;
+		  window.history.pushState({path:url},'',url);
+		  
+	  });
+  
+	  document.getElementById('select_all').addEventListener('click', function() {
+		  var checkboxes = document.querySelectorAll('.row_checkbox');
+		  for (var checkbox of checkboxes) {
+			  checkbox.checked = this.checked;
+		  }
+	  });
+  
+	  jQuery('.apply_bulk_action').on('click', function() {
+		  var action = jQuery('#bulk_action').val();
+		  if (action === 'delete') {
+			  var selectedIds = [];
+			  jQuery('.row_checkbox:checked').each(function() {
+				  selectedIds.push(jQuery(this).val());
+			  });
+  
+			  if (selectedIds.length > 0) {
+				  if (confirm('Are you sure you want to delete the selected users?')) {
+					  // AJAX call to delete selected users
+					  jQuery.ajax({
+						  url: cev_vars.ajax_url,
+						  method: 'POST',
+						  data: {
+							  action: 'delete_users',
+							  nonce: cev_vars.delete_user_nonce,
+							  ids: selectedIds
+						  },
+						  success: function(response) {
+							  response = JSON.parse(response);
+							  if (response.success) {
+								  // Remove deleted rows from the table
+								  for (var id of selectedIds) {
+									  table.row(jQuery('input[value="' + id + '"]').closest('tr')).remove().draw();
+								  }
+								  jQuery.fn.zorem_snackbar('Users deleted successfully.');
+							  } else {
+								  jQuery.fn.zorem_snackbar_warning('Error deleting users.');
+							  }
+						  },
+						  error: function() {
+							  jQuery.fn.zorem_snackbar_warning('Error deleting users.');
+						  }
+					  });
+				  }
+			  } else {
+				  alert('No users selected for deletion');
+			  }
+		  }
+	  });
+  
+	  jQuery(document).on('click', '.delete_button', function() {
+		  var button = jQuery(this);
+		  var userId = button.data('id');
+		  if (confirm('Are you sure you want to delete this user?')) {
+			  // AJAX call to delete the user
+			  jQuery.ajax({
+				  url: cev_vars.ajax_url,
+				  method: 'POST',
+				  data: {
+					  action: 'delete_user',
+					  nonce: cev_vars.delete_user_nonce,
+					  id: userId
+				  },
+				  success: function(response) {
+					  response = JSON.parse(response);
+					  if (response.success) {
+						  // Remove the row from the table
+						  table.row(button.closest('tr')).remove().draw();
+						  jQuery.fn.zorem_snackbar('User deleted successfully.');
+					  } else {
+						  jQuery.fn.zorem_snackbar_warning('Error deleting user.');
+					  }
+				  },
+				  error: function() {
+					  jQuery.fn.zorem_snackbar_warning('Error deleting user.');
+				  }
+			  });
+		  }
+	  });
+	  
+  });
+  /* activity-panel custom popup create start */
+document.addEventListener('DOMContentLoaded', () => {
+    const menuButton = document.querySelector('.menu-button');
+    const popupMenu = document.querySelector('.popup-menu');
 
-//       // Hide the data
-//       jQuery("#dataToDisplay").hide();
-//     });
-//   });
+    // Toggle menu visibility on button click
+    menuButton.addEventListener('click', () => {
+        popupMenu.style.display = popupMenu.style.display === 'block' ? 'none' : 'block';
+    });
 
-//   function checkHideData() {
-//     // Retrieve the stored timestamp from localStorage
-//     var storedTimestamp = localStorage.getItem("hideDataTimestamp");
+    // Close menu when clicking outside of it
+    document.addEventListener('click', (e) => {
+        if (!menuButton.contains(e.target) && !popupMenu.contains(e.target)) {
+            popupMenu.style.display = 'none';
+        }
+    });
+});
 
-//     // If the timestamp is not present or if it's older than 30 days, show the data
-//     if (!storedTimestamp || isTimestampOlderThan30Days(storedTimestamp)) {
-//       jQuery("#dataToDisplay").show();
-//     } else {
-//       jQuery("#dataToDisplay").hide();
-//     }
-//   }
 
-//   function isTimestampOlderThan30Days(timestamp) {
-//     var thirtyDaysAgo = new Date().getTime() - 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
-//     return timestamp < thirtyDaysAgo;
-//   }
-  // Get the current URL
+jQuery(document).ready(function ($) {
+    var $toggle = $("#cev_enable_email_verification");
+    var $panel = $(".panel.options.add-tracking-option.active");
 
+    function updatePanelVisibility() {
+        if ($toggle.is(":checked")) {
+            $panel.slideDown();
+        } else {
+            $panel.slideUp();
+        }
+    }
+
+    // Initial check on page load
+    updatePanelVisibility();
+
+    // Listen for change events on the toggle
+    $toggle.on("change", updatePanelVisibility);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.cev_tab_input');
+    const breadcrumb = document.querySelector('.breadcums_page_heading');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+            breadcrumb.textContent = this.getAttribute('data-label');
+        });
+    });
+});
+/* activity-panel custom popup create end */

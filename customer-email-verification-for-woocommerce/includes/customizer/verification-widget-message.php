@@ -235,7 +235,7 @@ class Cev_Verification_Widget_Message {
 		$wp_customize->add_control( new WP_Customize_cev_codeinfoblock_Control( $wp_customize, 'cev_widzet_code_block',
 			array(
 				'label' => __( 'Available variables', 'customer-email-verification-for-woocommerce' ),
-				'description' => '<code>{customer_email}<br>{cev_resend_verification}</code><br>You can use HTML tag : &lt;strong&gt;, &lt;i&gt;',
+				'description' => '<code>{cev_resend_verification}</code><br>You can use HTML tag : &lt;strong&gt;, &lt;i&gt;',
 				'section' => 'cev_verification_widget_messages',			
 			)		
 		)

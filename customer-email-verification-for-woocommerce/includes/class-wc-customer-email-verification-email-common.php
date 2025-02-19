@@ -8,6 +8,7 @@ class WC_Customer_Email_Verification_Email_Common {
 
 	public $wuev_user_id = null;
 	public $wuev_myaccount_page_id = null;
+	public $registerd_user_email = null;
 	
 	/**
 	 * Initialize the main plugin function
@@ -45,7 +46,7 @@ class WC_Customer_Email_Verification_Email_Common {
 		$result = false;		
 		
 		$email_subject = get_option( 'cev_verification_email_subject', $cev_initialise_customizer_settings->defaults['cev_verification_email_subject'] );
-		$email_subject = $this->maybe_parse_merge_tags( $email_subject );
+		$email_subject = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_subject );
 		
 		$email_heading = get_option( 'cev_verification_email_heading', $cev_initialise_customizer_settings->defaults['cev_verification_email_heading'] );
 		
@@ -55,7 +56,7 @@ class WC_Customer_Email_Verification_Email_Common {
 		//do_action( 'woocommerce_email_header',  $email_heading,  $email ); 	
 		$mailer->email_header( $email_heading, $email );		
 		$email_body = get_option( 'cev_verification_email_body', $cev_initialise_customizer_settings->defaults['cev_verification_email_body'] );
-		$email_body = $this->maybe_parse_merge_tags( $email_body );
+		$email_body = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_body );
 		$email_body = apply_filters( 'cev_verification_email_content', $email_body );
 		$email_body = wpautop( $email_body );
 		$email_body = wp_kses_post( $email_body );
@@ -261,23 +262,23 @@ class WC_Customer_Email_Verification_Email_Common {
 	}
 	
 	public function cev_user_verification_pin() {
-		
-		$user_id = $this->wuev_user_id;			
-		
-		$cev_email_verification_pin = get_user_meta( $user_id, 'cev_email_verification_pin', true );
-		
-		$verification_pin = $this->generate_verification_pin();
-		
-		if ( empty( $cev_email_verification_pin ) ) {
-			$cev_email_verification_pin = array();
-			$cev_email_verification_pin['pin'] = $verification_pin;
-		}
-		
-		if ( !is_array( $cev_email_verification_pin ) ) {
-			return '<span>' . $cev_email_verification_pin . '</span>';
-		}
+
+		$user_email = $this->registerd_user_email;
+		global $wpdb;
+		$email_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}cev_user_log WHERE email = %s", $user_email));
+		if ($email_exists) {
+			$verification_pin = $wpdb->get_var($wpdb->prepare("SELECT pin FROM {$wpdb->prefix}cev_user_log WHERE email = %s", $user_email));
+		} else {
+			$user_id = $this->wuev_user_id;
+			$cev_email_verification_pin = get_user_meta( $user_id, 'cev_email_verification_pin', true );
+			if ( !empty($cev_email_verification_pin) ) {
+				$verification_pin = $cev_email_verification_pin['pin'];
+			} else {
+				$verification_pin = $this->generate_verification_pin();
+			}
 				
-		return '<span>' . $cev_email_verification_pin['pin'] . '</span>';
+		}
+		return '<span>' . $verification_pin . '</span>';
 	}
 	
 	public function generate_verification_pin() {
@@ -299,11 +300,22 @@ class WC_Customer_Email_Verification_Email_Common {
 	public function cev_resend_verification() {	
 		$resend_limit_reached = apply_filters( 'cev_resend_email_limit', false, get_current_user_id() );
 		$resend_email_link = add_query_arg( array('cev_redirect_limit_resend' => base64_encode( get_current_user_id() ),), get_the_permalink( $this->wuev_myaccount_page_id ) ); 
-		ob_start(); ?>
-		<a href="<?php echo esc_url( $resend_email_link ); ?>" class="cev-link-try-again <?php echo ( $resend_limit_reached ) ? 'cev-try-again-disable' : ''; ?>"><?php esc_html_e( 'Try Again', 'customer-email-verification-for-woocommerce' ); ?></a>
-		<?php
-		$try_again_url = ob_get_clean();
-		return $try_again_url;
+		if ( is_account_page() ) {
+			ob_start(); 
+			?>
+			<a href="#" class="cev-link-try-again send_again_link  <?php echo esc_html( $class ); ?>"><?php esc_html_e( 'Try Again', 'customer-email-verification' ); ?></a>
+			<?php 
+			$try_again_url = ob_get_clean();
+			return $try_again_url;
+		} else {
+			ob_start(); 
+			?>
+			<a href="<?php echo esc_url( $resend_email_link ); ?>" class="cev-link-try-again <?php echo ( $resend_limit_reached ) ? 'cev-try-again-disable' : ''; ?>"><?php esc_html_e( 'Try Again', 'customer-email-verification-for-woocommerce' ); ?></a>
+			<?php
+			$try_again_url = ob_get_clean();
+			return $try_again_url;
+		}
+		
 	}
 }
 /**

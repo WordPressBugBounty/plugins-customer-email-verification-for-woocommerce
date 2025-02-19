@@ -4,14 +4,14 @@
  * Plugin Name: Customer Email Verification for WooCommerce 
  * Plugin URI: https://www.zorem.com/products/customer-email-verification-for-woocommerce/ 
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.2
+ * Version: 2.3
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
  * License URI: 
  * Text Domain: customer-email-verification-for-woocommerce
  * Domain Path: /lang/
- * WC tested up to: 9.5.1
+ * WC tested up to: 9.6.2
  * Requires Plugins: woocommerce
 */
 
@@ -22,13 +22,14 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.2';
+	public $version = '2.3';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
 	public $email;
 	public $preview;
 	public $admin;
+	public $signup;
 	
 	/**
 	 * Initialize the main plugin function
@@ -72,17 +73,19 @@ class Zorem_Woo_Customer_Email_Verification {
 	}
 	
 	/**
-	 * Check Advanced Shipment Tracking for WooCommerce version
+	 * Check Customer email verification pro version
 	 *	 
 	 * @since  1.0.0
 	 * @return bool
 	*/
 	private function cev_pro_version_check() {
-		
+
+		// Ensure the function 'is_plugin_active' is available
 		if ( ! function_exists( 'is_plugin_active' ) ) {
 			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		}
 		
+		// Get plugin data if the Pro plugin file exists
 		$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/customer-email-verification-pro/customer-email-verification-pro.php' );
 		$cev_pro_version = $plugin_data['Version'];
 		
@@ -94,6 +97,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	
 		return $is_version;
 	}
+	
 	
 	/**
 	 * Check if WooCommerce is active
@@ -186,11 +190,6 @@ class Zorem_Woo_Customer_Email_Verification {
 	* init when class loaded
 	*/
 	public function init() {
-		
-		
-		add_action( 'admin_notices', array( $this, 'admin_notice_pro_update' ) );		
-		add_action('admin_init', array( $this, 'cev_pro_notice_ignore' ) );
-
 		//Custom Woocomerce menu
 		add_action('admin_menu', array( $this->admin, 'register_woocommerce_menu' ), 99 );
 		
@@ -218,6 +217,9 @@ class Zorem_Woo_Customer_Email_Verification {
 		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-admin.php';
 		$this->admin = WC_customer_email_verification_admin::get_instance();
 
+		require_once $this->get_plugin_path() . '/includes/cev-pro-signup-verification.php';
+		$this->signup = CEV_Signup_Verification::get_instance();
+		
 		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-email.php';
 		$this->email = WC_customer_email_verification_email::get_instance();	
 		
@@ -232,8 +234,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	*/
 	public function on_plugins_loaded() {	
 		require_once $this->get_plugin_path() . '/includes/customizer/class-customer-verification-new-customizer.php';
-		require_once $this->get_plugin_path() . '/includes/customizer/class-cev-customizer.php';			
-		require_once $this->get_plugin_path() . '/includes/customizer/class-cev-new-account-email-customizer.php';
+		require_once $this->get_plugin_path() . '/includes/customizer/class-cev-customizer.php';
 		require_once $this->get_plugin_path() . '/includes/customizer/verification-widget-style.php';	
 		require_once $this->get_plugin_path() . '/includes/customizer/verification-widget-message.php';	
 		require_once $this->get_plugin_path() . '/includes/cev-wc-admin-notices.php';		
@@ -418,61 +419,6 @@ class Zorem_Woo_Customer_Email_Verification {
 		//Return rgb(a) color string
 		return $output;
 	}	
-	
-	/*
-	* Display admin notice on plugin install or update
-	*/
-	public function admin_notice_pro_update() { 		
-		
-		if ( get_option('wc_cev_pro_notice_ignore_1_5') ) {
-			return;
-		}
-		
-		$dismissable_url = esc_url(  add_query_arg( 'wc-cev-pro-ignore-notice-1-5', 'true' ) );
-		?>
-		<style>		
-		.wp-core-ui .notice.cev-dismissable-notice{
-			position: relative;
-			padding-right: 38px;
-		}
-		.wp-core-ui .notice.cev-dismissable-notice a.notice-dismiss{
-			padding: 9px;
-			text-decoration: none;
-		} 
-		.wp-core-ui .button-primary.btn_pro_notice {
-			background: transparent;
-			color: #395da4;
-			border-color: #395da4;
-			text-transform: uppercase;
-			padding: 0 11px;
-			font-size: 12px;
-			height: 30px;
-			line-height: 28px;
-			margin: 5px 0 15px;
-		}
-		</style>
-		<?php if ( !class_exists( 'customer_email_verification_pro' ) ) { ?>	
-			<div class="notice updated notice-success cev-dismissable-notice">
-				<a href="<?php echo esc_url( $dismissable_url ); ?>" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></a>
-				<h3 style="margin-top: 10px;">Upgrade to Customer Email Verification Pro!</h3>
-				<p>Get 20% off on <a href="https://www.zorem.com/product/customer-email-verification/">Customer Email Verification Pro!</a> Verify customer email on checkout, delay new account emails until successful verification, send customers new login alerts and more…</p>
-				<p>Use code <strong>CEVPRO20</strong> to get 20% on your 1st year order </p>
-				<a class="button-primary btn_pro_notice" target="blank" href="https://www.zorem.com/product/customer-email-verification/">Upgrade Now ></a>
-				<a class="button-primary ast_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>">Dismiss</a>
-			</div>
-		<?php
-		}
-	}	
-	
-	/*
-	* Hide admin notice on dismiss of ignore-notice
-	*/
-	public function cev_pro_notice_ignore() {
-		if (isset($_GET['wc-cev-pro-ignore-notice-1-5'])) {
-			update_option( 'wc_cev_pro_notice_ignore_1_5', 'true' );
-		}
-	}
-	
 	/**
 	 * Add plugin action links.
 	 *

@@ -3,8 +3,8 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: woocommerce, email address verification, customer verification, registration verification, woocommerce signup spam
 Requires at least: 5.3
 Requires PHP: 7.2
-Tested up to: 6.7.1
-Stable tag: 2.2
+Tested up to: 6.7.2
+Stable tag: 2.3
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,13 @@ Explore more at [zorem.com](https://www.zorem.com/)
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+= 2.3 =
+* Dev - Created new signup verification flow where users cannot create an account without verifying their email.
+* Dev - Update New Design of Admin Page According new signup verification.
+* Dev - Update Customizer According to New signup Verification Flow.
+* Dev - tested with WordPress 6.7.2
+* Dev - tested with WooCommerce 9.6.2
+
 = 2.2 =
 * Fix -Uncaught TypeError: Cannot read properties of undefined (reading 'top')
 * Fix - PHP Notice:  Function _load_textdomain_just_in_time was called incorrectly

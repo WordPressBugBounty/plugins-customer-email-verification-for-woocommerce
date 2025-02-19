@@ -26,25 +26,25 @@ $more_plugins = array(
 		'file' => 'sms-for-woocommerce/sms-for-woocommerce.php'
 	),
 	3 => array(
-		'title' => 'Advanced Local Pickup',
+		'title' => 'Zorem Local Pickup Pro',
 		'description' => 'The Advanced Local Pickup (ALP) helps you manage the local pickup orders workflow more conveniently by extending the WooCommerce Local Pickup shipping method. The Pro you set up multiple pickup locations, , split the business hours, apply discounts by pickup location, display local pickup message on the products pages, allow customers to choose pickup location per product, force products to be local pickup only and more…',
-		'url' => 'https://www.zorem.com/products/advanced-local-pickup-pro/#utm_source=wp-admin&utm_medium=CEV&utm_campaign=add-ons',
+		'url' => 'https://www.zorem.com/product/zorem-local-pickup-pro/#utm_source=wp-admin&utm_medium=CEV&utm_campaign=add-ons',
 		'image' => 'alp.png',
 		'width' => '60px',
 		'file' => 'advanced-local-pickup-pro/advanced-local-pickup-pro.php'
 	),
 	4 => array(
 		'title' => 'Email Reports for WooCommerce',
-		'description' => 'Schedule daily, daily overnight, weekly, or monthly sales report by email from your WooCommerce store.',
-		'url' => 'https://www.zorem.com/products/email-reports-for-woocommerce/#utm_source=wp-admin&utm_medium=CEV&utm_campaign=add-ons',
+		'description' => 'The Sales Report Email Pro will help know how well your store is performing and how your products are selling by sending you a daily, weekly, or monthly sales report by email, directly from your WooCommerce store.',
+		'url' => 'https://www.zorem.com/product/email-reports-for-woocommerce/#utm_source=wp-admin&utm_medium=CEV&utm_campaign=add-ons',
 		'image' => 'erw.png',
 		'width' => '60px',
 		'file' => 'advanced-order-status-manager/advanced-order-status-manager.php'
 	),
 	5 => array(
-		'title' => 'Country Based Restrictions Pro',
+		'title' => 'Country Based Restriction for WooCommerce',
 		'description' => 'The country-based restrictions plugin by zorem works by the WooCommerce Geolocation or the shipping country added by the customer and allows you to restrict products on your store to sell or not to sell to specific countries.',
-		'url' => 'https://www.zorem.com/products/country-based-restriction-pro/#utm_source=wp-admin&utm_medium=CEV&utm_campaign=add-ons',
+		'url' => 'https://www.zorem.com/product/country-based-restriction-pro/#utm_source=wp-admin&utm_medium=CEV&utm_campaign=add-ons',
 		'image' => 'cbr.png',
 		'width' => '70px',
 		'file' => 'country-based-restriction-pro-addon/country-based-restriction-pro-addon.php'
@@ -61,24 +61,29 @@ $more_plugins = array(
 					<div class="cev-col-6">
 						<div class="cev_col_inner">
 							<h1 class="cev_pro_landing_header">Customer Email Verification Pro</h1>
-							<ul class="cev_pro_features_list">								
-								<li>Email verification on checkout</li>
-								<li>Verification for free orders only</li>
-								<li>Automatic account email verification</li>
-								<li>Checkout verification type</li>			
-								<li>Fully customize the verification process</li>
-								<li>Delay new-account email</li>
-								<li>Re-verify customer email address</li>							
-								<li>Verification expiration</li>
-								<li>Limit resend</li>
-								<li>Bulk resend and auto-delete</li>
-							</ul>
-							<a href="https://woocommerce.com/products/customer-email-verification/" class="button button-primary btn_cev2 btn_large" target="_blank">UPGRADE NOW</a>							
+							<div class="cev_pro_features_wrapper">
+								<ul class="cev_pro_features_list">
+									<li>Email verification on checkout</li>
+									<li>Verification for free orders only</li>
+									<li>Automatic account email verification</li>
+									<li>Checkout verification type</li>
+									<li>Fully customize the verification process</li>
+								</ul>
+
+								<ul class="cev_pro_features_list">
+									<li>Delay new-account email</li>
+									<li>Re-verify customer email address</li>
+									<li>Verification expiration</li>
+									<li>Limit resend</li>
+									<li>Bulk resend and auto-delete</li>
+								</ul>
+							</div>
+							<a href="https://www.zorem.com/product/customer-email-verification/" class="button button-primary btn_cev3" target="_blank">Upgrade Now <span class="dashicons dashicons-arrow-right-alt2"></span></a>							
 						</div>
 					</div>									
 					<div class="cev-col-6">
 						<div class="cev_pro_landing_banner">
-							<img src="<?php echo esc_url( woo_customer_email_verification()->plugin_dir_url() ); ?>assets/images/cev-banner.png">
+							<img src="<?php echo esc_url( woo_customer_email_verification()->plugin_dir_url() ); ?>assets/images/cev-banner.png?<?php echo esc_html_e( time() ); ?>">
 						</div>
 					</div>
 				</div>
@@ -90,7 +95,7 @@ $more_plugins = array(
 						<div class="zorem_single_plugin">
 							<div class="free_plugin_inner">
 								<div class="plugin_image">
-									<img src="<?php echo esc_url( woo_customer_email_verification()->plugin_dir_url() ); ?>assets/images/<?php esc_html_e( $mplugin['image'] ); ?>">
+									<img src="<?php echo esc_url( woo_customer_email_verification()->plugin_dir_url() ); ?>assets/images/<?php esc_html_e( $mplugin['image'] ); ?>?<?php echo esc_html_e( time() ); ?>">
 									<h3 class="plugin_title"><?php esc_html_e( $mplugin['title'] ); ?></h3>
 								</div>
 								<div class="plugin_description">
@@ -100,7 +105,7 @@ $more_plugins = array(
 										?>
 									<button type="button" class="button button button-primary btn_green">Active</button>
 								<?php } else { ?>
-									<a href="<?php esc_html_e( $mplugin['url'] ); ?>" class="button button-primary btn_cev2" target="blank">More Info</a>
+									<a href="<?php esc_html_e( $mplugin['url'] ); ?>" class="button button-primary btn_cev2" target="blank">Buy Now</a>
 								<?php } ?>								
 								</div>
 							</div>	
