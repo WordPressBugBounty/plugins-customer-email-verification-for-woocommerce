@@ -74,9 +74,15 @@ class CEV_Installation {
 			if ( version_compare( get_option( 'cev_pro_update_version', '1.0' ), '1.1', '<' ) ) {								
 				$this->create_user_log_table();	
 				update_option( 'cev_pro_update_version', '1.1');
-				update_option( 'cev_verification_message', 'We sent verification code. To verify your email address, please check your inbox and enter the code below.');
+				update_option( 
+					'cev_verification_message', 
+					__( 'We sent a verification code. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification' ) 
+				);
 				update_option( 'cev_verification_code_length', '1');
-				update_option( 'cev_verification_email_body', 'Thank you for signing up for {site_title}, to activate your account, we need to verify your email address. <p>Your verification code: <strong>{cev_user_verification_pin}</strong></p>');
+				update_option( 
+					'cev_verification_email_body', 
+					__( 'Thank you for signing up for {site_title}. To activate your account, we need to verify your email address. <p>Your verification code: <strong>{cev_user_verification_pin}</strong></p>', 'customer-email-verification' ) 
+				);
 				update_option( 'cev_email_for_verification', '0');	
 			}	
 		}

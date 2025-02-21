@@ -120,7 +120,7 @@ jQuery(document).ready(function($) {
                 return otp;
             }
 
-            var $form = $('.woocommerce-form-register__submit').closest('form');
+            var $form = $('.email_verification_popup').closest('form');
             var email = $form.find('#reg_email').val();
             var otp = getOtpValue();
             // console.log("response", email)

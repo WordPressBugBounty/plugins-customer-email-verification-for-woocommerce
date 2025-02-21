@@ -91,7 +91,7 @@ class Cev_Initialise_Customizer_Settings {
 		$customizer_defaults = array(
 			'cev_verification_email_heading' => __( 'Please Verify Your Email Address', 'customer-email-verification-for-woocommerce' ),			
 			'cev_verification_email_subject' =>  __( 'Please Verify Your Email Address on {site_title}', 'customer-email-verification-for-woocommerce' ),		
-			'cev_verification_email_body' => __( 'To finish signing up, please confirm your email address. This ensures we have the right email in case we need to contact you.<p>Your verification code: {cev_user_verification_pin}</p><p>Or, verify your account clicking on the button below:', 'customer-email-verification-for-woocommerce' ),			
+			'cev_verification_email_body' => __( 'Thank you for signing up for {site_title}. To activate your account, we need to verify your email address. <p>Your verification code: <strong>{cev_user_verification_pin}</strong></p>', 'customer-email-verification-for-woocommerce' ),			
 		);
 
 		return $customizer_defaults;

@@ -102,7 +102,7 @@ class Cev_Verification_Widget_Message {
 			'cev_verification_popup_background_color'	=> '#f5f5f5',
 			'cev_verification_popup_overlay_background_color' => '#ffffff',
 			'cev_verification_header' => __( 'Verify its you.', 'customer-email-verification-for-woocommerce' ),
-			'cev_verification_message'	=> __( 'We sent verification code to  {customer_email}. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification-for-woocommerce' ),
+			'cev_verification_message'	=> __( 'We sent a verification code. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification-for-woocommerce' ),
 			'cev_verification_widget_footer'  =>__( "Didn't receive an email? {cev_resend_verification}", 'customer-email-verification-for-woocommerce'),
 		);
 		return $customizer_defaults;

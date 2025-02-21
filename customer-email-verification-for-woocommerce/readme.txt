@@ -4,7 +4,7 @@ Tags: woocommerce, email address verification, customer verification, registrati
 Requires at least: 5.3
 Requires PHP: 7.2
 Tested up to: 6.7.2
-Stable tag: 2.3
+Stable tag: 2.4
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,9 @@ Explore more at [zorem.com](https://www.zorem.com/)
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+= 2.4 =
+* Fix - Signup Email Verification Issue - Verification Code Doesn't Match
+
 = 2.3 =
 * Dev - Created new signup verification flow where users cannot create an account without verifying their email.
 * Dev - Update New Design of Admin Page According new signup verification.
