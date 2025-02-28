@@ -61,14 +61,12 @@ jQuery(document).ready(function($) {
                             $form.find('button[name="register"]').trigger('click');
                             $('.cev_loading_overlay').css('display', 'none');
                         } else if (response.data.email) {
-                            console.log(response.data.email);
                             $('#otp-popup').show();
                             $('.cev_loading_overlay').css('display', 'none');
                         } else if (response.data.validation == false ) {
                             displayError(response.data.message);
                             $('.cev_loading_overlay').css('display', 'none');
                         } else {
-                            // console.log('No email found in response.data');
                             $('.cev_loading_overlay').css('display', 'none');
                         }
                     }
@@ -85,7 +83,6 @@ jQuery(document).ready(function($) {
                 if (index < $('.otp-input').length - 1) {
                     $('.otp-input').eq(index + 1).focus();
                 } else {
-                    // console.log("response", index)
                     $('#verify-otp-button').trigger('click');
                 }
             }
@@ -111,7 +108,7 @@ jQuery(document).ready(function($) {
 
         $('#verify-otp-button').on('click', function(event) {
             event.preventDefault(); // Prevents page reload
-            console.log("response")
+           
             function getOtpValue() {
                 var otp = '';
                 $('.otp-input').each(function() {
@@ -123,7 +120,7 @@ jQuery(document).ready(function($) {
             var $form = $('.email_verification_popup').closest('form');
             var email = $form.find('#reg_email').val();
             var otp = getOtpValue();
-            // console.log("response", email)
+           
             // Verify OTP using AJAX
             $.ajax({
                 url: cev_ajax.ajax_url,
@@ -135,7 +132,7 @@ jQuery(document).ready(function($) {
                     nonce: cev_ajax.nonce 
                 },
                 success: function(response) {
-                    console.log("response", response)
+                   
                     if (response.success) {
                         
                         if (response.data.verified) {

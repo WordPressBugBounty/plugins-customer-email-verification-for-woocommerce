@@ -9,6 +9,10 @@ class WC_Customer_Email_Verification_Email {
 	public $is_new_user_email_sent = false;
 	private $user_id;
 	public $my_account;
+	public $user_login;
+	public $email_id;
+	public $user_email;
+	public $is_user_created;
 	/**
 	 * Initialize the main plugin function
 	*/
@@ -49,7 +53,6 @@ class WC_Customer_Email_Verification_Email {
 
 		add_shortcode( 'customer_email_verification_code', array( $this, 'customer_email_verification_code' ) );
 		add_action( 'woocommerce_created_customer_notification', array( $this, 'new_user_registration_from_registration_form' ), 10, 3 );
-		add_action( 'woocommerce_email_footer', array( $this, 'append_content_before_woocommerce_footer' ), 9, 1 );
 		add_action( 'wp', array( $this, 'authenticate_user_by_email' ) );
 		add_filter( 'woocommerce_registration_redirect', array( $this, 'redirect_user_after_registration' ) );	
 		add_filter( 'wcalr_register_user_successful', array( $this, 'wcalr_register_user_successful_fun' ) );	
@@ -140,72 +143,6 @@ class WC_Customer_Email_Verification_Email {
 			update_user_meta( (int) $user_id, 'customer_email_verified', 'true' );
 		}
 	}
-
-	/**
-	 * This function appends the verification link to the bottom of the welcome email of woocommerce.
-	 *
-	 * @param $emailclass_object
-	 */
-	public function append_content_before_woocommerce_footer( $emailclass_object ) {		
-		
-		
-		if ( isset( $emailclass_object->id ) && ( 'customer_new_account' === $emailclass_object->id ) ) {
-			
-			$cev_initialise_customizer_settings = new cev_initialise_customizer_settings();
-			$cev_new_account_email_customizer = new cev_new_account_email_customizer();				
-			$user_id = $emailclass_object->object->data->ID;
-			
-			$verification_pin = WC_customer_email_verification_email_Common()->generate_verification_pin();	
-			$expire_time =  get_option('cev_verification_code_expiration', 'never');
-		
-			if ( empty( $expire_time ) ) {
-				$expire_time = 'never';
-			}
-			
-			$verification_data = array(
-				'pin' => $verification_pin, 
-				'startdate' => time(),
-				'enddate' => time() + (int) $expire_time,
-			);										
-			
-			$cev_enable_email_verification = get_option( 'cev_enable_email_verification', 1 );
-			
-			if ( isset( $_REQUEST['cev-new-account-email-preview'] ) && '1' == $_REQUEST['cev-new-account-email-preview'] ) {
-				$preview = true;
-			} else {
-				$preview = false;
-			}
-			
-			if ( ( !woo_customer_email_verification()->is_admin_user( $user_id )  && !woo_customer_email_verification()->is_verification_skip_for_user( $user_id ) && 1 == $cev_enable_email_verification ) || $preview) {
-				
-				$cev_email_for_verification = get_option( 'cev_email_for_verification', 0 );
-				if ( 1 != $cev_email_for_verification ) {
-					return;
-				}
-					
-				update_user_meta( $user_id, 'cev_email_verification_pin', $verification_data );
-				$cev_email_verification_pin = get_user_meta( $user_id, 'cev_email_verification_pin', true );							
-				
-				$this->user_id = $user_id;					
-				$is_secret_code_present = get_user_meta( $user_id, 'customer_email_verification_code', true );
-		
-				if ( '' === $is_secret_code_present ) {
-					$secret_code = md5( $user_id . time() );
-					update_user_meta( $user_id, 'customer_email_verification_code', $secret_code );
-				}
-				
-				$heading = get_option( 'cev_new_acoount_email_heading', $cev_new_account_email_customizer->defaults['cev_new_acoount_email_heading'] );								
-				$heading = apply_filters( 'the_content', $heading );
-				echo '<strong>' . wp_kses_post( $heading ) . '</strong>';	
-				
-				$email_body = get_option( 'cev_new_verification_email_body', $cev_new_account_email_customizer->defaults['cev_new_verification_email_body'] );
-				$email_body = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_body );
-				$email_body = apply_filters( 'the_content', $email_body );
-				echo wp_kses_post( $email_body );
-			}
-		}
-	}	
-	
 	/**
 	 * This function generates the verification link from the shortocde [customer_email_verification_code] and returns the link.	 
 	 */

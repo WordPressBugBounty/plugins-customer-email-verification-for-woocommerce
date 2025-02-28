@@ -176,11 +176,7 @@ class WC_Customer_Email_Verification_Email_Common {
 			array(
 				'name' => __( 'User email', 'customer-email-verification-for-woocommerce' ),
 				'tag'  => 'cev_user_email',
-			),
-			array(
-				'name' => __( 'Email Verification Link', 'customer-email-verification-for-woocommerce' ),
-				'tag'  => 'cev_user_verification_link',
-			),			
+			),		
 			array(
 				'name' => __( 'Verification link', 'customer-email-verification-for-woocommerce' ),
 				'tag'  => 'customer_email_verification_code',
@@ -228,27 +224,6 @@ class WC_Customer_Email_Verification_Email_Common {
 		$display_name = $user->display_name;
 
 		return $display_name;
-	}
-	
-	public function cev_user_verification_link() {		
-		$cev_verification_selection = get_option('cev_verification_selection');	
-		$secret      = get_user_meta( $this->wuev_user_id, 'customer_email_verification_code', true );
-		$create_link = $secret . '@' . $this->wuev_user_id;
-		$hyperlink   = add_query_arg( array(
-			'cusomer_email_verify' => base64_encode( $create_link ),
-		), get_the_permalink( $this->wuev_myaccount_page_id ) );	
-		
-		$style = 'text-decoration:  none ';
-		$style = apply_filters( 'cev_user_verification_link_style', $style );
-		
-		if ( 'button' == $cev_verification_selection ) {
-			$link = '<p style="display:inline-block;"><a style="' . $style . '" href="' . $hyperlink . '">' . get_option( 'cev_new_acoount_button_text', __( 'Verify your email', 'customer-email-verification-for-woocommerce' ) ) . '</a></p>';	
-		} else {
-			$link = '<p><a style="' . $style . '" href="' . $hyperlink . '">' . get_option( 'cev_new_acoount_link_text', __( 'Verify your email', 'customer-email-verification-for-woocommerce' ) ) . '</a></p>';	
-		}
-		
-		return $link;
-		
 	}
 	
 	public function cev_resend_email_link() {
@@ -303,7 +278,7 @@ class WC_Customer_Email_Verification_Email_Common {
 		if ( is_account_page() ) {
 			ob_start(); 
 			?>
-			<a href="#" class="cev-link-try-again send_again_link  <?php echo esc_html( $class ); ?>"><?php esc_html_e( 'Try Again', 'customer-email-verification' ); ?></a>
+			<a href="#" class="cev-link-try-again send_again_link"><?php esc_html_e( 'Try Again', 'customer-email-verification' ); ?></a>
 			<?php 
 			$try_again_url = ob_get_clean();
 			return $try_again_url;

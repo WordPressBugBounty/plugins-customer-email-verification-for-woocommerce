@@ -4,7 +4,7 @@ Tags: woocommerce, email address verification, customer verification, registrati
 Requires at least: 5.3
 Requires PHP: 7.2
 Tested up to: 6.7.2
-Stable tag: 2.4
+Stable tag: 2.5
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,12 @@ Explore more at [zorem.com](https://www.zorem.com/)
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+= 2.5 =
+* Fix - Resolved a fatal error where the class "cev_new_account_email_customizer" was not found
+* Enhancement - Removed all console.log statements from JavaScript files to enhance performance and prevent unnecessary debugging output in the browser console
+* Fix - Resolved the passcode verification issue by ensuring the user table is created properly during the plugin update process
+* Dev - tested with WooCommerce 9.7.0
+
 = 2.4 =
 * Fix - Signup Email Verification Issue - Verification Code Doesn't Match
 

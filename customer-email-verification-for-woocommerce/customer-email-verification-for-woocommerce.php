@@ -4,14 +4,14 @@
  * Plugin Name: Customer Email Verification for WooCommerce 
  * Plugin URI: https://www.zorem.com/products/customer-email-verification-for-woocommerce/ 
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.4
+ * Version: 2.5
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
  * License URI: 
  * Text Domain: customer-email-verification-for-woocommerce
  * Domain Path: /lang/
- * WC tested up to: 9.6.2
+ * WC tested up to: 9.7.0
  * Requires Plugins: woocommerce
 */
 
@@ -22,7 +22,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.4';
+	public $version = '2.5';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
@@ -30,7 +30,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	public $preview;
 	public $admin;
 	public $signup;
-	
+	public $install;
 	/**
 	 * Initialize the main plugin function
 	*/
@@ -214,10 +214,14 @@ class Zorem_Woo_Customer_Email_Verification {
 	* include files
 	*/
 	private function includes() {
+
+		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-installation.php';
+		$this->install = CEV_Installation::get_instance(__FILE__);
+
 		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-admin.php';
 		$this->admin = WC_customer_email_verification_admin::get_instance();
 
-		require_once $this->get_plugin_path() . '/includes/cev-pro-signup-verification.php';
+		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-signup.php';
 		$this->signup = CEV_Signup_Verification::get_instance();
 		
 		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-email.php';
