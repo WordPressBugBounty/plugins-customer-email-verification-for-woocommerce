@@ -201,22 +201,17 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 				</a>
 				
 				<!-- Notice content -->
-				<h3 style="margin-top: 10px;">Upgrade to Customer Email Verification Pro!</h3>
-				<p>
-					Get 20% off on <a href="https://www.zorem.com/product/customer-email-verification/">
-					Customer Email Verification Pro!</a> Verify customer email on checkout, delay new account emails until successful verification, 
-					send customers new login alerts, and more…
-				</p>
-				<p>
-					Use code <strong>CEVPRO20</strong> to get 20% off your 1st year order.
-				</p>
+				<h3 style="margin-top: 10px; color:#3b64d3;font-size:16px">✅ Secure & Verify with Customer Email Verification PRO!</h3>
+				<p>Upgrade to <b>Customer Email Verification PRO</b> to prevent fake registrations, require email verification at checkout, enable login authentication, and customize verification emails for a seamless experience.</p>
+				<p>🎉 <b>Get 20% Off*!</b> Use code <b>CEVPRO20</b> at checkout.</p>
 				
 				<!-- Upgrade button -->
 				<a class="button-primary btn_pro_notice" target="_blank" 
-					href="https://www.zorem.com/product/customer-email-verification/">Upgrade Now ></a>
+					href="https://www.zorem.com/product/customer-email-verification/" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:0; color:#fff;">Upgrade Now ></a>
 				
 				<!-- Dismiss button -->
-				<a class="button-primary ast_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>">Dismiss</a>
+				<a class="button-primary ast_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:0;" >Dismiss</a>
+				<p style="margin-bottom: 10px;">⭐ for new customers only</p>
 			</div>
 		<?php
 		}
@@ -256,4 +251,3 @@ function WC_CEV_Admin_Notices_Under_WC_Admin() {
  * Backward compatibility.
 */
 WC_CEV_Admin_Notices_Under_WC_Admin();
-

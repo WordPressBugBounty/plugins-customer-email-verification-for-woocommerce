@@ -1300,9 +1300,9 @@ a.menu_cev_link{
     width: 100%;
 }
 .box_main .box_left h3{
-    color: #424242;
+    color: #3b64d3;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 27px;
     margin: 0;
 }
@@ -1313,10 +1313,10 @@ a.menu_cev_link{
 .btn_upgrade {
     background: #3b64d3;
     border: 1px solid #3b64d3;
-    padding: 9px 48px;
+    padding: 9px 18px;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 14px;
     color: #fafafa;
     font-weight: 600;
     cursor: pointer;

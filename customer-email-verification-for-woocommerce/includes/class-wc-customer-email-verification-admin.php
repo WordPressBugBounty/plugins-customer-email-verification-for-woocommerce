@@ -227,13 +227,15 @@ class WC_Customer_Email_Verification_Admin {
 			<div class="pro_banner_box">
 				<div class="box_main">
 					<div class="box_left">
-						<h3>Upgrade to Customer Email Verification Pro!</h3>
-						<p>Upgrade to Customer Email Verification Pro and supercharge your WooCommerce store! Verify emails at checkout, delay account emails until verified, and enjoy new login alerts. Get 20% off now!</p>
-						<p>Use code <b>CEVPRO20</b> to get <b>20%</b> on your 1st year order</p>
+						<h3>✅ Secure & Verify with Customer Email Verification PRO!</h3>
+						<p>Upgrade to <b>Customer Email Verification PRO</b> to prevent fake registrations, require email verification at checkout, enable login authentication, and customize verification emails for a seamless experience.
+						</p>
+						<p>🎉 <b>Get 20% Off*!</b> Use code <b>CEVPRO20</b> at checkout.</p>
 						<div class="btn_box">
 							<button class="btn_upgrade"><a href="https://www.zorem.com/product/customer-email-verification/" target="_blank">Upgrade Now</a></button>
 							<!-- <button class="btn_dismiss" id="btn_dismiss"><a href="<?php //esc_html_e( $dismissable_url ); ?>">Dismiss for 30 days</a></button> -->
 						</div>
+						<p style="margin-bottom: 0;">⭐ for new customers only</p>
 					</div>
 					<!-- <div class="box_right">
 						<img src="<?php //echo esc_url( woo_customer_email_verification()->plugin_dir_url() ); ?>assets/images/cev-banner.png" class="pro_banner_img">
