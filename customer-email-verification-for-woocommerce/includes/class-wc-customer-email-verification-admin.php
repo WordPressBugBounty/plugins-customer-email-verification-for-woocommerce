@@ -892,7 +892,7 @@ class WC_Customer_Email_Verification_Admin {
 				<option <?php esc_html_e( $false_selected ); ?> value='false'><?php esc_html_e( 'Non verified', 'customer-email-verification-pro' ); ?></option>
 			</select>
 			<?php
-			submit_button( __( 'Filter' ), null, $which, false );
+			submit_button( __( 'Filter' ), '', $which, false );
 		
 		}
 		

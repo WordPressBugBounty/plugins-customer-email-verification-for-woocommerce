@@ -3,8 +3,8 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: woocommerce, email address verification, customer verification, registration verification, woocommerce signup spam
 Requires at least: 5.3
 Requires PHP: 7.2
-Tested up to: 6.7.2
-Stable tag: 2.6
+Tested up to: 6.8
+Stable tag: 2.6.1
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,11 +76,14 @@ Explore more at [zorem.com](https://www.zorem.com/)
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+= 2.6.1 =
+* Fix - Function _load_textdomain_just_in_time was called incorrectly. 
+* Dev - tested with WooCommerce 9.8.1
+* Dev - tested with WordPress 6.8
 
 = 2.6 =
 * Dev - Updated the promotional notice on the settings page.
 * Dev - tested with WooCommerce 9.7.1
-
 
 = 2.5 =
 * Fix - Resolved a fatal error where the class "cev_new_account_email_customizer" was not found

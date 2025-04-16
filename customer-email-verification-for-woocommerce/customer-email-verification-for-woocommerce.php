@@ -4,14 +4,14 @@
  * Plugin Name: Customer Email Verification for WooCommerce 
  * Plugin URI: https://www.zorem.com/products/customer-email-verification-for-woocommerce/ 
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.6
+ * Version: 2.6.1
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
  * License URI: 
  * Text Domain: customer-email-verification-for-woocommerce
  * Domain Path: /lang/
- * WC tested up to: 7.2.1
+ * WC tested up to: 9.8.1
  * Requires Plugins: woocommerce
 */
 
@@ -22,7 +22,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.6';
+	public $version = '2.6.1';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
@@ -69,7 +69,26 @@ class Zorem_Woo_Customer_Email_Verification {
 				
 			}
 			add_action( 'init', array( $this, 'customer_email_verification_load_textdomain'));
-		}		
+		}
+
+		// Add debugging for early translation calls
+		add_filter( 'override_load_textdomain', array( $this, 'debug_textdomain_loading' ), 10, 3 );
+	}
+	
+	/**
+	 * Debug text domain loading to identify early calls
+	 *
+	 * @param bool   $override
+	 * @param string $domain
+	 * @param string $mofile
+	 * @return bool
+	 */
+	public function debug_textdomain_loading( $override, $domain, $mofile ) {
+		if ( 'customer-email-verification-for-woocommerce' === $domain && ! did_action( 'init' ) ) {
+			$backtrace = wp_debug_backtrace_summary();
+			error_log( 'Early textdomain load detected for customer-email-verification-for-woocommerce. Backtrace: ' . $backtrace );
+		}
+		return $override;
 	}
 	
 	/**
@@ -85,8 +104,14 @@ class Zorem_Woo_Customer_Email_Verification {
 			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		}
 		
+		// Check if Pro plugin file exists
+		$pro_plugin_file = WP_PLUGIN_DIR . '/customer-email-verification-pro/customer-email-verification-pro.php';
+		if ( ! file_exists( $pro_plugin_file ) ) {
+			return false;
+		}
+		
 		// Get plugin data if the Pro plugin file exists
-		$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/customer-email-verification-pro/customer-email-verification-pro.php' );
+		$plugin_data = get_plugin_data( $pro_plugin_file );
 		$cev_pro_version = $plugin_data['Version'];
 		
 		if (version_compare( $cev_pro_version , '1.0.5', '>=')) {
@@ -119,7 +144,7 @@ class Zorem_Woo_Customer_Email_Verification {
 
 		// Do the WC active check
 		if ( false === $is_active ) {
-			add_action( 'admin_notices', array( $this, 'notice_activate_wc' ) );
+			add_action( 'admin_init', array( $this, 'notice_activate_wc' ) );
 		}		
 		return $is_active;
 	}
@@ -194,7 +219,7 @@ class Zorem_Woo_Customer_Email_Verification {
 		add_action('admin_menu', array( $this->admin, 'register_woocommerce_menu' ), 99 );
 		
 		//load css js 
-		add_action( 'admin_enqueue_scripts', array( $this->admin, 'admin_styles' ), 4);	
+		add_action( 'admin_enqueue_scripts', array( $this->admin, 'admin_styles' ), 20);	
 		add_filter( 'woocommerce_account_menu_items', array( $this, 'cev_account_menu_items' ), 10, 1 );	
 		add_filter( 'woocommerce_account_menu_items', array( $this, 'hide_cev_menu_my_account' ), 999 );
 		add_action( 'init', array( $this, 'cev_add_my_account_endpoint' ) );		
@@ -207,6 +232,10 @@ class Zorem_Woo_Customer_Email_Verification {
 	}
 	/*** Method load Language file ***/
 	public function customer_email_verification_load_textdomain() {
+		if ( ! did_action( 'init' ) && ! doing_action( 'init' ) ) {
+			// Avoid loading text domain too early unless necessary
+			return;
+		}
 		load_plugin_textdomain( 'customer-email-verification-for-woocommerce', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
 	}
 	
@@ -339,12 +368,15 @@ class Zorem_Woo_Customer_Email_Verification {
 	*/
 	public function cev_add_my_account_endpoint() {
 		add_rewrite_endpoint( 'email-verification', EP_PAGES );
+		// Original code commented out; flush moved to activation hook in installation class
+		/*
 		if ( version_compare( get_option( 'cev_version' ), '1.5', '<' ) ) {
 			global $wp_rewrite;
 			$wp_rewrite->set_permalink_structure('/%postname%/');
 			$wp_rewrite->flush_rules();
 			update_option( 'cev_version', '1.5');				
 		}
+		*/
 	}
 	
 	/**
@@ -434,6 +466,11 @@ class Zorem_Woo_Customer_Email_Verification {
 	 * @return array         List of modified plugin action links.
 	 */
 	public function my_plugin_action_links( $links ) {
+		// Delay translation until init to avoid early textdomain loading
+		if ( ! did_action( 'init' ) ) {
+			return $links;
+		}
+		
 		$links = array_merge( array(
 			'<a href="' . esc_url( admin_url( '/admin.php?page=customer-email-verification-for-woocommerce' ) ) . '">' . __( 'Settings', 'woocommerce' ) . '</a>'
 		), $links );
