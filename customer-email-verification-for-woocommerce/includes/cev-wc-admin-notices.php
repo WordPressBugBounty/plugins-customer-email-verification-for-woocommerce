@@ -154,7 +154,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	public function admin_notice_pro_update() { 		
 		
 		// Check if the notice has been dismissed before, and if so, do not display it.
-		if ( get_option('wc_cev_pro_notice_ignore_1_5') ) {
+		if ( get_option('wc_cev_pro_notice_ignore_1_6') ) {
 			return;
 		}
 		
@@ -165,7 +165,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 		}
 		
 		// Generate the dismissable URL with a query parameter to ignore the notice.
-		$dismissable_url = esc_url( add_query_arg( 'wc-cev-pro-ignore-notice-1-5', 'true' ) );
+		$dismissable_url = esc_url( add_query_arg( 'wc-cev-pro-ignore-notice-1-6', 'true' ) );
 		?>
 		
 		<style>		
@@ -207,17 +207,15 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 				</a>
 				
 				<!-- Notice content -->
-				<h3 style="margin-top: 10px; color:#3b64d3;font-size:16px">✅ Secure & Verify with Customer Email Verification PRO!</h3>
-				<p>Upgrade to <b>Customer Email Verification PRO</b> to prevent fake registrations, require email verification at checkout, enable login authentication, and customize verification emails for a seamless experience.</p>
-				<p>🎉 <b>Get 20% Off*!</b> Use code <b>CEVPRO20</b> at checkout.</p>
-				
+				<h3 style="margin-top: 10px; color:#3b64d3;font-size:16px">✅ Upgrade to Customer Email Verification PRO & Strengthen Store Security!</h3>
+				<p>Boost your WooCommerce store’s protection with Customer Email Verification PRO. Enable email verification at checkout, delay account emails until verified, and get login alerts for enhanced account security and customer trust.</p>
+				<p>🎉 <b>Get 20% Off*!</b> for new customers only. Use code <b>CEVPRO20</b> at checkout.</p>
 				<!-- Upgrade button -->
 				<a class="button-primary btn_pro_notice" target="_blank" 
-					href="https://www.zorem.com/product/customer-email-verification/" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:0; color:#fff;">Upgrade Now ></a>
+					href="https://www.zorem.com/product/customer-email-verification/" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px; color:#fff;">Upgrade Now ></a>
 				
 				<!-- Dismiss button -->
-				<a class="button-primary ast_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:0;" >Dismiss</a>
-				<p style="margin-bottom: 10px;">⭐ for new customers only</p>
+				<a class="button-primary ast_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px;" >Dismiss</a>
 			</div>
 		<?php
 		}
@@ -228,8 +226,8 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	* This prevents the notice from being displayed again.
 	*/
 	public function cev_pro_notice_ignore() {
-		if ( isset( $_GET['wc-cev-pro-ignore-notice-1-5'] ) ) {
-			update_option( 'wc_cev_pro_notice_ignore_1_5', 'true' );
+		if ( isset( $_GET['wc-cev-pro-ignore-notice-1-6'] ) ) {
+			update_option( 'wc_cev_pro_notice_ignore_1_6', 'true' );
 		}
 	}
 
