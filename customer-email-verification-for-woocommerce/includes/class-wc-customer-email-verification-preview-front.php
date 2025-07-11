@@ -89,15 +89,21 @@ class WC_Customer_Email_Verification_Preview {
 	 * @since  1.0.0
 	*/
 	public function cev_verification_popup_message_callback( $message, $email ) {
-		
 		$cev_verification_widget_message = new cev_verification_widget_message();
-		$message_text = get_option( 'cev_verification_message', $cev_verification_widget_message->defaults['cev_verification_message'] );
-		$message_text = str_replace( '{customer_email}', $email, $message_text );		
-		
+
+		$default_message = '';
+		if ( isset( $cev_verification_widget_message->defaults['cev_verification_message'] ) ) {
+			$default_message = $cev_verification_widget_message->defaults['cev_verification_message'];
+		}
+
+		$message_text = get_option( 'cev_verification_message', $default_message );
+		$message_text = str_replace( '{customer_email}', $email, $message_text );
+
 		if ( '' != $message_text ) {
 			return $message_text;
 		}
-		
+
 		return $message;
-	}	
+	}
+
 }

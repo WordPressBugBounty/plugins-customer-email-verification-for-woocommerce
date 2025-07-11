@@ -110,7 +110,7 @@ class WC_Customer_Email_Verification_Email_Common {
 			foreach ( $get_all_tags as $tag ) {
 				$matches = array();
 				$re      = sprintf( '/\{{%s(.*?)\}}/', $tag );
-				$str     = $content;
+				$str     = is_string( $content ) ? $content : '';
 
 				//trying to find match w.r.t current tag
 				preg_match_all( $re, $str, $matches );
@@ -135,7 +135,7 @@ class WC_Customer_Email_Verification_Email_Common {
 			foreach ( $get_all_tags as $tag ) {
 				$matches = array();
 				$re      = sprintf( '/\{%s(.*?)\}/', $tag );
-				$str     = $content;
+				$str     = is_string( $content ) ? $content : '';
 
 				//trying to find match w.r.t current tag
 				preg_match_all( $re, $str, $matches );

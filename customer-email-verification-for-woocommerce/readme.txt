@@ -4,7 +4,7 @@ Tags: woocommerce, email address verification, customer verification, registrati
 Requires at least: 5.3
 Requires PHP: 7.2
 Tested up to: 6.8.1
-Stable tag: 2.6.2
+Stable tag: 2.6.3
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,7 +75,14 @@ Explore more at [zorem.com](https://www.zorem.com/)
 1. Upload the folder `customer-email-verification-for-woocommerce` to the `/wp-content/plugins/` folder
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
+
 == Changelog ==
+= 2.6.3 =
+* Fix - PHP Warning – Undefined Array 
+* Fix - Grammar in Verification Page – Change “4-digits code” to “4-digit code”
+* Fix - Verification widget not open in customizer
+* Dev - tested with WooCommerce  9.9.5
+
 = 2.6.2 =
 * Dev - tested with WooCommerce 9.8.5
 * Dev - tested with WordPress 6.8.1

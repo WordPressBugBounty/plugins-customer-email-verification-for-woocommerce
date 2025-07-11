@@ -4,14 +4,14 @@
  * Plugin Name: Customer Email Verification for WooCommerce 
  * Plugin URI: https://www.zorem.com/products/customer-email-verification-for-woocommerce/ 
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.6.2
+ * Version: 2.6.3
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
  * License URI: 
  * Text Domain: customer-email-verification-for-woocommerce
  * Domain Path: /lang/
- * WC tested up to: 9.8.5
+ * WC tested up to: 9.9.5
  * Requires Plugins: woocommerce
 */
 
@@ -22,7 +22,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.6.2';
+	public $version = '2.6.3';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
@@ -63,33 +63,14 @@ class Zorem_Woo_Customer_Email_Verification {
 				
 				$this->email->init();
 				
-				$this->preview->init();							
-								
-				add_action( 'plugins_loaded', array( $this, 'on_plugins_loaded' ) );
+				$this->preview->init();		
 				
 			}
 			add_action( 'init', array( $this, 'customer_email_verification_load_textdomain'));
 		}
-
-		// Add debugging for early translation calls
-		add_filter( 'override_load_textdomain', array( $this, 'debug_textdomain_loading' ), 10, 3 );
 	}
 	
-	/**
-	 * Debug text domain loading to identify early calls
-	 *
-	 * @param bool   $override
-	 * @param string $domain
-	 * @param string $mofile
-	 * @return bool
-	 */
-	public function debug_textdomain_loading( $override, $domain, $mofile ) {
-		if ( 'customer-email-verification-for-woocommerce' === $domain && ! did_action( 'init' ) ) {
-			$backtrace = wp_debug_backtrace_summary();
-			error_log( 'Early textdomain load detected for customer-email-verification-for-woocommerce. Backtrace: ' . $backtrace );
-		}
-		return $override;
-	}
+	
 	
 	/**
 	 * Check Customer email verification pro version
@@ -260,19 +241,15 @@ class Zorem_Woo_Customer_Email_Verification {
 		$this->preview = WC_customer_email_verification_preview::get_instance();		
 		
 		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-email-common.php';
-	}
 
-	/*
-	* include file on plugin load
-	*/
-	public function on_plugins_loaded() {	
 		require_once $this->get_plugin_path() . '/includes/customizer/class-customer-verification-new-customizer.php';
 		require_once $this->get_plugin_path() . '/includes/customizer/class-cev-customizer.php';
 		require_once $this->get_plugin_path() . '/includes/customizer/verification-widget-style.php';	
 		require_once $this->get_plugin_path() . '/includes/customizer/verification-widget-message.php';	
 		require_once $this->get_plugin_path() . '/includes/cev-wc-admin-notices.php';		
-										
 	}
+
+	
 	
 	/**
 	 * Include front js and css
@@ -494,10 +471,18 @@ class Zorem_Woo_Customer_Email_Verification {
  *
  * @return zorem_woo_il_post
 */
+/**
+ * Returns an instance of Zorem_Woo_Customer_Email_Verification.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
+ * @return Zorem_Woo_Customer_Email_Verification
+ */
 function woo_customer_email_verification() {
 	static $instance;
 
-	if ( ! isset( $instance ) ) {		
+	if ( ! isset( $instance ) ) {
 		$instance = new Zorem_Woo_Customer_Email_Verification();
 	}
 
@@ -505,18 +490,22 @@ function woo_customer_email_verification() {
 }
 
 /**
- * Register this class globally.
- *
- * Backward compatibility.
-*/
-woo_customer_email_verification();
+ * Bootstrap the plugin on plugins_loaded.
+ */
+add_action( 'init', 'woo_customer_email_verification' );
 
+/**
+ * Declare HPOS compatibility.
+ */
 add_action( 'before_woocommerce_init', function() {
 	if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 	}
 } );
 
+/**
+ * Init Zorem Tracking.
+ */
 if ( ! function_exists( 'zorem_tracking' ) ) {
 	function zorem_tracking() {
 		require_once dirname(__FILE__) . '/zorem-tracking/zorem-tracking.php';
@@ -528,9 +517,17 @@ if ( ! function_exists( 'zorem_tracking' ) ) {
 		$parent_menu_type = '';
 		$menu_slug = 'customer-email-verification-for-woocommerce';
 		$plugin_id = '18';
-		$zorem_tracking = WC_Trackers::get_instance( $plugin_name, $plugin_slug, $user_id,
-			$setting_page_type, $setting_page_location, $parent_menu_type, $menu_slug, $plugin_id );
 
+		$zorem_tracking = WC_Trackers::get_instance(
+			$plugin_name,
+			$plugin_slug,
+			$user_id,
+			$setting_page_type,
+			$setting_page_location,
+			$parent_menu_type,
+			$menu_slug,
+			$plugin_id
+		);
 
 		return $zorem_tracking;
 	}
