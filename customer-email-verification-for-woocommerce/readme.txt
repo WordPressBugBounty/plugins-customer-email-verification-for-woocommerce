@@ -3,8 +3,8 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: woocommerce, email address verification, customer verification, registration verification, woocommerce signup spam
 Requires at least: 5.3
 Requires PHP: 7.2
-Tested up to: 6.8.1
-Stable tag: 2.6.3
+Tested up to: 6.8.2
+Stable tag: 2.6.4
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,13 @@ Explore more at [zorem.com](https://www.zorem.com/)
 
 
 == Changelog ==
+
+= 2.6.4 =
+* Fix - Fix JavaScript Link for “Already Have a Verification Code?”
+* Fix - Fix Tooltip Not Working with WooCommerce 10
+* Dev - tested with WooCommerce  10.0.4
+* Dev - tested with WordPress 6.8.2
+
 = 2.6.3 =
 * Fix - PHP Warning – Undefined Array 
 * Fix - Grammar in Verification Page – Change “4-digits code” to “4-digit code”

@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
                     nonce: cev_ajax.nonce 
                 },
                 success: function(response) {
-                    if (response.data.message == 'OTP has been resent successfully.') {
+                    if (response.data.email) {
                         $('.resend_sucsess').show();
                         setTimeout(function() {
                             $('.resend_sucsess').hide();

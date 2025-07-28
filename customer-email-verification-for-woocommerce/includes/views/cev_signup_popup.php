@@ -1,7 +1,6 @@
 <?php
 // === Safe static values ===
 $email = __( 'johny@example.com', 'customer-email-verification-for-woocommerce' );
-$try_again = __( 'Try Again', 'customer-email-verification-for-woocommerce' );
 
 // === Make sure widget style object exists ===
 if ( ! isset( $cev_verification_widget_style ) || ! is_object( $cev_verification_widget_style ) ) {
@@ -21,10 +20,11 @@ if ( ! isset( $cev_verification_widget_message ) || ! is_object( $cev_verificati
 if ( ! isset( $cev_verification_widget_message->defaults ) || ! is_array( $cev_verification_widget_message->defaults ) ) {
 	
 	$cev_verification_widget_message->defaults = array(
-		'cev_verification_header'         => __( 'Verify it\'s you.', 'customer-email-verification-for-woocommerce' ),
-		/* translators: %s: Try again link */
-		'cev_verification_widget_footer'  => sprintf( __( 'Didn’t receive an email? <strong>%s</strong>', 'customer-email-verification-for-woocommerce' ), $try_again ),
+	'cev_verification_header'         => __( 'Verify it\'s you.', 'customer-email-verification-for-woocommerce' ),
+	'cev_verification_message'        => __( 'We sent a verification code. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification-for-woocommerce' ),
+	'cev_verification_widget_footer'  => __( "Didn't receive an email? {cev_resend_verification}", 'customer-email-verification-for-woocommerce' ),
 	);
+
 }
 
 // === Get all options safely ===
@@ -32,18 +32,15 @@ $background_color = get_option( 'cev_verification_popup_background_color', $cev_
 $overlay_color    = get_option( 'cev_verification_popup_overlay_background_color', $cev_verification_widget_style->defaults['cev_verification_popup_overlay_background_color'] );
 
 $cev_button_color_widget_header      = get_option( 'cev_button_color_widget_header', '#212121' );
-$cev_button_text_color_widget_header = get_option( 'cev_button_text_color_widget_header', '#ffffff' );
-$cev_button_text_size_widget_header  = get_option( 'cev_button_text_size_widget_header', '14' );
 $cev_widget_header_image_width       = get_option( 'cev_widget_header_image_width', '150' );
 $cev_button_text_header_font_size    = get_option( 'cev_button_text_header_font_size', '22' );
 $cev_enable_email_verification       = get_option( 'cev_enable_email_verification' );
 $password_setup_link_enabled         = get_option( 'woocommerce_registration_generate_password', 'no' );
 
 $heading = get_option( 'cev_verification_header', $cev_verification_widget_message->defaults['cev_verification_header'] );
+$message = get_option( 'cev_verification_message', $cev_verification_widget_message->defaults['cev_verification_message'] );
 $footer_message = get_option( 'cev_verification_widget_footer', $cev_verification_widget_message->defaults['cev_verification_widget_footer'] );
 $footer_message = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $footer_message );
-$footer_message = str_replace( '{cev_resend_verification}', $try_again, $footer_message );
-
 // === Code length ===
 $code_length = get_option( 'cev_verification_code_length', 4 );
 $digits = ( '2' === $code_length ) ? 6 : 4;
@@ -84,11 +81,6 @@ $content_align = get_option( 'cev_content_align', 'center' );
 									</span>
 									<span class="cev-authorization__description">
 										<?php
-										/* translators: %s: Customer email address */
-										$message = sprintf(
-											__( 'We sent a verification code. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification-for-woocommerce' )
-										);
-										$message = apply_filters( 'cev_verification_popup_message', $message, $email );
 										echo wp_kses_post( $message );
 										?>
 									</span>
@@ -125,7 +117,7 @@ $content_align = get_option( 'cev_content_align', 'center' );
 
 <style>
 	.cev-authorization-grid__visual {
-		background-color: <?php echo esc_attr( woo_customer_email_verification()->hex2rgba( $overlay_color, '0.7' ) ); ?>;
+		background-color: <?php echo esc_attr( woo_customer_email_verification()->hex2rgba( $overlay_color, '0.7' ) ); ?> !important;
 	}
 	html {
 		background: none;
