@@ -4,7 +4,7 @@ Tags: woocommerce, email address verification, customer verification, registrati
 Requires at least: 5.3
 Requires PHP: 7.2
 Tested up to: 6.8.2
-Stable tag: 2.6.4
+Stable tag: 2.6.5
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,8 @@ Explore more at [zorem.com](https://www.zorem.com/)
 
 
 == Changelog ==
+= 2.6.5 =
+* Dev - Added a compatibility with WooCommerce 10.1.2
 
 = 2.6.4 =
 * Fix - Fix JavaScript Link for “Already Have a Verification Code?”

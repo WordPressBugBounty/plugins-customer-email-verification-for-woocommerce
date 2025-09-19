@@ -52,7 +52,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	public function admin_notice_pro_update() { 		
 		
 		// Check if the notice has been dismissed before, and if so, do not display it.
-		if ( get_option('wc_cev_pro_zorem_returns_ignore') ) {
+		if ( get_option('wc_cev_pro_upgrade_ignore') ) {
 			return;
 		}
 		
@@ -63,7 +63,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 		}
 		
 		// Generate the dismissable URL with a query parameter to ignore the notice.
-		$dismissable_url = esc_url( add_query_arg( 'wc-cev-pro-zorem-returns-ignore-notice', 'true' ) );
+		$dismissable_url = esc_url( add_query_arg( 'wc-cev-pro-upgrade-ignore-notice', 'true' ) );
 		?>
 		
 		<style>		
@@ -105,12 +105,18 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 				</a>
 				
 				<!-- Notice content -->
-				<h3 style="margin-top: 10px; color:#3b64d3;font-size:16px">🔁 Simplify Returns with Zorem Returns for WooCommerce!</h3>
-				<p>Let your customers easily request returns or exchanges directly from their account. With features like return approvals, customizable return reasons, and automated status updates, the Zorem Returns plugin helps you manage post-purchase experiences more efficiently.</p>
-				<p>🎁 <b>Special Offer:</b> Get <b>20% OFF</b> with coupon code <b>RETURNS20!</b></p>
+				<h3 style="margin-top: 10px; color:#3b64d3;font-size:16px">✉️ Upgrade to Customer Email Verification PRO – Secure Every Step of the Customer Journey!</h3>
+				<p>Get advanced verification features to protect your store from spam, fake signups, and fraudulent orders:</p>
+				<ul class="ignor_notice_ul" style="list-style: none;">
+					<li>✅ Verify emails during signup and checkout</li>
+					<li>✅ OTP-based login authentication for secure access</li>
+					<li>✅ Customizable verification popup & emails</li>
+					<li>✅ Block fake registrations and unauthorized activity</li>
+				</ul>
+				<p>🎁 <b>Special Offer:</b> Get <b>20% OFF</b> with coupon code <b>CEVPRO20</b> – limited time only!</p>
 				<!-- Upgrade button -->
 				<a class="button-primary btn_pro_notice" target="_blank" 
-					href="https://www.zorem.com/product/zorem-returns/" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px; color:#fff;">👉 Learn More & Get Zorem Returns</a>
+					href="https://www.zorem.com/product/customer-email-verification/" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px; color:#fff;">👉 Upgrade to CEV PRO Now</a>
 				
 				<!-- Dismiss button -->
 				<a class="button-primary ast_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px;" >Dismiss</a>
@@ -124,8 +130,8 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	* This prevents the notice from being displayed again.
 	*/
 	public function cev_pro_notice_ignore() {
-		if ( isset( $_GET['wc-cev-pro-zorem-returns-ignore-notice'] ) ) {
-			update_option( 'wc_cev_pro_zorem_returns_ignore', 'true' );
+		if ( isset( $_GET['wc-cev-pro-upgrade-ignore-notice'] ) ) {
+			update_option( 'wc_cev_pro_upgrade_ignore', 'true' );
 		}
 	}
 }
