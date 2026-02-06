@@ -175,7 +175,7 @@ class WC_Customer_Email_Verification_Admin {
 		
 		wp_register_script( 'selectWoo', WC()->plugin_url() . '/assets/js/selectWoo/selectWoo.full' . $suffix . '.js', array( 'jquery' ), '1.0.4' );
 		wp_register_script( 'wc-enhanced-select', WC()->plugin_url() . '/assets/js/admin/wc-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), WC_VERSION );
-		wp_register_script( 'jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI' . $suffix . '.js', array( 'jquery' ), '2.70', true );
+		wp_register_script( 'wc-jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI' . $suffix . '.js', array( 'jquery' ), '2.70', true );
 		
 		
 
@@ -187,9 +187,9 @@ class WC_Customer_Email_Verification_Admin {
 		
 		wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', array(), time());
 		
-		wp_enqueue_script( 'jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip.min.js', array( 'jquery' ), time(), true );
-		wp_enqueue_script( 'jquery-tiptip' );
-		wp_enqueue_script( 'jquery-blockui' );
+		wp_enqueue_script( 'wc-jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip.min.js', array( 'jquery' ), time(), true );
+		wp_enqueue_script( 'wc-jquery-tiptip' );
+		wp_enqueue_script( 'wc-jquery-blockui' );
 		wp_enqueue_script( 'wp-color-picker' );		
 		wp_enqueue_script( 'jquery-ui-sortable' );		
 		wp_enqueue_script('media-upload');
@@ -660,7 +660,7 @@ class WC_Customer_Email_Verification_Admin {
 	 */	
 	public function add_details_in_custom_users_list( $val, $column_name, $user_id ) {
 		
-		wp_enqueue_script( 'jquery-blockui' );
+		wp_enqueue_script( 'wc-jquery-blockui' );
 		
 		wp_enqueue_style( 'customer_email_verification_user_admin_styles', woo_customer_email_verification()->plugin_dir_url() . 'assets/css/user-admin.css', array(), woo_customer_email_verification()->version );
 				
@@ -923,18 +923,18 @@ class WC_Customer_Email_Verification_Admin {
 						'compare' => 'LIKE'
 					));
 				} else {
-					$meta_query = array (
-						'relation' => 'AND',
-						array (
-							'key' => 'cev_email_verification_pin',							
-							'compare' => 'EXISTS'
-						),
-						array (
-							'key' => 'customer_email_verified',
-							'value' => $section,
-							'compare' => 'NOT EXISTS'
-						),	
-					);
+					$meta_query = array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'customer_email_verified',
+						'compare' => 'NOT EXISTS',
+					),
+					array(
+						'key'     => 'customer_email_verified',
+						'value'   => 'true',
+						'compare' => '!=',
+					),
+				);
 				}
 				$query->set('meta_query', $meta_query);				
 			}
