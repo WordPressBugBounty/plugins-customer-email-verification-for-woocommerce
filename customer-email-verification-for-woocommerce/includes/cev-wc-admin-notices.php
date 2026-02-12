@@ -50,7 +50,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	public function admin_notice_pro_update() { 		
 		
 		// Check if the notice has been dismissed before, and if so, do not display it.
-		if ( get_option('wc_cev_pro_ignore_notice') ) {
+		if ( get_option('wc_cev_pro_ignore_notice_2.6.8') ) {
 			return;
 		}
 		
@@ -61,7 +61,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 		}
 		
 		// Generate the dismissable URL with a query parameter to ignore the notice.
-		$dismissable_url = esc_url( add_query_arg( 'wc-cev-pro-ignore-notice', 'true' ) );
+		$dismissable_url = esc_url( add_query_arg( 'wc-cev-pro-ignore-notice-2.6.8', 'true' ) );
 		?>
 		
 		<style>		
@@ -123,8 +123,8 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	* This prevents the notice from being displayed again.
 	*/
 	public function cev_pro_notice_ignore() {
-		if ( isset( $_GET['wc-cev-pro-ignore-notice'] ) ) {
-			update_option( 'wc_cev_pro_ignore_notice', 'true' );
+		if ( isset( $_GET['wc-cev-pro-ignore-notice-2.6.8'] ) ) {
+			update_option( 'wc_cev_pro_ignore_notice_2.6.8', 'true' );
 		}
 	}
 }

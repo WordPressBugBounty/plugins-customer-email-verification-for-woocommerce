@@ -3,8 +3,8 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: woocommerce, email address verification, customer verification, registration verification, woocommerce signup spam
 Requires at least: 5.3
 Requires PHP: 7.2
-Tested up to: 6.9
-Stable tag: 2.6.7
+Tested up to: 6.9.1
+Stable tag: 2.6.8
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,10 @@ Explore more at [zorem.com](https://www.zorem.com/)
 
 
 == Changelog ==
+= 2.6.8 =
+* Enhancement – Added PRO upsell elements (locked PRO fields, upgrade banner, Go PRO tab with comparison and benefits).
+* Dev - Added a compatibility with WooCommerce 10.5.1
+* Dev - Added a compatibility with WordPress 6.9.1
 
 = 2.6.7 =
 * Fix – Resolved issue where users were redirected to /my-account/email-verification/ (404) instead of seeing the verification popup on new installations.
