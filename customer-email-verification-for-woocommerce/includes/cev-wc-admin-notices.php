@@ -96,7 +96,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 		// Display the notice only if the Pro version of the plugin is not active.
 		if ( !class_exists( 'customer_email_verification_pro' ) ) { 
 			?>
-			<div class="notice updated notice-success cev-dismissable-notice">
+			<div class="notice updated notice-success cev-dismissable-notice is-dismissible">
 				<!-- Dismiss button -->
 				<a href="<?php echo esc_url( $dismissable_url ); ?>" class="notice-dismiss">
 					<span class="screen-reader-text">Dismiss this notice.</span>
@@ -112,7 +112,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 					href="https://www.zorem.com/product/customer-email-verification/" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px; color:#fff;">👉 Upgrade to CEV PRO Now</a>
 				
 				<!-- Dismiss button -->
-				<a class="button-primary ast_notice_btn" href="<?php esc_html_e( $dismissable_url ); ?>" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px;" >Dismiss</a>
+				<a class="button-primary ast_notice_btn" href="<?php echo esc_url( $dismissable_url ); ?>" style="background:#3b64d3;font-size:14px; border:1px solid #3b64d3; margin-bottom:10px;" >Dismiss</a>
 			</div>
 		<?php
 		}
@@ -123,8 +123,20 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	* This prevents the notice from being displayed again.
 	*/
 	public function cev_pro_notice_ignore() {
+		// WordPress converts dots to underscores in query parameter names
+		// Check for both versions to handle the conversion
+		$dismissed = false;
 		if ( isset( $_GET['wc-cev-pro-ignore-notice-2.6.8'] ) ) {
+			$dismissed = true;
+		} elseif ( isset( $_GET['wc-cev-pro-ignore-notice-2_6_8'] ) ) {
+			$dismissed = true;
+		}
+		
+		if ( $dismissed ) {
 			update_option( 'wc_cev_pro_ignore_notice_2.6.8', 'true' );
+			// Redirect to clean up the URL
+			wp_safe_redirect( remove_query_arg( array( 'wc-cev-pro-ignore-notice-2.6.8', 'wc-cev-pro-ignore-notice-2_6_8' ) ) );
+			exit;
 		}
 	}
 }

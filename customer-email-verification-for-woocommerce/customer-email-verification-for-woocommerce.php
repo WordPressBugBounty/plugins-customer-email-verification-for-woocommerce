@@ -4,7 +4,7 @@
  * Plugin Name: Customer Email Verification for WooCommerce 
  * Plugin URI: https://www.zorem.com/products/customer-email-verification-for-woocommerce/ 
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.6.8
+ * Version: 2.6.9
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
@@ -22,7 +22,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.6.8';
+	public $version = '2.6.9';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
