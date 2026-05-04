@@ -3,8 +3,8 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: woocommerce, email address verification, customer verification, registration verification, woocommerce signup spam
 Requires at least: 5.3
 Requires PHP: 7.2
-Tested up to: 6.9.1
-Stable tag: 2.6.9
+Tested up to: 6.9.4
+Stable tag: 2.7
 License: GPLv2 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,10 @@ Explore more at [zorem.com](https://www.zorem.com/)
 
 
 == Changelog ==
+= 2.7 =
+* Dev - Added a compatibility with WooCommerce 10.7.0
+* Dev - Added a compatibility with WordPress 6.9.4
+
 = 2.6.9 =
 * Fix – Fixed admin notice dismiss functionality not working when clicking dismiss button or X icon. The notice now properly dismisses and redirects to clean URL.
 * Fix – Resolved issue where WordPress converts dots to underscores in query parameters, preventing the dismiss handler from detecting the parameter correctly.
