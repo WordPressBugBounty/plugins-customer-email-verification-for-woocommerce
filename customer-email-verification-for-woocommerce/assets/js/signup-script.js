@@ -138,7 +138,7 @@ jQuery(document).ready(function($) {
                         if (response.data.verified) {
                             $('#otp-popup').hide();
 
-                            $('<p class="success-message">Your email is verified successfully.</p>').insertBefore($form);
+                            $('<p class="success-message">' + cev_ajax.cev_verified_success + '</p>').insertBefore($form);
 
                             $form.find('button[name="register"]').removeClass('email_verification_popup');
                             $form.find('input[name="email_verification"]').val('true');
@@ -151,7 +151,7 @@ jQuery(document).ready(function($) {
                     }
                 },
                 error: function(xhr, status, error) {
-                    displayError('Error: ' + error);
+                    displayError(cev_ajax.cev_error_prefix + ' ' + error);
                 }
             });
         });
@@ -178,7 +178,7 @@ jQuery(document).ready(function($) {
                     }
                 },
                 error: function(xhr, status, error) {
-                    displayError('Error: ' + error);
+                    displayError(cev_ajax.cev_error_prefix + ' ' + error);
                 }
             });
         });
