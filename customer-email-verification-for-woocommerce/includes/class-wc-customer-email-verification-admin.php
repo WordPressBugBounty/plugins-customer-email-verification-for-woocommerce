@@ -55,7 +55,11 @@ class WC_Customer_Email_Verification_Admin {
 		add_filter( 'handle_bulk_actions-users', array( $this, 'users_bulk_action_handler' ), 10, 3 );
 		add_action( 'admin_notices', array( $this, 'user_bulk_action_notices' ) );
 		
-		if ( isset( $_GET['page'] ) && 'customer-email-verification-for-woocommerce' == $_GET['page'] ) {
+		// Read-only screen/preview check, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+
+		if ( 'customer-email-verification-for-woocommerce' === $cev_page ) {
 			// Hook for add admin body class in settings page
 			add_filter( 'admin_body_class', array( $this, 'cev_post_admin_body_class' ), 100 );
 		}
@@ -74,12 +78,14 @@ class WC_Customer_Email_Verification_Admin {
 			global $wpdb;
 			$id = intval($_POST['id']);
 			$table_name = $wpdb->prefix . 'cev_user_log';
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			$result = $wpdb->delete($table_name, array('id' => $id), array('%d'));
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 	
 			if (false !== $result) {
-				echo json_encode(array('success' => true));
+				echo wp_json_encode(array('success' => true));
 			} else {
-				echo json_encode(array('success' => false));
+				echo wp_json_encode(array('success' => false));
 			}
 		}
 		wp_die(); // Required to terminate immediately and return a proper response
@@ -111,7 +117,9 @@ class WC_Customer_Email_Verification_Admin {
 				}
 	
 				// Perform the delete operation
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 				$result = $wpdb->delete($table_name, ['id' => $id], ['%d']);
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 				if ($result) {
 					$results['success']++;
 				} else {
@@ -125,7 +133,7 @@ class WC_Customer_Email_Verification_Admin {
 		}
 	
 		// Return a single JSON response
-		echo json_encode($results);
+		echo wp_json_encode($results);
 		wp_die(); // Required to terminate immediately and return a proper response
 	}
 	/*
@@ -149,11 +157,11 @@ class WC_Customer_Email_Verification_Admin {
 	*/
 	public function admin_styles( $hook ) {						
 		
-		if ( !isset( $_GET['page'] ) ) {
-			return;
-		}
-		
-		if ( 'customer-email-verification-for-woocommerce' != $_GET['page'] ) {
+		// Read-only screen/preview check, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+
+		if ( 'customer-email-verification-for-woocommerce' !== $cev_page ) {
 			return;
 		}
 
@@ -164,9 +172,8 @@ class WC_Customer_Email_Verification_Admin {
 		// the browser cache automatically.
 		$zui_url = woo_customer_email_verification()->plugin_dir_url() . 'assets/zui/';
 		$zui_dir = woo_customer_email_verification()->get_plugin_path() . '/assets/zui/';
-		$zui_ver = is_readable( $zui_dir . 'VERSION' )
-			? trim( file_get_contents( $zui_dir . 'VERSION' ) )
-			: woo_customer_email_verification()->version;
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a plugin-bundled text file, not a remote resource.
+		$zui_ver = is_readable( $zui_dir . 'VERSION' ) ? trim( file_get_contents( $zui_dir . 'VERSION' ) ) : woo_customer_email_verification()->version;
 		wp_enqueue_style( 'zui', $zui_url . 'css/zui.css', array(), $zui_ver );
 		wp_enqueue_script( 'zui', $zui_url . 'js/zui.js', array(), $zui_ver, true );
 
@@ -192,7 +199,7 @@ class WC_Customer_Email_Verification_Admin {
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		wp_register_script( 'select2', WC()->plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.3' );
+		wp_register_script( 'select2', WC()->plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.3', false );
 		wp_enqueue_script( 'select2');
 		wp_enqueue_style( 'wp-color-picker' );
 
@@ -210,8 +217,8 @@ class WC_Customer_Email_Verification_Admin {
 			'ajax_url' => admin_url('admin-ajax.php')
 		)); 
 		
-		wp_register_script( 'selectWoo', WC()->plugin_url() . '/assets/js/selectWoo/selectWoo.full' . $suffix . '.js', array( 'jquery' ), '1.0.4' );
-		wp_register_script( 'wc-enhanced-select', WC()->plugin_url() . '/assets/js/admin/wc-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), WC_VERSION );
+		wp_register_script( 'selectWoo', WC()->plugin_url() . '/assets/js/selectWoo/selectWoo.full' . $suffix . '.js', array( 'jquery' ), '1.0.4', false );
+		wp_register_script( 'wc-enhanced-select', WC()->plugin_url() . '/assets/js/admin/wc-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), WC_VERSION, false );
 		wp_register_script( 'wc-jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI' . $suffix . '.js', array( 'jquery' ), '2.70', true );
 		
 		
@@ -219,8 +226,9 @@ class WC_Customer_Email_Verification_Admin {
 		wp_enqueue_script( 'selectWoo');
 		wp_enqueue_script( 'wc-enhanced-select');
 
-		wp_enqueue_script('datatables-js', 'https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js', array('jquery'), time(), true);
-		wp_enqueue_style('datatables-css', 'https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css', array(), time());
+		// Bundled locally: WordPress.org disallows loading assets from a remote CDN.
+		wp_enqueue_script( 'datatables-js', woo_customer_email_verification()->plugin_dir_url() . 'assets/js/vendor/jquery.dataTables.min.js', array( 'jquery' ), '1.11.5', true );
+		wp_enqueue_style( 'datatables-css', woo_customer_email_verification()->plugin_dir_url() . 'assets/css/jquery.dataTables.min.css', array(), '1.11.5' );
 		
 		wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', array(), time());
 		
@@ -241,7 +249,9 @@ class WC_Customer_Email_Verification_Admin {
 		wp_enqueue_script( 'customer_email_verification_table_rows' );	
 		$ignore = get_transient( 'cev_settings_admin_notice_ignore' );
 		$dismissable_url = esc_url(  add_query_arg( 'cev-pro-settings-ignore-notice', 'true' ) ); 
-		$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'email-verification';
+		// Which settings tab to render; read-only, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'email-verification';
 
 		$breadcrumb_text = __( 'Settings', 'customer-email-verification-for-woocommerce' );
 		if ( 'unverified-users' === $tab ) {
@@ -351,11 +361,13 @@ class WC_Customer_Email_Verification_Admin {
 	}
 
 	public function get_html_menu_tab( $arrays ) {
-		$tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'email-verification';
+		// Which settings tab to render; read-only, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'email-verification';
 		foreach ( (array) $arrays as $id => $array ) {
 			if ( isset( $array['type'] ) && 'link' == $array['type'] ) {
 				?>
-				<a class="menu_cev_link" href="<?php esc_html_e( esc_url( $array['link'] ) ); ?>"><?php esc_html_e( $array['title'] ); ?></a>
+				<a class="menu_cev_link" href="<?php echo esc_url( $array['link'] ); ?>"><?php echo esc_html( $array['title'] ); ?></a>
 				<?php
 			} else {
 				?>
@@ -378,7 +390,10 @@ class WC_Customer_Email_Verification_Admin {
 	 * @return void
 	 */
 	public function render_zui_menu_tabs( $arrays ) {
+		// Which settings tab/page to render; read-only, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
 		$current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'email-verification';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
 		$cev_page    = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'customer-email-verification-for-woocommerce';
 
 		foreach ( (array) $arrays as $tab_id => $tab_data ) {
@@ -469,16 +484,16 @@ class WC_Customer_Email_Verification_Admin {
 				if ( $array['show'] ) {
 					$class = isset( $array['class'] ) ? $array['class'] : '';
 					?>
-					<li class="<?php esc_html_e( $class ); ?>">
+					<li class="<?php echo esc_attr( $class ); ?>">
 					<?php 
 					if ( 'desc' != $array['type'] && 'checkbox' != $array['type'] && 'checkbox_select' != $array['type'] ) { 
 						?>
 					<label class="settings_label">
 						<?php 
-						esc_html_e( $array['title'] );
+						echo esc_html( $array['title'] );
 						if ( isset( $array['tooltip'] ) ) {
 							?>
-							<span class="woocommerce-help-tip tipTip" title="<?php esc_html_e( $array['tooltip'] ); ?>"></span>
+							<span class="woocommerce-help-tip tipTip" title="<?php echo esc_attr( $array['tooltip'] ); ?>"></span>
 						<?php } ?>
 					</label>
 					<?php
@@ -488,12 +503,12 @@ class WC_Customer_Email_Verification_Admin {
 						$field_id = isset( $array['multiple'] ) ? $array['multiple'] : $id;
 						?>
 						<fieldset>
-							<select class="select select2" id="<?php esc_html_e( $field_id ); ?>" name="<?php esc_html_e( $id ); ?>" <?php esc_html_e( $multiple ); ?>>  
+							<select class="select select2" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $id ); ?>" <?php echo esc_attr( $multiple ); ?>>  
 								<?php 
 								foreach ( ( array ) $array['options'] as $key => $val ) {
 									$selected = ( get_option( $id, $array['Default'] ) == ( string ) $key ) ? 'selected' : '';										
 									?>
-									<option value="<?php esc_html_e( $key ); ?>" <?php esc_html_e( $selected ); ?> ><?php esc_html_e( $val ); ?></option>
+									<option value="<?php echo esc_attr( $key ); ?>" <?php echo esc_attr( $selected ); ?> ><?php echo esc_html( $val ); ?></option>
 									<?php 
 								} 
 								?>
@@ -503,14 +518,14 @@ class WC_Customer_Email_Verification_Admin {
 					} elseif ( isset( $array['type'] ) && 'multiple_select' == $array['type'] ) {
 						?>
 						<div class="multiple_select_container">	
-							<select multiple class="wc-enhanced-select" name="<?php esc_html_e( $id ); ?>[]" id="<?php esc_html_e( $id ); ?>">
+							<select multiple class="wc-enhanced-select" name="<?php echo esc_attr( $id ); ?>[]" id="<?php echo esc_attr( $id ); ?>">
 							<?php
 							foreach ( (array) $array['options'] as $key => $val ) :
 								$multi_checkbox_data = get_option( $id );
 								$checked = isset( $multi_checkbox_data[$key] ) && 1 == $multi_checkbox_data[$key] ? 'selected' : '' ; 
 								?>
-								<option value="<?php esc_html_e( $key ); ?>" <?php esc_html_e( $checked ); ?>>
-									<?php esc_html_e( $val ); ?>
+								<option value="<?php echo esc_attr( $key ); ?>" <?php echo esc_attr( $checked ); ?>>
+									<?php echo esc_html( $val ); ?>
 								</option>
 							<?php 
 							endforeach;
@@ -521,15 +536,15 @@ class WC_Customer_Email_Verification_Admin {
 					} elseif ( 'checkbox' == $array['type'] ) { 
 						$checked = ( get_option( $id, $array['Default'] ) ) ? 'checked' : '';
 						?>
-						<label class="" for="<?php esc_html_e( $id ); ?>">
-							<input type="hidden" name="<?php esc_html_e( $id ); ?>" value="0"/>
-							<input type="checkbox" id="<?php esc_html_e( $id ); ?>" name="<?php esc_html_e( $id ); ?>" class="" <?php esc_html_e( $checked ); ?> value="1"/>
+						<label class="" for="<?php echo esc_attr( $id ); ?>">
+							<input type="hidden" name="<?php echo esc_attr( $id ); ?>" value="0"/>
+							<input type="checkbox" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $id ); ?>" class="" <?php echo esc_attr( $checked ); ?> value="1"/>
 							<span class="label">
 								<?php 
-								esc_html_e( $array['title'] );
+								echo esc_html( $array['title'] );
 								if ( isset( $array['tooltip'] ) ) {
 									?>
-									<span class="woocommerce-help-tip tipTip" title="<?php esc_html_e( $array['tooltip'] ); ?>"></span>
+									<span class="woocommerce-help-tip tipTip" title="<?php echo esc_attr( $array['tooltip'] ); ?>"></span>
 								<?php } ?>
 							</span>								
 						</label>	
@@ -537,20 +552,20 @@ class WC_Customer_Email_Verification_Admin {
 					} elseif ( 'checkbox_select' == $array['type'] ) { 
 						$checked = ( get_option( $id, $array['Default'] ) ) ? 'checked' : '';
 						?>
-						<label class="" for="<?php esc_html_e( $id ); ?>">
-							<input type="hidden" name="<?php esc_html_e( $id ); ?>" value="0"/>
-							<input type="checkbox" id="<?php esc_html_e( $id ); ?>" name="<?php esc_html_e( $id ); ?>" class="" <?php esc_html_e( $checked ); ?> value="1"/>
+						<label class="" for="<?php echo esc_attr( $id ); ?>">
+							<input type="hidden" name="<?php echo esc_attr( $id ); ?>" value="0"/>
+							<input type="checkbox" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $id ); ?>" class="" <?php echo esc_attr( $checked ); ?> value="1"/>
 							<span class="label">
 								<?php 
-								esc_html_e( $array['title'] );
+								echo esc_html( $array['title'] );
 								if ( !empty( $array['select'] ) ) {
 									?>
-									<select name="<?php esc_html_e( $array['select']['id'] ); ?>" style="width: auto;">
+									<select name="<?php echo esc_attr( $array['select']['id'] ); ?>" style="width: auto;">
 										<?php
 										foreach ( $array['select']['options'] as $key => $val ) {
 											$selected = ( get_option( $array['select']['id'], '' ) == $key ) ? 'selected' : '';
 											?>
-											<option value="<?php esc_html_e( $key ); ?>" <?php esc_html_e( $selected ); ?>><?php esc_html_e( $val ); ?></option>	
+											<option value="<?php echo esc_attr( $key ); ?>" <?php echo esc_attr( $selected ); ?>><?php echo esc_html( $val ); ?></option>	
 											<?php	
 										}	
 										?>
@@ -559,7 +574,7 @@ class WC_Customer_Email_Verification_Admin {
 								}
 								if ( isset( $array['tooltip'] ) ) {
 									?>
-									<span class="woocommerce-help-tip tipTip" title="<?php esc_html_e( $array['tooltip'] ); ?>"></span>
+									<span class="woocommerce-help-tip tipTip" title="<?php echo esc_attr( $array['tooltip'] ); ?>"></span>
 								<?php } ?>
 							</span>								
 						</label>	
@@ -577,10 +592,10 @@ class WC_Customer_Email_Verification_Admin {
 							?>
 							
 							<span class="multiple_checkbox">
-								<label class="" for="<?php esc_html_e( $key ); ?>">
-									<input type="hidden" name="<?php esc_html_e( $id ); ?>[<?php esc_html_e( $key ); ?>]" value="0"/>
-									<input type="checkbox" id="<?php esc_html_e( $key ); ?>" name="<?php esc_html_e( $id ); ?>[<?php esc_html_e( $key ); ?>]" class="" <?php esc_html_e( $checked ); ?> value="1"/>
-									<span class="multiple_label"><?php esc_html_e( $val ); ?></span>	
+								<label class="" for="<?php echo esc_attr( $key ); ?>">
+									<input type="hidden" name="<?php echo esc_attr( $id ); ?>[<?php echo esc_attr( $key ); ?>]" value="0"/>
+									<input type="checkbox" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $id ); ?>[<?php echo esc_attr( $key ); ?>]" class="" <?php echo esc_attr( $checked ); ?> value="1"/>
+									<span class="multiple_label"><?php echo esc_html( $val ); ?></span>	
 									</br>
 								</label>																		
 							</span>												
@@ -591,9 +606,9 @@ class WC_Customer_Email_Verification_Admin {
 						?>
 						
 						<fieldset>
-							<textarea placeholder="<?php esc_html_e( $placeholder ); ?>" class="input-text regular-input" name="<?php esc_html_e( $id ); ?>" id="<?php esc_html_e( $id ); ?>"><?php esc_html_e( get_option( $id, $array['Default'] ) ); ?></textarea>                                
+							<textarea placeholder="<?php echo esc_attr( $placeholder ); ?>" class="input-text regular-input" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>"><?php echo esc_textarea( get_option( $id, $array['Default'] ) ); ?></textarea>                                
 						</fieldset>
-						<span class="" style="font-size: 12px;"><?php esc_html_e( $array['desc_tip'] ); ?></span>
+						<span class="" style="font-size: 12px;"><?php echo esc_html( $array['desc_tip'] ); ?></span>
 					<?php
 					} elseif ( 'tag_block' == $array['type'] ) {
 						?>
@@ -603,13 +618,13 @@ class WC_Customer_Email_Verification_Admin {
 					<?php
 					} elseif ( 'desc' == $array['type'] ) {
 						?>
-						<p class="section_desc"><?php esc_html_e( $array['title'] ); ?></p>
+						<p class="section_desc"><?php echo esc_html( $array['title'] ); ?></p>
 					<?php
 					} else { 
 						$placeholder = ( !empty( $array['placeholder'] ) ) ? $array['placeholder'] : '';
 						?>
 						<fieldset>
-							<input class="input-text regular-input " type="text" name="<?php esc_html_e( $id ); ?>" id="<?php esc_html_e( $id ); ?>" style="" value="<?php esc_html_e( get_option( $id, $array['Default'] ) ); ?>" placeholder="<?php esc_html_e( $placeholder ); ?>">
+							<input class="input-text regular-input " type="text" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" style="" value="<?php echo esc_attr( get_option( $id, $array['Default'] ) ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>">
 						</fieldset>
 					<?php } ?>
 					</li>
@@ -660,16 +675,16 @@ class WC_Customer_Email_Verification_Admin {
 			// 'cev_enter_account_after_registration' => array(
 			// 	'type'		=> 'checkbox',
 			// 	'show' => true,
-			// 	'tooltip' 		=> __('Allow your customers to access their account for the first time after registration before they verify the email address', 'customer-emial-verification-for-woocommerce'),
-			// 	'title' => __( 'Allow first login after registration without email verification', 'customer-emial-verification-for-woocommerce' ),				
+			// 	'tooltip' 		=> __('Allow your customers to access their account for the first time after registration before they verify the email address', 'customer-email-verification-for-woocommerce'),
+			// 	'title' => __( 'Allow first login after registration without email verification', 'customer-email-verification-for-woocommerce' ),				
 			// 	'Default'   => '',
 			// 	'class'     => '',
 			// ),
 			// 'cev_email_for_verification' => array(
 			// 	'type'		=> 'checkbox',
 			// 	'show' => true,
-			// 	'tooltip' 		=> __('if you select this option, the verification message, code and link will be added in New Account Emails. The separate email verification will be sent only when the customer (or admin) resend verification', 'customer-emial-verification-for-woocommerce'),
-			// 	'title' => __( 'Verification code in new account email', 'customer-emial-verification-for-woocommerce' ),				
+			// 	'tooltip' 		=> __('if you select this option, the verification message, code and link will be added in New Account Emails. The separate email verification will be sent only when the customer (or admin) resend verification', 'customer-email-verification-for-woocommerce'),
+			// 	'title' => __( 'Verification code in new account email', 'customer-email-verification-for-woocommerce' ),				
 			// 	'Default'   => '',
 			// 	'class'     => '',
 			// ),
@@ -683,6 +698,7 @@ class WC_Customer_Email_Verification_Admin {
 			// 	'options'   => $page_list, 				
 			// ),							
 		);
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$form_data = apply_filters( 'cev_general_settings_options', $form_data );
 		return $form_data;
 	}
@@ -752,7 +768,8 @@ class WC_Customer_Email_Verification_Admin {
 			if ( ! isset( $_POST[ $cev_key ] ) ) {
 				continue;
 			}
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+			// Sanitized immediately below by the per-field branch; PHPCS cannot follow that.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$cev_raw = wp_unslash( $_POST[ $cev_key ] );
 			if ( 'textarea' === $cev_sanitizer ) {
 				$cev_value = sanitize_textarea_field( $cev_raw );
@@ -1005,7 +1022,7 @@ class WC_Customer_Email_Verification_Admin {
 				'type'        => 'toogel',
 				'title'       => __( 'Require checkout verification only for free orders', 'customer-email-verification-for-woocommerce' ),
 				'description' => __( 'Ensure free orders are tied to valid email addresses.', 'customer-email-verification-for-woocommerce' ),
-				'tooltip'     => __( 'Only show the OTP step on $0 / 100%-discount orders — paid orders skip verification.', 'customer-email-verification-for-woocommerce' ),
+				'tooltip'     => __( 'Only show the OTP step on $0 / fully discounted orders — paid orders skip verification.', 'customer-email-verification-for-woocommerce' ),
 				'pro'         => true,
 				'hidden'      => true,
 			),
@@ -1602,10 +1619,10 @@ class WC_Customer_Email_Verification_Admin {
 	
 	public function cev_manualy_user_verify_in_user_menu() {
 		
-		if ( isset( $_POST['wp_nonce'] ) && wp_verify_nonce( wc_clean( $_POST['wp_nonce'] ), 'wc_cev_email' ) ) { 
+		if ( isset( $_POST['wp_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wp_nonce'] ) ), 'wc_cev_email' ) ) { 
 		
-			$user_id = isset( $_POST['id'] ) ? wc_clean( $_POST['id'] ) : '';
-			$action_type = isset( $_POST['actin_type'] ) ? wc_clean( $_POST['actin_type'] ) : '';
+			$user_id = isset( $_POST['id'] ) ? sanitize_text_field( wp_unslash( $_POST['id'] ) ) : '';
+			$action_type = isset( $_POST['actin_type'] ) ? sanitize_text_field( wp_unslash( $_POST['actin_type'] ) ) : '';
 			
 			if ( 'unverify_user' == $action_type ) {
 				delete_user_meta( $user_id, 'customer_email_verified' ); 
@@ -1638,11 +1655,15 @@ class WC_Customer_Email_Verification_Admin {
 	 */
 	public function cev_manual_verify_user() {
 		
-		if ( isset( $_GET['user_id'] ) && isset( $_GET['wp_nonce'] ) && wp_verify_nonce( wc_clean( $_GET['wp_nonce'] ), 'wc_cev_email' ) ) {
+		if ( isset( $_GET['user_id'] ) && isset( $_GET['wp_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['wp_nonce'] ) ), 'wc_cev_email' ) ) {
 			
-			$user_id = wc_clean( $_GET['user_id'] );
+			$user_id = sanitize_text_field( wp_unslash( $_GET['user_id'] ) );
 			
-			if ( isset( $_GET['wc_cev_confirm'] ) && 'true' === $_GET['wc_cev_confirm'] ) { 
+			// Nonce for this request already verified above.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+			$cev_confirm = isset( $_GET['wc_cev_confirm'] ) ? sanitize_text_field( wp_unslash( $_GET['wc_cev_confirm'] ) ) : '';
+
+			if ( 'true' === $cev_confirm ) { 
 				
 				update_user_meta( $user_id, 'customer_email_verified', 'true' );
 				add_action( 'admin_notices', array( $this, 'manual_cev_verify_email_success_admin' ) );
@@ -1653,7 +1674,7 @@ class WC_Customer_Email_Verification_Admin {
 			}				
 		}
 		
-		if ( isset( $user_id ) && isset( $_GET['wp_nonce'] ) && wp_verify_nonce( wc_clean( $_GET['wp_nonce'] ), 'wc_cev_email_confirmation' ) ) {			
+		if ( isset( $user_id ) && isset( $_GET['wp_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['wp_nonce'] ) ), 'wc_cev_email_confirmation' ) ) {			
 			$current_user           = get_user_by( 'id', $user_id );
 			$is_secret_code_present = get_user_meta( $user_id, 'customer_email_verification_code', true );
 
@@ -1767,8 +1788,11 @@ class WC_Customer_Email_Verification_Admin {
 
 	public function filter_user_by_verified( $which ) {
 		if ( 'top' === $which ) {
-			$top = ( isset($_GET['customer_email_verified_top']) ) ? wc_clean( $_GET['customer_email_verified_top'] ) : null;
-			$bottom = ( isset($_GET['customer_email_verified_bottom']) ) ? wc_clean( $_GET['customer_email_verified_bottom'] ) : null;	
+			// Users-list filter values from the admin table, not form processing.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+			$top = ( isset($_GET['customer_email_verified_top']) ) ? sanitize_text_field( wp_unslash( $_GET['customer_email_verified_top'] ) ) : null;
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+			$bottom = ( isset($_GET['customer_email_verified_bottom']) ) ? sanitize_text_field( wp_unslash( $_GET['customer_email_verified_bottom'] ) ) : null;	
 			
 			$true_selected = '';
 			$false_selected = '';
@@ -1785,13 +1809,13 @@ class WC_Customer_Email_Verification_Admin {
 			}
 
 			?>
-			<select name="customer_email_verified_<?php esc_html_e( $which ); ?>" style="float:none;margin-left:10px;">
+			<select name="customer_email_verified_<?php echo esc_attr( $which ); ?>" style="float:none;margin-left:10px;">
 				<option value=''><?php esc_html_e( 'User verification', 'customer-email-verification-for-woocommerce' ); ?></option>
-				<option <?php esc_html_e( $true_selected ); ?> value='true'><?php esc_html_e( 'Verified', 'customer-email-verification-for-woocommerce' ); ?></option>
-				<option <?php esc_html_e( $false_selected ); ?> value='false'><?php esc_html_e( 'Non verified', 'customer-email-verification-for-woocommerce' ); ?></option>
+				<option <?php echo esc_attr( $true_selected ); ?> value='true'><?php esc_html_e( 'Verified', 'customer-email-verification-for-woocommerce' ); ?></option>
+				<option <?php echo esc_attr( $false_selected ); ?> value='false'><?php esc_html_e( 'Non verified', 'customer-email-verification-for-woocommerce' ); ?></option>
 			</select>
 			<?php
-			submit_button( __( 'Filter' ), '', $which, false );
+			submit_button( __( 'Filter', 'customer-email-verification-for-woocommerce' ), '', $which, false );
 		
 		}
 		
@@ -1803,12 +1827,21 @@ class WC_Customer_Email_Verification_Admin {
 		if ( is_admin() && 'users.php' == $pagenow ) {
 			
 			// figure out which button was clicked. The $which in filter_by_job_role()
-			if ( isset( $_GET['customer_email_verified_top'] ) ) {
-				$top = wc_clean( $_GET['customer_email_verified_top'] ) ? wc_clean( $_GET['customer_email_verified_top'] ) : null;
+			$top    = '';
+			$bottom = '';
+
+			// Users-list filter values from the admin table, not form processing.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+			$cev_filter_top = isset( $_GET['customer_email_verified_top'] ) ? sanitize_text_field( wp_unslash( $_GET['customer_email_verified_top'] ) ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+			$cev_filter_bottom = isset( $_GET['customer_email_verified_bottom'] ) ? sanitize_text_field( wp_unslash( $_GET['customer_email_verified_bottom'] ) ) : '';
+
+			if ( '' !== $cev_filter_top ) {
+				$top = $cev_filter_top;
 			}
-			
-			if ( isset( $_GET['customer_email_verified_bottom'] ) ) {
-				$bottom = wc_clean( $_GET['customer_email_verified_bottom'] ) ? wc_clean( $_GET['customer_email_verified_bottom'] ) : null;
+
+			if ( '' !== $cev_filter_bottom ) {
+				$bottom = $cev_filter_bottom;
 			}
 			
 			if ( !empty( $top ) || !empty( $bottom ) ) {
@@ -1897,25 +1930,34 @@ class WC_Customer_Email_Verification_Admin {
 	}
  
 	public function user_bulk_action_notices() {
-	 
-		if ( ! empty( $_REQUEST['verify_users_emails'] ) ) {			
-			printf( '<div id="message" class="updated notice is-dismissible"><p>' .
-				/* translators: %s: replace with email */
-				esc_html( _n( 'Verification Status updated for  %s user.',
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_verified_count = isset( $_REQUEST['verify_users_emails'] ) ? intval( $_REQUEST['verify_users_emails'] ) : 0;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_emailed_count = isset( $_REQUEST['send_verification_emails'] ) ? intval( $_REQUEST['send_verification_emails'] ) : 0;
+
+		if ( 0 < $cev_verified_count ) {
+			/* translators: %s: number of users whose verification status was updated. */
+			$cev_notice = _n(
+				'Verification Status updated for  %s user.',
 				'Verification Status updated for  %s users.',
-				intval( $_REQUEST['verify_users_emails'] )
-			) ) . '</p></div>', intval( $_REQUEST['verify_users_emails'] ) );
+				$cev_verified_count,
+				'customer-email-verification-for-woocommerce'
+			);
+			echo '<div id="message" class="updated notice is-dismissible"><p>' . esc_html( sprintf( $cev_notice, $cev_verified_count ) ) . '</p></div>';
 		}
-	 
-		if ( ! empty( $_REQUEST['send_verification_emails'] ) ) {			
-			printf( '<div id="message" class="updated notice is-dismissible"><p>' .
-				/* translators: %s: replace with email */
-				esc_html( _n( 'Verification email sent to %s user.',
+
+		if ( 0 < $cev_emailed_count ) {
+			/* translators: %s: number of users the verification email was sent to. */
+			$cev_notice = _n(
+				'Verification email sent to %s user.',
 				'Verification email sent to %s users.',
-				intval( $_REQUEST['send_verification_emails'] )
-			) ) . '</p></div>', intval( $_REQUEST['send_verification_emails'] ) );
-	 
+				$cev_emailed_count,
+				'customer-email-verification-for-woocommerce'
+			);
+			echo '<div id="message" class="updated notice is-dismissible"><p>' . esc_html( sprintf( $cev_notice, $cev_emailed_count ) ) . '</p></div>';
 		}
-	 
+
 	}	
 }

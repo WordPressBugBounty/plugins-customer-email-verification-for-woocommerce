@@ -1,6 +1,15 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+// This template is include()d from inside a class method, so the variables
+// below are function-scoped, not globals. PHPCS analyses the file in isolation
+// and cannot see that, hence the false positives.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 	global $wpdb;
 	// Create the query using placeholders
+	// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 	$results = $wpdb->get_results(
 		$wpdb->prepare(
 			"SELECT id, email, last_updated FROM {$wpdb->prefix}cev_user_log WHERE 1 = %d",
@@ -8,6 +17,7 @@
 		),
 		ARRAY_A
 	);
+	// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 	?>
 <section id="cev_content_user" class="cev_tab_section">
 	<?php if ($results) : ?>
@@ -49,7 +59,7 @@
 							</td>
 							<td>
 								<button class="delete_button" data-id="<?php echo esc_attr($row['id']); ?>">
-									<img src="<?php echo esc_url(woo_customer_email_verification()->plugin_dir_url() . 'assets/images/bin.png'); ?>?<?php echo esc_html_e( time() ); ?>" alt="Delete">
+									<img src="<?php echo esc_url(woo_customer_email_verification()->plugin_dir_url() . 'assets/images/bin.png'); ?>?<?php echo esc_attr( time() ); ?>" alt="Delete">
 								</button>
 							</td>
 						</tr>
@@ -60,7 +70,7 @@
 	<?php else : ?>
 		<div class="no_user">
 			<div class="no_user_content">
-				<img src="<?php echo esc_url(woo_customer_email_verification()->plugin_dir_url() . 'assets/images/nouser.png'); ?>?<?php echo esc_html_e( time() ); ?>" alt="nouser">
+				<img src="<?php echo esc_url(woo_customer_email_verification()->plugin_dir_url() . 'assets/images/nouser.png'); ?>?<?php echo esc_attr( time() ); ?>" alt="nouser">
 				<span>No user found!</span>
 			</div>
 		</div>

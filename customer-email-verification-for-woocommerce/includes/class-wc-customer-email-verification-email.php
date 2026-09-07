@@ -81,13 +81,20 @@ class WC_Customer_Email_Verification_Email {
 	
 	public function cev_verify_user_email_on_registration_checkout( $user_id ) {
 		
-		$woocommerce_process_checkout_nonce = isset( $_REQUEST['woocommerce-process-checkout-nonce'] ) ? wc_clean( $_REQUEST['woocommerce-process-checkout-nonce'] ) : '';
-		$_wpnonce = isset( $_REQUEST['_wpnonce'] ) ? wc_clean( $_REQUEST['_wpnonce'] ) : '';
+		// These reads are the nonce lookup itself, verified on the next line.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$woocommerce_process_checkout_nonce = isset( $_REQUEST['woocommerce-process-checkout-nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['woocommerce-process-checkout-nonce'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_wpnonce = isset( $_REQUEST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
+
+		// Checkout create-account flag; the nonce guarding it is checked below.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_createaccount = isset( $_POST['createaccount'] ) ? sanitize_text_field( wp_unslash( $_POST['createaccount'] ) ) : '';
 		
-		$nonce_value = wc_get_var( $woocommerce_process_checkout_nonce, wc_get_var( $_wpnonce, '' ) );
+		$nonce_value = wc_get_var( $woocommerce_process_checkout_nonce, wc_get_var( $cev_wpnonce, '' ) );
 		
 		if ( wp_verify_nonce( $nonce_value, 'woocommerce-process_checkout' ) ) {		
-			if ( isset($_POST['createaccount']) && '1' == $_POST['createaccount'] ) {
+			if ( '1' === $cev_createaccount ) {
 				update_user_meta( $user_id, 'customer_email_verified', 'false' );
 			}
 		}
@@ -108,12 +115,10 @@ class WC_Customer_Email_Verification_Email {
 		
 		$user_role = get_userdata( $user_id );
 		
-		// $verified = get_user_meta( $user_id, 'customer_email_verified', true );
 		update_user_meta( (int) $user_id, 'customer_email_verified', 'false' );
-		$cev_enable_email_verification = get_option( 'cev_enable_email_verification', 1 );		
-		
-		
-		if ( !woo_customer_email_verification()->is_admin_user( $user_id )  && !woo_customer_email_verification()->is_verification_skip_for_user( $user_id ) && 1 == $cev_enable_email_verification && 'true' != $verified ) {
+		$cev_enable_email_verification = get_option( 'cev_enable_email_verification', 1 );
+
+		if ( ! woo_customer_email_verification()->is_admin_user( $user_id ) && ! woo_customer_email_verification()->is_verification_skip_for_user( $user_id ) && 1 == $cev_enable_email_verification ) {
 			
 			$current_user = get_user_by( 'id', $user_id );
 			$this->user_id                         = $current_user->ID;
@@ -155,6 +160,7 @@ class WC_Customer_Email_Verification_Email {
 		$secret      = get_user_meta( $this->user_id, 'customer_email_verification_code', true );
 		$create_link = $secret . '@' . $this->user_id;
 		$hyperlink   = add_query_arg( array(
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- URL-safe encoding of the verification token, not obfuscation.
 			'cusomer_email_verify' => base64_encode( $create_link ),
 		), get_the_permalink( $this->my_account ) );		
 		$link  = '<a href="' . $hyperlink . '">' . __( 'Email verification link', 'customer-email-verification-for-woocommerce' ) . '</a>';
@@ -168,8 +174,14 @@ class WC_Customer_Email_Verification_Email {
 	 */
 	public function authenticate_user_by_email() {
 		
-		if ( isset( $_GET['cusomer_email_verify'] ) && '' !== $_GET['cusomer_email_verify'] ) { // WPCS: input var ok, CSRF ok.
-			$user_meta = explode( '@', base64_decode( wc_clean( $_GET['cusomer_email_verify'] ) ) ); // WPCS: input var ok, CSRF ok.
+		// Public verification link, not a form post: the token is validated against
+		// stored user meta below, so there is no nonce to check.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_email_verify = isset( $_GET['cusomer_email_verify'] ) ? sanitize_text_field( wp_unslash( $_GET['cusomer_email_verify'] ) ) : '';
+
+		if ( '' !== $cev_email_verify ) {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Decoding our own verification token; validated against stored user meta below.
+			$user_meta = explode( '@', base64_decode( $cev_email_verify ) );
 			if ( 'true' === get_user_meta( (int) $user_meta[1], 'customer_email_verified', true ) ) {
 				$this->is_user_already_verified = true;
 			}
@@ -178,6 +190,7 @@ class WC_Customer_Email_Verification_Email {
 			
 			if ( ! empty( $verified_code ) && $verified_code === $user_meta[0] ) {
 				
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 				$cev_email_link_expired = apply_filters( 'cev_email_link_expired', false, (int) $user_meta[1] );
 				
 				if ( $cev_email_link_expired ) {
@@ -190,6 +203,7 @@ class WC_Customer_Email_Verification_Email {
 					update_user_meta( (int) $user_meta[1], 'cev_user_resend_times', 0 );					
 					$verification_success_message = get_option( 'cev_verification_success_message', __( 'Your email is verified!', 'customer-email-verification-for-woocommerce' ) );
 					wc_add_notice( $verification_success_message, 'notice' );	
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 					do_action('cev_new_email_enable');
 				}						
 			}
@@ -221,12 +235,20 @@ class WC_Customer_Email_Verification_Email {
 	}
 	
 	public function show_cev_notification_message_after_register() {
-		if ( isset( $_GET['cev'] ) && '' !== $_GET['cev'] ) { // WPCS: input var ok, CSRF ok.
+		// Notice flags on a link back from registration; they only decide which
+		// message to show, so there is no form nonce to verify.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_notice_flag = isset( $_GET['cev'] ) ? sanitize_text_field( wp_unslash( $_GET['cev'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_resend_token = isset( $_GET['cevsm'] ) ? sanitize_text_field( wp_unslash( $_GET['cevsm'] ) ) : '';
+
+		if ( '' !== $cev_notice_flag ) {
 			$registration_message = get_option( 'cev_verification_message', __( 'We sent you a verification email. Check and verify your account.', 'customer-email-verification-for-woocommerce' ) );
 			wc_add_notice( $registration_message, 'notice' );
 		}
-		if ( isset( $_GET['cevsm'] ) && '' !== $_GET['cevsm'] ) { // WPCS: input var ok, CSRF ok.
-			WC_customer_email_verification_email_Common()->wuev_user_id = base64_decode( wc_clean( $_GET['cevsm'] ) ); // WPCS: input var ok, CSRF ok.
+		if ( '' !== $cev_resend_token ) {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Decoding our own resend token.
+			WC_customer_email_verification_email_Common()->wuev_user_id = base64_decode( $cev_resend_token );
 			if ( false === WC()->session->has_session() ) {
 				WC()->session->set_customer_session_cookie( true );
 			}
@@ -243,9 +265,14 @@ class WC_Customer_Email_Verification_Email {
 	 * If the email is already verified then it redirects to my-account page
 	 */
 	public function cev_resend_verification_email() {
-		if ( isset( $_GET['cev_redirect_limit_resend'] ) && '' !== $_GET['cev_redirect_limit_resend'] ) { // WPCS: input var ok, CSRF ok.
-			
-			$user_id = base64_decode( wc_clean( $_GET['cev_redirect_limit_resend'] ) ); // WPCS: input var ok, CSRF ok.
+		// Resend link from the verification email, not a form post.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_resend_limit_token = isset( $_GET['cev_redirect_limit_resend'] ) ? sanitize_text_field( wp_unslash( $_GET['cev_redirect_limit_resend'] ) ) : '';
+
+		if ( '' !== $cev_resend_limit_token ) {
+
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Decoding our own resend token.
+			$user_id = base64_decode( $cev_resend_limit_token );
 
 			if ( false === WC()->session->has_session() ) {
 				WC()->session->set_customer_session_cookie( true );
@@ -263,6 +290,7 @@ class WC_Customer_Email_Verification_Email {
 				
 				$current_user = get_user_by( 'id', $user_id );
 				
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 				$resend_limit_reached = apply_filters( 'cev_resend_email_limit', false, $user_id );
 				
 				if ( $resend_limit_reached ) {
@@ -290,18 +318,21 @@ class WC_Customer_Email_Verification_Email {
 		
 		check_admin_referer( 'cev_verify_user_email_with_pin', 'cev_verify_user_email_with_pin' );
 		
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$cev_email_link_expired = apply_filters( 'cev_email_link_expired', false, get_current_user_id() );
 				
 		if ( $cev_email_link_expired ) {
 			$verification_message_expire = get_option( 'cev_verification_success_message', __( 'failed', 'customer-email-verification-for-woocommerce' ) );
 			wc_add_notice( $verification_message_expire, 'notice' );
-			echo json_encode( array('success' => 'false') );
+			echo wp_json_encode( array('success' => 'false') );
 			die();	
 		}
 					
 		$cev_email_verification_pin = get_user_meta( get_current_user_id(), 'cev_email_verification_pin', true );								
 		
-		$cev_pin = isset( $_POST['cev_pin1'] ) ? wc_clean( $_POST['cev_pin1'] ) : '';
+		// The PIN is validated against the stored code before it grants anything.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_pin = isset( $_POST['cev_pin1'] ) ? sanitize_text_field( wp_unslash( $_POST['cev_pin1'] ) ) : '';
 		
 		if ( $cev_email_verification_pin['pin'] == $cev_pin ) {
 			$my_account = woo_customer_email_verification()->my_account;
@@ -314,12 +345,13 @@ class WC_Customer_Email_Verification_Email {
 			$verification_success_message = get_option( 'cev_verification_success_message', __( 'Your email is verified!', 'customer-email-verification-for-woocommerce' ) );
 			wc_add_notice( $verification_success_message, 'notice' );
 			
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 			do_action('cev_new_email_enable');
 				
-			echo json_encode( array('success' => 'true','url' => get_permalink($redirect_page_id)) );
+			echo wp_json_encode( array('success' => 'true','url' => get_permalink($redirect_page_id)) );
 			die();
 		} else {
-			echo json_encode( array('success' => 'false') );
+			echo wp_json_encode( array('success' => 'false') );
 			die();
 		}
 		exit;

@@ -1,4 +1,8 @@
 <?php
+// This template is include()d from inside a class method, so the variables
+// below are function-scoped, not globals. PHPCS analyses the file in isolation
+// and cannot see that, hence the false positives.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 /**
  * Html code for settings tab
  * Matches PRO version layout with locked PRO features
@@ -34,7 +38,7 @@ $ignore = get_transient( 'cev_settings_admin_notice_ignore' );
 								<li class="toogel">
 									<div class="accordion-toggle">
 										<input type="hidden" name="cev_enable_email_verification" value="0"/>
-										<input class="tgl tgl-flat-cev" id="cev_enable_email_verification" name="cev_enable_email_verification" type="checkbox" <?php esc_html_e( $checked ); ?> value="1"/>
+										<input class="tgl tgl-flat-cev" id="cev_enable_email_verification" name="cev_enable_email_verification" type="checkbox" <?php echo esc_attr( $checked ); ?> value="1"/>
 										<label class="tgl-btn tgl-panel-label" for="cev_enable_email_verification"></label>
 									</div>
 									<label class="settings_label">

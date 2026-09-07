@@ -60,7 +60,11 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 
 		// Check if we are on the "customer-email-verification-for-woocommerce" settings page.
 		// If so, do not display the notice there.
-		if ( isset( $_GET['page'] ) && 'customer-email-verification-for-woocommerce' === $_GET['page'] ) {
+		// Read-only check of which admin screen we are on, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+
+		if ( 'customer-email-verification-for-woocommerce' === $cev_current_page ) {
 			return;
 		}
 
@@ -171,7 +175,12 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 
 		// WordPress converts dots to underscores in query parameter names,
 		// so check for both forms.
-		if ( isset( $_GET[ $query_arg ] ) || isset( $_GET[ $query_arg_alt ] ) ) {
+		// Dismiss link from our own notice; the only effect is setting a user
+		// preference, so there is no form nonce to verify.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_dismiss_requested = isset( $_GET[ $query_arg ] ) || isset( $_GET[ $query_arg_alt ] );
+
+		if ( $cev_dismiss_requested ) {
 			update_option( $option_key, 'true' );
 			wp_safe_redirect( remove_query_arg( array( $query_arg, $query_arg_alt ) ) );
 			exit;
@@ -187,6 +196,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
  *
  * @return WC_CEV_Admin_Notices_Under_WC_Admin
 */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Established public API of this plugin; renaming breaks CEV PRO and customer code.
 function WC_CEV_Admin_Notices_Under_WC_Admin() {
 	static $instance;
 

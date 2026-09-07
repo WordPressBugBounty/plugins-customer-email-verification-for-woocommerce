@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 /**
  * Customizer Setup and Custom Controls
  *
@@ -41,14 +45,22 @@ class Cev_Initialise_Customizer_Settings {
 	 * Are we opening the custom preview?
 	 */
 	public static function is_own_preview_request() {
-		return isset( $_REQUEST['cev-email-preview'] ) && '1' === $_REQUEST['cev-email-preview'];
+		// Read-only screen/preview check, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_preview = isset( $_REQUEST['cev-email-preview'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['cev-email-preview'] ) ) : '';
+
+		return '1' === $cev_preview;
 	}
 
 	/**
 	 * Are we opening our own customizer controls?
 	 */
 	public static function is_own_customizer_request() {
-		return isset( $_REQUEST['section'] ) && 'cev_main_controls_section' === $_REQUEST['section'];
+		// Read-only screen/preview check, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_section = isset( $_REQUEST['section'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['section'] ) ) : '';
+
+		return 'cev_main_controls_section' === $cev_section;
 	}
 
 	/**
@@ -198,12 +210,11 @@ class Cev_Initialise_Customizer_Settings {
 		WC_customer_email_verification_email_Common()->wuev_user_id = 1;
 
 		$email_heading = get_option( 'cev_verification_email_heading', $this->defaults['cev_verification_email_heading'] );
-		$email_heading = __( $email_heading, 'customer-email-verification-for-woocommerce' );
 		$email_heading = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_heading );
 
 		$email_content = get_option( 'cev_verification_email_body', $this->defaults['cev_verification_email_body'] );
-		$email_content = __( $email_content, 'customer-email-verification-for-woocommerce' );
 		$email_content = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_content );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$email_content = apply_filters( 'cev_verification_email_content', $email_content );
 		$email_content = wpautop( $email_content );
 		$email_content = wp_kses_post( $email_content );
@@ -212,11 +223,13 @@ class Cev_Initialise_Customizer_Settings {
 		$email  = new WC_Email();
 		$email->id = 'Customer_New_Account';
 
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 		$message = apply_filters( 'woocommerce_mail_content', $email->style_inline( $mailer->wrap_message( $email_heading, $email_content ) ) );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$message = apply_filters( 'wc_cev_decode_html_content', $message );
 
 		echo wp_kses_post( $message );
 	}
 }
 
-$cev_customizer_settings = new Cev_Initialise_Customizer_Settings();
+new Cev_Initialise_Customizer_Settings();

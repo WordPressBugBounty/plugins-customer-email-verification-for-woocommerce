@@ -92,6 +92,7 @@ class CEV_Signup_Verification {
 			// Popup / OTP messages.
 			'cev_verified_success' => __( 'Your email is verified successfully.', 'customer-email-verification-for-woocommerce' ),
 			'cev_error_prefix' => __( 'Error:', 'customer-email-verification-for-woocommerce' ),
+			'cev_processing' => __( 'Please wait...', 'customer-email-verification-for-woocommerce' ),
 		));
 		
 	}
@@ -111,7 +112,7 @@ class CEV_Signup_Verification {
 	 */
 	public function resend_otp() {
 		// Verify nonce for security.
-		$nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+		$nonce = isset($_POST['nonce']) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 		if (!$nonce || !wp_verify_nonce($nonce, 'verify_otp_nonce')) {
 			wp_send_json_error(array(
 				'verified' => false,
@@ -120,7 +121,7 @@ class CEV_Signup_Verification {
 		}
 
 		// Get recipient email from POST data.
-		$recipient = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+		$recipient = isset($_POST['email']) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 		if (empty($recipient)) {
 			wp_send_json_error(array(
 				'verified' => false,
@@ -147,14 +148,14 @@ class CEV_Signup_Verification {
 	public function check_email_exists() {
 
 		  // Verify nonce for security.
-		$nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+		$nonce = isset($_POST['nonce']) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 		if (!$nonce || !wp_verify_nonce($nonce, 'verify_otp_nonce')) {
 			  wp_send_json_error(array(
 				  'verified' => false,
 				  'message'  => __('Nonce verification failed.', 'customer-email-verification-for-woocommerce'),
 			  ));
 		}
-		$email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+		$email = isset($_POST['email']) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 		if (!is_email($email)) {
 			wp_send_json_error(array(
 				'not_valid' => true,
@@ -169,7 +170,9 @@ class CEV_Signup_Verification {
 			));
 		}
 		$errors = new WP_Error();		
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 		$errors = apply_filters( 'woocommerce_registration_errors', $errors, '', $email );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 		$errors = apply_filters( 'registration_errors', $errors, '', $email );
 
 		if ( $errors->has_errors() ) {			
@@ -192,6 +195,18 @@ class CEV_Signup_Verification {
 	public function send_signup_verification_email( $recipient ) {
 
 		woo_customer_email_verification()->install->create_user_log_table();
+
+		/*
+		 * Throttle repeat sends for the same address. Without this, every extra
+		 * click on the Register button issues a brand new PIN and overwrites the
+		 * stored one, which silently invalidates the code in the email the
+		 * customer already received.
+		 */
+		if ( $this->is_verification_email_throttled( $recipient ) ) {
+			// The previously sent code is still valid, so reuse it and skip the send.
+			wp_send_json_success( array( 'email' => true ) );
+		}
+
 		$verification_pin = WC_customer_email_verification_email_Common()->generate_verification_pin();
 		$cev_initialise_customizer_settings = new cev_initialise_customizer_settings();	
 		$expire_time =  get_option('cev_verification_code_expiration', 'never');
@@ -202,10 +217,13 @@ class CEV_Signup_Verification {
 		
 		global $wpdb;
 		
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		$email_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}cev_user_log WHERE email = %s", $recipient));
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		$current_time = current_time('mysql');
 		if ($email_exists) {
 			// Update the existing record
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			$wpdb->update(
 				"{$wpdb->prefix}cev_user_log",
 				array(
@@ -225,8 +243,10 @@ class CEV_Signup_Verification {
 				),
 				array('%s') // email
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		} else {
 			// Insert a new record
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			$wpdb->insert(
 				"{$wpdb->prefix}cev_user_log",
 				array(
@@ -244,6 +264,7 @@ class CEV_Signup_Verification {
 					'%s', // last_updated
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		}
 		 WC_customer_email_verification_email_Common()->registerd_user_email  = $recipient;
 		$result = false;		
@@ -256,10 +277,12 @@ class CEV_Signup_Verification {
 		$mailer = WC()->mailer();
 		ob_start();
 	
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 		//do_action( 'woocommerce_email_header',  $email_heading,  $email ); 	
 		$mailer->email_header( $email_heading, $recipient );		
 		$email_body = get_option( 'cev_verification_email_body', $cev_initialise_customizer_settings->defaults['cev_verification_email_body'] );
 		$email_body = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_body );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$email_body = apply_filters( 'cev_verification_email_content', $email_body );
 		$email_body = wpautop( $email_body );
 		$email_body = wp_kses_post( $email_body );
@@ -271,8 +294,10 @@ class CEV_Signup_Verification {
 		$email_abstract_object = new WC_Email();
 		
 		
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 		$email_body = apply_filters( 'woocommerce_mail_content', $email_abstract_object->style_inline( wptexturize( $email_body ) ) );		
 			
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$email_body = apply_filters( 'wc_cev_decode_html_content', $email_body );		
 		
 		$result = $mailer->send( $recipient, $email_subject, $email_body );
@@ -282,12 +307,51 @@ class CEV_Signup_Verification {
 	}
 
 	/**
+	 * Check whether a verification email was already sent to this address moments ago.
+	 *
+	 * Guards against duplicate clicks on the Register button, each of which would
+	 * otherwise send another email and regenerate the stored PIN.
+	 *
+	 * @param string $recipient Email address the code would be sent to.
+	 * @return bool True when the last send is still inside the throttle window.
+	 */
+	public function is_verification_email_throttled( $recipient ) {
+
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
+		$throttle_seconds = (int) apply_filters( 'cev_verification_email_throttle_seconds', 30, $recipient );
+		if ( 1 > $throttle_seconds ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+		$last_sent = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT last_updated FROM {$wpdb->prefix}cev_user_log WHERE email = %s",
+				$recipient
+			)
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+
+		if ( empty( $last_sent ) ) {
+			return false;
+		}
+
+		$elapsed = strtotime( current_time( 'mysql' ) ) - strtotime( $last_sent );
+
+		return 0 <= $elapsed && $elapsed < $throttle_seconds;
+	}
+
+	/**
 	 * Get the from address for outgoing emails.
 	 *
 	 * @return string
 	 */
 	public function get_from_address() {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 		$from_address = apply_filters( 'woocommerce_email_from_address', get_option( 'woocommerce_email_from_address' ), $this );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$from_address = apply_filters( 'cev_email_from_address', $from_address, $this );
 		return sanitize_email( $from_address );
 	}
@@ -298,7 +362,9 @@ class CEV_Signup_Verification {
 	 * @return string
 	 */
 	public function get_from_name() {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 		$from_name = apply_filters( 'woocommerce_email_from_name', get_option( 'woocommerce_email_from_name' ), $this );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$from_name = apply_filters( 'cev_email_from_name', $from_name, $this );
 		return wp_specialchars_decode( esc_html( $from_name ), ENT_QUOTES );
 	}
@@ -308,32 +374,36 @@ class CEV_Signup_Verification {
 		global $wpdb;
 		// Verify nonce
 		
-		$nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+		$nonce = isset($_POST['nonce']) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 		if (!$nonce || !wp_verify_nonce($nonce, 'verify_otp_nonce')) {
 			wp_send_json_error(array('verified' => false, 'message' => __('Nonce verification failed.', 'customer-email-verification-for-woocommerce')));
 		}
-		if (!isset($_POST['otp'])) {
+		$otp = isset($_POST['otp']) ? sanitize_text_field( wp_unslash( $_POST['otp'] ) ) : '';
+		if ( '' === $otp ) {
 			wp_send_json_error(array('verified' => false));
 		}
-		$otp = isset($_POST['otp']) ? sanitize_text_field($_POST['otp']) : '';
-		$email = isset($_POST['email']) ? sanitize_text_field($_POST['email']) : '';
+		$email = isset($_POST['email']) ? sanitize_text_field( wp_unslash( $_POST['email'] ) ) : '';
 		
 		// Assume the OTP is "123456" for demonstration purposes
 		if ( '' == $otp ) {
-			echo json_encode( array( 'success' => 'false' ));
+			echo wp_json_encode( array( 'success' => 'false' ));
 			die();
 		}
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}cev_user_log WHERE email = %s AND pin = %s", $email, $otp));
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		
 		if ($row) {
 			if ($row->verified) {
 				wp_send_json_error(array('verified' => false, 'message' => __('Already verified.', 'customer-email-verification-for-woocommerce')));
 			} else {
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 				$wpdb->delete(
 					"{$wpdb->prefix}cev_user_log",
 					array('id' => $row->id),
 					array('%d')
 				);
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 				wp_send_json_success(array('verified' => true, 'message' => __('Registration and verification successful', 'customer-email-verification-for-woocommerce'), 'redirect_url' =>  home_url() . '/my-account/'));
 						
 				
@@ -344,11 +414,19 @@ class CEV_Signup_Verification {
 	}
 	public function authenticate_user_by_email_link() {
 		global $wpdb;
-		if ( isset( $_GET['cusomer_email_verify'] ) && '' !== $_GET['cusomer_email_verify'] ) {
-			$cusomer_email_verify = wc_clean( $_GET['cusomer_email_verify'] );
-			$user_meta = explode( '@', base64_decode( $cusomer_email_verify ) ); 
+
+		// Public verification link, not a form post: the token below carries no
+		// privileges on its own and is matched against the secret_code stored in
+		// cev_user_log before anything happens, so there is no nonce to check.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cusomer_email_verify = isset( $_GET['cusomer_email_verify'] ) ? sanitize_text_field( wp_unslash( $_GET['cusomer_email_verify'] ) ) : '';
+
+		if ( '' !== $cusomer_email_verify ) {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Decoding our own verification token; matched against cev_user_log below.
+			$user_meta = explode( '@', base64_decode( $cusomer_email_verify ) );
 			$email_secret_code = $user_meta[0];
 	
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"SELECT email, password FROM {$wpdb->prefix}cev_user_log WHERE secret_code = %s",
@@ -356,6 +434,7 @@ class CEV_Signup_Verification {
 				),
 				ARRAY_A
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 	
 			if ($result) {
 				$email = $result['email'];
@@ -377,10 +456,11 @@ class CEV_Signup_Verification {
 	
 						wp_set_current_user($new_customer);
 						wp_set_auth_cookie($new_customer);
+						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
 						do_action('wp_login', $email, get_userdata($new_customer));
 	
 						// wp_send_json_success(array('verified' => true, 'message' => 'Registration and verification successful', 'redirect_url' => home_url() . '/my-account/'));
-						wp_redirect( home_url() . '/my-account/' );
+						wp_safe_redirect( home_url() . '/my-account/' );
 						exit;
 					} else {
 						wp_send_json_error(array('verified' => false, 'message' =>  __('Error creating user', 'customer-email-verification-for-woocommerce')));
@@ -406,7 +486,7 @@ class CEV_Signup_Verification {
 		$pin = ''; //our default pin is blank.
 		while ( $i < $digits ) {
 			//generate a random number between 0 and 9.
-			$pin .= mt_rand(0, 9);
+			$pin .= wp_rand( 0, 9 );
 			$i++;
 		}		
 		return $pin;

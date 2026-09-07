@@ -1,4 +1,8 @@
 <?php
+// This template is include()d from inside a class method, so the variables
+// below are function-scoped, not globals. PHPCS analyses the file in isolation
+// and cannot see that, hence the false positives.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 /**
  * Unverified Users tab body (ZUI redesign, Free).
  *
@@ -28,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 $cev_user_rows = $wpdb->get_results(
 	$wpdb->prepare(
 		"SELECT id, email, last_updated FROM {$wpdb->prefix}cev_user_log WHERE 1 = %d ORDER BY last_updated DESC",
@@ -36,7 +40,7 @@ $cev_user_rows = $wpdb->get_results(
 	),
 	ARRAY_A
 );
-// phpcs:enable
+// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 
 $cev_total_pending = is_array( $cev_user_rows ) ? count( $cev_user_rows ) : 0;
 

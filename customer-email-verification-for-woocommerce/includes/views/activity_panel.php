@@ -1,4 +1,12 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+// This template is include()d from inside a class method, so the variables
+// below are function-scoped, not globals. PHPCS analyses the file in isolation
+// and cannot see that, hence the false positives.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 $support_link = class_exists( 'customer_email_verification_pro' ) ? 'https://www.zorem.com/?support=1' : 'https://wordpress.org/support/plugin/customer-email-verification-for-woocommerce/#new-topic-0' ;
 ?>
 <div class="menu-container">

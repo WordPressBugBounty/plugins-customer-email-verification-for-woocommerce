@@ -1,4 +1,12 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+// This template is include()d from inside a class method, so the variables
+// below are function-scoped, not globals. PHPCS analyses the file in isolation
+// and cannot see that, hence the false positives.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 // === Safe fallback defaults ===
 $email = __( 'johny@example.com', 'customer-email-verification-for-woocommerce' );
 $try_again = __( 'Try Again', 'customer-email-verification-for-woocommerce' );
@@ -75,6 +83,7 @@ $image = get_option(
 								$message = sprintf(
 									__( 'We sent a verification code. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification-for-woocommerce' )
 								);
+								// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 								$message = apply_filters( 'cev_verification_popup_message', $message, $email );
 								echo wp_kses_post( $message );
 								?>
