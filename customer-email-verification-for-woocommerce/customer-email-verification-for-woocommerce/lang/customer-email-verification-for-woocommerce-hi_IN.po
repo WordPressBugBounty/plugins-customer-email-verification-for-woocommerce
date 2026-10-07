@@ -1,0 +1,653 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Customer Email verification for WooCommerce\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-22 11:41+0000\n"
+"PO-Revision-Date: 2026-02-12 09:44+0000\n"
+"Last-Translator: John Doe\n"
+"Language-Team: Hindi\n"
+"Language: hi_IN\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.5; wp-5.8.2"
+
+#: includes/views/admin_options_settings.php:147
+msgid "10 min"
+msgstr "10 मिनट"
+
+#: includes/views/admin_options_settings.php:260
+msgid "15 Days"
+msgstr "15 दिन"
+
+#: includes/views/admin_options_settings.php:129
+msgid "4-digit"
+msgstr "4 अंक"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:78
+#| msgid "4-digits code"
+msgid "4-digit code"
+msgstr "4-अंकीय कोड"
+
+#: includes/class-wc-customer-email-verification-admin.php:657
+msgid "Actions"
+msgstr "कार्रवाई"
+
+#: includes/views/cev_addons_tab.php:601
+msgid "Active"
+msgstr "सक्रिय"
+
+#: includes/views/admin_options_settings.php:166
+msgid "Allow 3 Attempts"
+msgstr "3 प्रयासों की अनुमति है"
+
+#: includes/views/cev_addons_tab.php:534
+msgid "API Protection"
+msgstr "एपीआई सुरक्षा"
+
+#: includes/customizer/class-cev-customizer.php:173
+#: includes/customizer/verification-widget-message.php:237
+msgid "Available variables"
+msgstr "Available variables"
+
+#: includes/views/cev_addons_tab.php:491
+msgid "CEV FREE"
+msgstr "सीईवी मुक्त"
+
+#: includes/views/cev_addons_tab.php:495
+msgid "CEV PRO"
+msgstr "सीईवी प्रो"
+
+#: includes/views/cev_pro_sidebar.php:39
+msgid ""
+"Check our documentation or contact our support team if you have any "
+"questions."
+msgstr ""
+"यदि आपके कोई प्रश्न हैं तो हमारे दस्तावेज़ देखें या हमारी सहायता टीम से "
+"संपर्क करें।"
+
+#: includes/views/admin_options_settings.php:63
+msgid "Checkout Verification Type"
+msgstr "चेकआउट सत्यापन प्रकार"
+
+#: includes/views/admin_options_settings.php:137
+msgid "Choose if you wish to set expiry time to the OTP."
+msgstr ""
+"आप चाहें तो ओटीपी की समाप्ति तिथि निर्धारित कर सकते हैं या नहीं, यह विकल्प "
+"चुनें।"
+
+#: includes/views/cev_addons_tab.php:490
+msgid "Current"
+msgstr "मौजूदा"
+
+#: includes/views/cev_addons_tab.php:516
+msgid "Custom Limits"
+msgstr "अनुकूलित सीमाएँ"
+
+#. Name of the plugin
+msgid "Customer Email Verification for WooCommerce"
+msgstr "WooCommerce के लिए ग्राहक ईमेल सत्यापन"
+
+#: includes/class-wc-customer-email-verification-admin.php:823
+#| msgid ""
+#| "Customer verification\n"
+msgid "Customer verification"
+msgstr "ग्राहक सत्यापन"
+
+#: includes/views/cev_addons_tab.php:508
+msgid "Customize OTP digit length and set expiration time."
+msgstr "ओटीपी अंकों की लंबाई को अनुकूलित करें और समाप्ति समय निर्धारित करें।"
+
+#: includes/views/cev_addons_tab.php:526
+msgid "Detect new devices, new locations, and inactive logins."
+msgstr "नए डिवाइस, नए स्थान और निष्क्रिय लॉगिन का पता लगाएं।"
+
+#: includes/views/cev_signup_popup.php:25
+#: includes/customizer/verification-widget-message.php:106
+msgid "Didn't receive an email? {cev_resend_verification}"
+msgstr "एक ईमेल नहीं मिला? {cev_resend_verification}"
+
+#. %s: Try again link
+#: includes/views/front/preview_cev_popup_page.php:17
+#, php-format
+msgid "Didn’t receive an email? <strong>%s</strong>"
+msgstr "क्या आपको कोई ईमेल नहीं मिला है? % s"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:12
+msgid "Didn’t receive an email? Try Again"
+msgstr "ईमेल नहीं मिला? पुनः प्रयास करें"
+
+#: includes/views/cev_addons_tab.php:532
+msgid "Disable Store API checkout to prevent bypassing verification."
+msgstr ""
+"सत्यापन प्रक्रिया को दरकिनार करने से रोकने के लिए स्टोर एपीआई चेकआउट को "
+"अक्षम करें।"
+
+#: includes/views/admin_options_settings.php:95
+msgid "Disable WooCommerce Store API Checkout"
+msgstr "WooCommerce स्टोर API चेकआउट को अक्षम करें"
+
+#: includes/customizer/class-cev-customizer.php:125
+msgid "Email Heading"
+msgstr "ईमेल शीर्षक"
+
+#: includes/class-wc-customer-email-verification-admin.php:656
+#| msgid "Email for Verification"
+msgid "Email verification"
+msgstr "सत्यापन के लिए ईमेल करें"
+
+#: includes/views/cev_addons_tab.php:501
+msgid "Email Verification at Checkout"
+msgstr "चेकआउट के समय ईमेल सत्यापन"
+
+#: includes/views/cev_pro_sidebar.php:21
+msgid "Email verification at checkout"
+msgstr "चेकआउट के समय ईमेल सत्यापन"
+
+#: includes/views/admin_options_settings.php:27
+msgid "Email verification settings"
+msgstr "ईमेल सत्यापन सेटिंग्स"
+
+#: includes/class-wc-customer-email-verification-admin.php:825
+msgid "Email verification status:"
+msgstr "ईमेल सत्यापन स्थिति:"
+
+#: includes/views/admin_options_settings.php:191
+msgid "Email Verification Success Message"
+msgstr "ईमेल सत्यापन सफलता संदेश"
+
+#: includes/class-wc-customer-email-verification-admin.php:513
+#: includes/class-wc-customer-email-verification-admin.php:580
+#| msgid "Verification Success Message"
+msgid "Email verification success message"
+msgstr "सत्यापन सफलता संदेश"
+
+#: includes/views/admin_options_settings.php:53
+msgid "Enable Checkout Verification"
+msgstr "चेकआउट सत्यापन सक्षम करें"
+
+#: includes/views/admin_options_settings.php:219
+msgid "Enable Login Authentication"
+msgstr "लॉगिन प्रमाणीकरण सक्षम करें"
+
+#: includes/views/admin_options_settings.php:41
+msgid "Enable Signup Verification"
+msgstr "साइनअप सत्यापन सक्षम करें"
+
+#: includes/views/cev_addons_tab.php:580
+msgid "Extend your store's capabilities with our ecosystem"
+msgstr "हमारे इकोसिस्टम के साथ अपने स्टोर की क्षमताओं का विस्तार करें।"
+
+#: includes/views/cev_addons_tab.php:488
+msgid "Feature Comparison"
+msgstr "विशेषता तुलना"
+
+#: includes/customizer/verification-widget-message.php:216
+msgid "Footer content"
+msgstr "पाद सामग्री"
+
+#: includes/views/cev_addons_tab.php:504
+msgid "Full Checkout Verification"
+msgstr "पूर्ण चेकआउट सत्यापन"
+
+#: includes/views/cev_addons_tab.php:510
+msgid "Fully Configurable"
+msgstr "पूरी तरह से कॉन्फ़िगर करने योग्य"
+
+#: includes/views/cev_pro_sidebar.php:25
+msgid "Fully customizable verification emails"
+msgstr "पूरी तरह से अनुकूलित किए जा सकने वाले सत्यापन ईमेल"
+
+#: includes/views/admin_options_settings.php:111
+msgid "General Settings"
+msgstr "सामान्य सेटिंग्स"
+
+#: includes/views/cev_addons_tab.php:568
+msgid "GET STARTED WITH PRO"
+msgstr "प्रो के साथ शुरुआत करें"
+
+#: includes/class-wc-customer-email-verification-admin.php:317
+#: includes/class-wc-customer-email-verification-admin.php:321
+msgid "Go Pro"
+msgstr "पेशेवर बनो"
+
+#: includes/customizer/verification-widget-message.php:169
+msgid "Header text"
+msgstr "शीर्ष लेख पाठ"
+
+#. Author URI of the plugin
+msgid "https://www.zorem.com"
+msgstr "https://www.zorem.com"
+
+#. URI of the plugin
+msgid ""
+"https://www.zorem.com/products/customer-email-verification-for-woocommerce/"
+msgstr ""
+"https://www.zorem.com/products/customer-email-verification-for-woocommerce/"
+
+#: includes/views/admin_options_settings.php:67
+msgid "Inline"
+msgstr "इन - लाइन"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:3
+#: includes/views/cev_signup_popup.php:3
+#: includes/views/front/preview_cev_popup_page.php:3
+msgid "johny@example.com"
+msgstr "johny@example.com"
+
+#: includes/views/admin_options_settings.php:258
+msgid "Last login more than"
+msgstr "पिछला लॉगिन इससे अधिक समय पहले हुआ था"
+
+#: includes/views/cev_addons_tab.php:603
+msgid "Learn More"
+msgstr "और अधिक जानें"
+
+#: includes/views/cev_addons_tab.php:514
+msgid "Limit the number of resend attempts to prevent abuse."
+msgstr "दुरुपयोग को रोकने के लिए पुनः भेजने के प्रयासों की संख्या सीमित करें।"
+
+#: includes/views/admin_options_settings.php:174
+msgid "Limit the number of resend attempts."
+msgstr "पुनः भेजने के प्रयासों की संख्या सीमित करें।"
+
+#: includes/views/cev_addons_tab.php:519
+#: includes/views/admin_options_settings.php:207
+msgid "Login Authentication"
+msgstr "लॉगिन प्रमाणीकरण"
+
+#: includes/views/admin_options_settings.php:243
+msgid "Login from a new device"
+msgstr "नए डिवाइस से लॉग इन करें"
+
+#: includes/views/admin_options_settings.php:250
+msgid "Login from a new location"
+msgstr "किसी नए स्थान से लॉग इन करें"
+
+#: includes/views/cev_pro_sidebar.php:38
+msgid "Need help?"
+msgstr "मदद की ज़रूरत है?"
+
+#: includes/views/cev_addons_tab.php:503 includes/views/cev_addons_tab.php:509
+#: includes/views/cev_addons_tab.php:515 includes/views/cev_addons_tab.php:521
+#: includes/views/cev_addons_tab.php:527 includes/views/cev_addons_tab.php:533
+msgid "Not Available"
+msgstr "उपलब्ध नहीं है"
+
+#: includes/views/admin_options_settings.php:136
+msgid "OTP Expiration"
+msgstr "ओटीपी समाप्ति"
+
+#: includes/views/cev_pro_sidebar.php:23
+msgid "OTP expiration & resend limits"
+msgstr "OTP की समय सीमा समाप्त होने और पुनः भेजने की सीमाएँ"
+
+#: includes/views/admin_options_settings.php:119
+msgid "OTP Length"
+msgstr "ओटीपी की लंबाई"
+
+#: includes/views/cev_addons_tab.php:507
+msgid "OTP Length & Expiration"
+msgstr "ओटीपी की अवधि और समाप्ति तिथि"
+
+#: includes/views/cev_addons_tab.php:522
+msgid "OTP-Based Login"
+msgstr "ओटीपी आधारित लॉगिन"
+
+#: includes/views/cev_pro_sidebar.php:22
+msgid "OTP-based login authentication"
+msgstr "ओटीपी-आधारित लॉगिन प्रमाणीकरण"
+
+#: includes/customizer/verification-widget-message.php:132
+msgid "Overlay background Color"
+msgstr "ओवरले पृष्ठभूमि रंग"
+
+#. %s: search WooCommerce plugin link
+#: customer-email-verification-for-woocommerce.php:144
+#, php-format
+msgid ""
+"Please install and activate %1$sWooCommerce%2$s for Customer Email "
+"Verification for WooCommerce!"
+msgstr ""
+"WooCommerce के लिए ग्राहक ईमेल सत्यापन के लिए कृपया %1$sWooCommerce%2$s "
+"स्थापित और सक्रिय करें!"
+
+#: includes/views/admin_options_settings.php:68
+msgid "Popup"
+msgstr "पॉप अप"
+
+#: includes/views/cev_addons_tab.php:579
+msgid "Powerful Add-ons"
+msgstr "शक्तिशाली ऐड-ऑन"
+
+#: includes/views/cev_addons_tab.php:537
+msgid "Premium Support"
+msgstr "प्रीमियम समर्थन"
+
+#: includes/views/cev_addons_tab.php:540
+msgid "Priority Support"
+msgstr "प्राथमिकता समर्थन"
+
+#: includes/views/cev_addons_tab.php:538
+msgid "Priority ticket handling and dedicated help center access."
+msgstr ""
+"प्राथमिकता के आधार पर टिकटों का निपटान और समर्पित सहायता केंद्र तक पहुंच।"
+
+#: includes/views/admin_options_settings.php:56
+#: includes/views/admin_options_settings.php:98
+#: includes/views/admin_options_settings.php:122
+#: includes/views/admin_options_settings.php:140
+#: includes/views/admin_options_settings.php:159
+#: includes/views/admin_options_settings.php:177
+#: includes/views/admin_options_settings.php:222
+msgid "PRO"
+msgstr "प्रो"
+
+#: includes/views/cev_addons_tab.php:494
+msgid "Recommended"
+msgstr "अनुशंसित"
+
+#: includes/views/admin_options_settings.php:83
+msgid "Require checkout verification only for free orders"
+msgstr "मुफ़्त ऑर्डर के लिए ही चेकआउट सत्यापन आवश्यक है।"
+
+#: includes/views/cev_addons_tab.php:502
+msgid "Require email verification before completing checkout."
+msgstr "चेकआउट पूरा करने से पहले ईमेल सत्यापन आवश्यक है।"
+
+#: includes/views/admin_options_settings.php:76
+msgid ""
+"Require email verification only when Create an account during checkout is "
+"selected"
+msgstr ""
+"चेकआउट के दौरान खाता बनाने का विकल्प चुनने पर ही ईमेल सत्यापन आवश्यक है।"
+
+#: includes/views/admin_options_settings.php:230
+msgid "Require OTP verification for unrecognized login"
+msgstr "अपरिचित लॉगिन के लिए OTP सत्यापन आवश्यक है"
+
+#: includes/views/cev_addons_tab.php:520
+msgid "Require OTP verification for unrecognized login attempts."
+msgstr "अज्ञात लॉगिन प्रयासों के लिए ओटीपी सत्यापन आवश्यक है।"
+
+#: includes/class-wc-customer-email-verification-email-common.php:185
+msgid "Resend Confirmation Email"
+msgstr "पुष्टिकरण ईमेल पुन: भेजें"
+
+#: includes/class-wc-customer-email-verification-email-common.php:233
+msgid "Resend confirmation email"
+msgstr "पुष्टिकरण ईमेल पुन: भेजें"
+
+#: includes/views/admin_options_settings.php:173
+msgid "Resend Limit Message"
+msgstr "पुनः भेजें सीमा संदेश"
+
+#: includes/class-wc-customer-email-verification-admin.php:806
+#: includes/class-wc-customer-email-verification-admin.php:854
+#| msgid "Resend Verification Email"
+msgid "Resend verification email"
+msgstr "सत्यापन ईमेल पुनः भेजे"
+
+#: includes/views/admin_options_settings.php:273
+msgid "Save"
+msgstr "बचाना"
+
+#: includes/class-wc-customer-email-verification-admin.php:950
+msgid "Send verification email"
+msgstr "सत्यापन ईमेल भेजें"
+
+#: includes/class-wc-customer-email-verification-admin.php:289
+#: includes/class-wc-customer-email-verification-admin.php:293
+msgid "Settings"
+msgstr "सेटिंग्स"
+
+#: customer-email-verification-for-woocommerce.php:331
+#| msgid "Sign Up Email Verification"
+msgid "Sign up email verification"
+msgstr "ईमेल सत्यापन पर हस्ताक्षर करें"
+
+#: includes/class-wc-customer-email-verification-email-common.php:193
+msgid "Site Title"
+msgstr "सत्यापन ईमेल भेजें"
+
+#: includes/class-wc-customer-email-verification-admin.php:524
+#: includes/class-wc-customer-email-verification-admin.php:591
+#| msgid "Skip email verification for the selected user roles"
+msgid "Skip email verification for the selected user roles:"
+msgstr "चयनित उपयोगकर्ता भूमिकाओं के लिए ईमेल सत्यापन छोड़ें"
+
+#: includes/views/cev_addons_tab.php:528
+msgid "Smart Detection"
+msgstr "स्मार्ट डिटेक्शन"
+
+#: includes/views/cev_addons_tab.php:539
+msgid "Standard Only"
+msgstr "केवल मानक"
+
+#: includes/views/cev_addons_tab.php:476
+msgid ""
+"Stop worrying about fake registrations and unauthorized access. Switch from "
+"<strong>basic email verification</strong> to a <a href=\"https://www.zorem."
+"com/product/customer-email-verification/?utm_source=wp-admin&utm_medium=cev-"
+"go-pro&utm_campaign=hero\" target=\"_blank\">fully secured verification "
+"powerhouse</a>."
+msgstr ""
+"फर्जी पंजीकरण और अनधिकृत पहुंच की चिंता करना बंद करें। <strong>साधारण ईमेल "
+"सत्यापन</strong> से हटकर एक <a href=\"https://www.zorem.com/product/customer-"
+"email-verification/?utm_source=wp-admin&utm_medium=cev-go-"
+"pro&utm_campaign=hero\" target=\"_blank\">पूर्णतः सुरक्षित सत्यापन प्रणाली "
+"का</a> उपयोग करें।"
+
+#: includes/customizer/class-cev-customizer.php:101
+msgid "Subject"
+msgstr "विषय"
+
+#: includes/views/cev_addons_tab.php:472
+msgid "Take Your Email Verification to the Next Level"
+msgstr "अपने ईमेल सत्यापन को अगले स्तर पर ले जाएं"
+
+#. Description of the plugin
+msgid ""
+"The Customer verification helps WooCommerce store owners to reduce "
+"registration spam by requiring customers to verify their email address when "
+"they register an account on your store, before they can access their account "
+"area."
+msgstr ""
+"ग्राहक सत्यापन से WooCommerce स्टोर मालिकों को पंजीकरण के स्पैम को कम करने "
+"के लिए ग्राहकों को अपने ईमेल पते को सत्यापित करने की आवश्यकता होती है, जब वे "
+"आपके स्टोर क्षेत्र में प्रवेश करने से पहले आपके स्टोर पर खाता पंजीकृत करने "
+"में मदद करते हैं।"
+
+#: includes/views/admin_options_settings.php:192
+msgid ""
+"The message that will appear on the top of the my-account or checkout page "
+"after successful email verification"
+msgstr ""
+"ईमेल सत्यापन सफल होने के बाद मेरे खाते या चेकआउट पेज के शीर्ष पर दिखाई देने "
+"वाला संदेश"
+
+#: includes/class-wc-customer-email-verification-admin.php:515
+#: includes/class-wc-customer-email-verification-admin.php:582
+msgid ""
+"the message that will appear on the top of the my-account or checkout page "
+"after successful email verification"
+msgstr ""
+"संदेश जो सफल ईमेल सत्यापन के बाद मेरे खाते या चेकआउट पृष्ठ के शीर्ष पर दिखाई "
+"देगा"
+
+#: includes/views/admin_options_settings.php:183
+msgid "Too many attempts, please contact us for further assistance"
+msgstr ""
+"बहुत अधिक प्रयास किए गए हैं, कृपया आगे की सहायता के लिए हमसे संपर्क करें।"
+
+#: includes/class-wc-customer-email-verification-email-common.php:197
+#: includes/class-wc-customer-email-verification-email-common.php:288
+#: includes/views/front/preview_cev_popup_page.php:4
+msgid "Try Again"
+msgstr "पुनः प्रयास करें"
+
+#: includes/class-wc-customer-email-verification-admin.php:858
+msgid "Un-verify email"
+msgstr "ईमेल को अन-सत्यापित करें"
+
+#: includes/views/cev_pro_sidebar.php:18
+msgid "Unlock Advanced Email Verification with CEV PRO"
+msgstr "CEV PRO के साथ उन्नत ईमेल सत्यापन को अनलॉक करें"
+
+#: includes/views/admin_options_settings.php:237
+msgid "Unrecognized Login Conditions:"
+msgstr "अपरिचित लॉगिन शर्तें:"
+
+#: includes/views/cev_addons_tab.php:525
+msgid "Unrecognized Login Detection"
+msgstr "अपरिचित लॉगिन का पता लगाना"
+
+#: includes/views/cev_pro_sidebar.php:24
+msgid "Unrecognized login detection"
+msgstr "अपरिचित लॉगिन का पता लगाना"
+
+#: includes/views/cev_pro_sidebar.php:19
+msgid ""
+"Upgrade to CEV PRO to secure your WooCommerce store with advanced email "
+"verification and login authentication beyond the basics."
+msgstr ""
+"बुनियादी सुविधाओं से कहीं आगे बढ़कर उन्नत ईमेल सत्यापन और लॉगिन प्रमाणीकरण "
+"के साथ अपने WooCommerce स्टोर को सुरक्षित करने के लिए CEV PRO में अपग्रेड "
+"करें।"
+
+#: includes/views/cev_pro_sidebar.php:28
+msgid "UPGRADE TO CEV PRO→"
+msgstr "CEV PRO में अपग्रेड करें→"
+
+#: includes/class-wc-customer-email-verification-email-common.php:173
+msgid "User display name"
+msgstr "उपयोगकर्ता प्रदर्शन नाम"
+
+#: includes/class-wc-customer-email-verification-email-common.php:177
+msgid "User email"
+msgstr "उपयोगकर्ता ईमेल"
+
+#: includes/class-wc-customer-email-verification-email-common.php:169
+msgid "User login"
+msgstr "उपयोगकर्ता लॉगिन"
+
+#: includes/class-wc-customer-email-verification-admin.php:794
+#| msgid "User Unverified."
+msgid "User unverified."
+msgstr "उपयोगकर्ता असत्यापित।"
+
+#: includes/class-wc-customer-email-verification-admin.php:786
+#| msgid "User Verified Successfully."
+msgid "User verified successfully."
+msgstr "उपयोगकर्ता सत्यापित सफलतापूर्वक।"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:95
+msgid "Verification code does not match"
+msgstr "सत्यापन कोड मेल नहीं खाता है"
+
+#: includes/customizer/class-customer-verification-new-customizer.php:35
+#| msgid "Verification Email"
+msgid "Verification email"
+msgstr "सत्यापन ईमेल"
+
+#: includes/views/cev_addons_tab.php:513
+#: includes/views/admin_options_settings.php:156
+msgid "Verification Email Resend Limit"
+msgstr "सत्यापन ईमेल पुनः भेजने की सीमा"
+
+#: includes/class-wc-customer-email-verification-admin.php:777
+#| msgid "Verification Email Successfully Sent."
+msgid "Verification email successfully sent."
+msgstr "सत्यापन ईमेल सफलतापूर्वक भेजा गया।"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:53
+#: includes/views/cev_signup_popup.php:74
+#: includes/views/front/preview_cev_popup_page.php:66
+msgid "Verification icon"
+msgstr "सत्यापन आइकन"
+
+#: includes/customizer/class-customer-verification-new-customizer.php:44
+#| msgid "Verification in Account Email"
+msgid "Verification in new account email"
+msgstr "खाता ईमेल में सत्यापन"
+
+#: includes/class-wc-customer-email-verification-email-common.php:181
+msgid "Verification link"
+msgstr "सत्यापन लिंक"
+
+#: includes/customizer/class-cev-customizer.php:149
+msgid "Verification Message"
+msgstr "सत्यापन संदेश"
+
+#: includes/class-wc-customer-email-verification-email-common.php:189
+msgid "Verification Pin"
+msgstr "सत्यापन पिन"
+
+#: includes/customizer/class-customer-verification-new-customizer.php:27
+#| msgid "Verification widget style"
+msgid "Verification widget"
+msgstr "सत्यापन विजेट"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:114
+msgid "Verify code"
+msgstr "कोड सत्यापित करें"
+
+#: includes/class-wc-customer-email-verification-admin.php:850
+msgid "Verify email manually"
+msgstr "ईमेल को मैन्युअल रूप से सत्यापित करें"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:11
+#: includes/views/cev_signup_popup.php:23
+#: includes/views/front/preview_cev_popup_page.php:15
+msgid "Verify it's you."
+msgstr "सत्यापित करें कि यह आप ही हैं."
+
+#: includes/customizer/verification-widget-message.php:104
+msgid "Verify its you."
+msgstr "इसका सत्यापन करें।"
+
+#: includes/class-wc-customer-email-verification-admin.php:949
+msgid "Verify users email"
+msgstr "उपयोगकर्ताओं को ईमेल सत्यापित करें"
+
+#: includes/views/cev_pro_sidebar.php:41
+msgid "View Documentation →"
+msgstr "दस्तावेज़ देखें →"
+
+#: includes/views/cev_admin_endpoint_popup_template.php:65
+#: includes/views/cev_signup_popup.php:24
+#: includes/customizer/verification-widget-message.php:105
+#: includes/views/front/preview_cev_popup_page.php:76
+#| msgid ""
+#| "We sent verification code to  {customer_email}. To verify your email "
+#| "address, please check your inbox and enter the code below."
+msgid ""
+"We sent a verification code. To verify your email address, please check your "
+"inbox and enter the code below."
+msgstr ""
+"हमने एक सत्यापन कोड भेजा है। अपना ईमेल पता सत्यापित करने के लिए, कृपया अपना "
+"इनबॉक्स देखें और नीचे दिया गया कोड दर्ज करें।"
+
+#: includes/customizer/verification-widget-message.php:150
+msgid "Widget background Color"
+msgstr "विजेट पृष्ठभूमि रंग"
+
+#: includes/views/cev_addons_tab.php:531
+msgid "WooCommerce Store API Checkout"
+msgstr "WooCommerce स्टोर API चेकआउट"
+
+#: includes/class-wc-customer-email-verification-admin.php:516
+#: includes/class-wc-customer-email-verification-admin.php:518
+#: includes/class-wc-customer-email-verification-admin.php:583
+#: includes/class-wc-customer-email-verification-admin.php:585
+#: includes/views/admin_options_settings.php:195
+#: includes/views/admin_options_settings.php:195
+#| msgid "Your Email is verified!"
+msgid "Your email is verified!"
+msgstr "आपका ईमेल सत्यापित है!"
+
+#. Author of the plugin
+msgid "zorem"
+msgstr "ज़ोरेम"

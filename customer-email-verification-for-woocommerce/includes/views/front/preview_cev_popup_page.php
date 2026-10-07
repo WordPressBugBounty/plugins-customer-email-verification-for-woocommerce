@@ -47,10 +47,17 @@ $overlay_background_color = get_option(
 // === Safe heading ===
 $heading_default = $cev_verification_widget_message->defaults['cev_verification_header'];
 $heading = get_option( 'cev_verification_header', $heading_default );
+// A field cleared in the Customizer shows its default text, matching the live popup.
+if ( '' === trim( wp_strip_all_tags( (string) $heading ) ) ) {
+	$heading = $heading_default;
+}
 
 // === Safe footer ===
 $footer_default = $cev_verification_widget_message->defaults['cev_verification_widget_footer'];
 $footer_message = get_option( 'cev_verification_widget_footer', $footer_default );
+if ( '' === trim( wp_strip_all_tags( (string) $footer_message ) ) ) {
+	$footer_message = $footer_default;
+}
 $footer_message = str_replace( '{cev_resend_verification}', $try_again, $footer_message );
 
 // === Safe verification code length ===
@@ -83,8 +90,13 @@ $image = get_option(
 								$message = sprintf(
 									__( 'We sent a verification code. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification-for-woocommerce' )
 								);
+								$cev_default_message = $message;
 								// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
-								$message = apply_filters( 'cev_verification_popup_message', $message, $email );
+								$message             = apply_filters( 'cev_verification_popup_message', $message, $email );
+								// A cleared Message field shows the default text, matching the live popup.
+								if ( '' === trim( wp_strip_all_tags( (string) $message ) ) ) {
+									$message = $cev_default_message;
+								}
 								echo wp_kses_post( $message );
 								?>
 							</span>

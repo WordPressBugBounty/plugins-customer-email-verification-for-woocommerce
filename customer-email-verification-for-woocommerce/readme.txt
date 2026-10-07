@@ -1,12 +1,12 @@
 === Customer Email Verification for WooCommerce ===
 Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
-Tags: email verification, registration, woocommerce, spam, customer verification
+Tags: email verification, customer verification, otp verification, fake accounts, spam registrations
 Requires at least: 5.3
 Tested up to: 7.1
-Stable tag: 2.8.1
+Stable tag: 2.8.2
 Requires PHP: 7.2
 WC requires at least: 5.0
-WC tested up to: 11.1.0
+WC tested up to: 11.1.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Block fake WooCommerce registrations with OTP email verification. Customers veri
 
 == Description ==
 
-**Customer Email Verification for WooCommerce** stops fake accounts and spam registrations at the source. When a customer tries to register on your WooCommerce store, they must verify their email address with a one-time OTP code before their account is created — no unverified accounts, no disposable emails slipping through.
+**Customer Email Verification for WooCommerce** stops fake accounts and spam registrations at the source. When a customer tries to register on your WooCommerce store, they must verify their email address with a one-time OTP code before their account is created — so every account on your store has a real, working email address behind it.
 
 The verification popup appears seamlessly during registration, the OTP is sent immediately via WooCommerce's email system, and accounts are only created after successful verification. Setup takes minutes, requires no coding, and works out of the box with WooCommerce's standard registration flow.
 
@@ -26,49 +26,80 @@ The verification popup appears seamlessly during registration, the OTP is sent i
 2. A verification popup appears and an OTP code is sent to their email address immediately.
 3. The customer enters the OTP. If correct, their account is created. If not verified, no account is created.
 
-Fake email addresses fail at step 2. Disposable addresses that receive the OTP but belong to bots are stopped at step 3.
+An address that doesn't exist, or that nobody can actually open, never receives a code — so the account is never created. Blocking disposable and temporary email providers outright, and scoring each signup for risk before it becomes a customer, are available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-description).
 
 = What's Included in the Free Version =
 
 * **OTP-based email verification at registration** — Customers must verify their email with a one-time code before their WooCommerce account is created. No verification, no account.
 * **Verification popup on the registration form** — A modal popup appears instantly after the customer enters their email, prompting them to check their inbox and enter the OTP. No page reload required.
 * **Resend OTP option** — Customers can request a new OTP if they didn't receive the first one.
+* **OTP length, expiry and resend limit** — Choose 4- or 6-digit codes, how long a code stays valid, how many resends are allowed, and the message shown when the limit is reached.
 * **Customizable verification popup** — Modify the popup's design, colors, and messages to match your store's branding using the built-in live preview customizer.
 * **Customizable verification email** — Edit the OTP email subject, heading, and message content to match your brand voice.
 * **Admin verification management** — View and manage email verification statuses for all users from the WordPress Users admin panel. Manually verify or re-send verification emails in bulk.
-* **Role-based verification skipping** — Exclude specific user roles (e.g. administrators, shop managers) from the verification requirement.
-* **Redirect after verification** — Send customers to any page of your choice after successful email verification.
+* **Unverified Users list** — See everyone who started signing up but never verified, resend the verification email to any of them, or delete pending signups.
+* **Verification stats** — See how many customers verified this month, in total, and how many signups are still pending.
+* **Setup checklist** — A short checklist on the settings page walks you through turning verification on, sending a test email and customizing it.
 * **HPOS Compatible** — Fully compatible with WooCommerce High-Performance Order Storage.
 
 = Free vs PRO — What's the Difference? =
 
-CEV Free covers registration verification. CEV PRO adds checkout verification, login authentication, and advanced security controls for stores that need stronger protection.
+CEV Free covers registration verification. CEV PRO is a full anti-spam and identity layer for WooCommerce — checkout and guest verification, disposable email blocking, AI risk scoring, SMS OTP, two-factor authentication and a verification analytics dashboard.
 
 **CEV Free includes:**
 
 * OTP email verification at registration
 * Verification popup on the registration form
 * Resend OTP option
+* OTP length, expiration and resend limit
 * Customizable popup design and messages
 * Customizable verification email template
 * Admin verification management panel
-* Role-based verification skipping
-* Post-verification redirect
+* Unverified Users list with resend
+* Verification stats and setup checklist
 * HPOS compatible
 
 **CEV PRO adds:**
 
-* **OTP verification at checkout** — Require guest users to verify their email before completing a purchase, blocking fake orders at checkout.
+* **Disposable email blocking** — Block signups from temporary and throwaway email providers, covering 430+ known domains.
+* **AI risk scoring** — Score every signup from 0 to 100 before it becomes a customer, so risky registrations are caught even when the address looks ordinary.
+* **AI temp-mail matcher** — Catch brand-new disposable domains before public blocklists have caught up with them.
+* **Bot-cluster detection** — Identify coordinated attack patterns across multiple signups rather than judging each one in isolation.
+* **DNS-based MX record validation** — Confirm the email domain has a working mail server before an OTP is ever sent.
+* **OTP verification at checkout** — Require guest users to verify their email before completing a purchase, blocking fake and fraudulent orders at checkout.
 * **Cart page verification** — Optionally trigger email verification from the cart page, before the customer even reaches checkout.
-* **OTP length control** — Choose between 4-digit and 6-digit OTP codes.
-* **OTP expiration time** — Set how long OTP codes remain valid (e.g. 15 minutes, 72 hours) to balance security and convenience.
-* **Resend attempt limit** — Cap the number of OTP resend requests per session to prevent abuse.
-* **Login authentication (2FA)** — Require OTP verification when a customer logs in from an unrecognized device or browser, adding a second factor to your WooCommerce login.
+* **Phone (SMS) verification** — Verify customers with an SMS OTP instead of, or alongside, email — via MSG91, Twilio, Vonage or WhatsApp.
+* **Two-factor authentication (2FA)** — Add Google Authenticator, Authy or Microsoft Authenticator for stronger account security.
+* **Login authentication** — Require OTP verification when a customer logs in from an unrecognized device or browser.
 * **New device/location detection** — Define what counts as an unrecognized login — new device, new browser, new location, or after a set period of inactivity.
+* **Require OTP at every login** — A universal authentication mode for stores that need it.
+* **B2B allowlist and address blocklist** — Allow only specific domains to register, or block specific addresses outright.
+* **Role-based verification rules** — Enforce different verification rules per user role.
+* **Paid-order gatekeeping** — Hold customer perks until their first paid order is completed.
+* **Smart Form — branded login and registration** — Replace WooCommerce's default forms with fully branded registration and login layouts, from four ready-made templates.
+* **Verification analytics dashboard** — Track signups, verification rates, failed attempts and blocked spam over time.
+* **Login notification emails** — Email the customer whenever their account is accessed, so an unexpected login is noticed straight away.
+* **WooCommerce Block Checkout support** — Verification works on the new block-based checkout as well as the classic one.
+* **Polylang compatibility** — Works alongside the existing WPML support for multilingual stores.
+* **Auto-cleanup verification log** — Purge old verification log entries automatically on a schedule.
+* **Re-engagement reminder emails** — Automatically remind unverified customers to finish verifying, at intervals you choose.
+* **Force re-verify all customers** — Flip every verified account back to unverified in one action, after a breach or a list cleanup.
+* **Automatic database cleanup** — A daily cron job removes stale unverified accounts so your user table stays clean.
 * **Advanced email and popup customization** — Additional control over OTP email templates and verification popup styling.
 * **Priority support** — Faster, dedicated assistance from the Zorem team.
 
-👉 [Get CEV PRO](https://www.zorem.com/product/customer-email-verification/)
+👉 [Get CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-description)
+
+= What It Stops =
+
+Email verification is the cheapest defence a WooCommerce store has against junk accounts and junk orders:
+
+* **Fake accounts and fake signups** — registrations using an address nobody owns or can open. Blocked at registration in the free version.
+* **Bot registrations and spam signups** — automated signups that bloat your user table, skew your customer counts and poison your email list.
+* **Unverified accounts piling up** — see and manage every account's verification status from the WordPress Users screen, and verify or resend in bulk.
+* **Disposable and temporary email addresses** — throwaway inboxes used to farm coupons and free trials. Blocking 430+ known providers is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-description).
+* **Fake and fraudulent orders, including fake cash-on-delivery (COD) orders** — unverified COD orders become failed deliveries and returns to origin (RTO), and each one costs you a real shipment in both directions. Verify a guest's email before the order is placed. Available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-description).
+* **Account takeover at login** — OTP and two-factor authentication on unrecognized devices. Available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-description).
 
 = Compatible With =
 
@@ -81,7 +112,7 @@ Customer Email Verification is built to work smoothly with plugins that follow W
 * **Store management** — Smart Manager, Cashier
 * **Multilingual** — WPML
 
-[Full compatibility list →](https://docs.zorem.com/docs/customer-email-verification-free/compatibility/)
+[Full compatibility list →](https://docs.zorem.com/docs/customer-email-verification-pro/compatibility/)
 
 = Documentation & Support =
 
@@ -90,11 +121,11 @@ Customer Email Verification is built to work smoothly with plugins that follow W
 
 = More Plugins by Zorem =
 
-* [Advanced Shipment Tracking for WooCommerce](https://www.zorem.com/product/woocommerce-advanced-shipment-tracking/) — The #1 WooCommerce shipment tracking plugin. Trusted by 80,000+ stores.
-* [SMS for WooCommerce](https://www.zorem.com/product/sms-for-woocommerce/) — Automated SMS order and shipping notifications via Twilio, WhatsApp, and 18 other providers.
-* [Local Pickup PRO](https://www.zorem.com/product/zorem-local-pickup-pro/) — Advanced local pickup with multiple locations, appointment scheduling, and ready-for-pickup notifications.
-* [Country Based Restrictions PRO](https://www.zorem.com/product/country-based-restriction-pro/) — Restrict products and payment gateways by customer country using WooCommerce geolocation.
-* [Zorem Returns](https://www.zorem.com/product/zorem-returns/) — Self-service returns, exchanges, and store credit management for WooCommerce.
+* [Advanced Shipment Tracking for WooCommerce](https://www.zorem.com/product/woocommerce-advanced-shipment-tracking/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — The #1 WooCommerce shipment tracking plugin. Trusted by 80,000+ stores.
+* [SMS for WooCommerce](https://www.zorem.com/product/sms-for-woocommerce/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Automated SMS order and shipping notifications via Twilio, WhatsApp, and 18 other providers.
+* [Local Pickup PRO](https://www.zorem.com/product/zorem-local-pickup-pro/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Advanced local pickup with multiple locations, appointment scheduling, and ready-for-pickup notifications.
+* [Country Based Restrictions PRO](https://www.zorem.com/product/country-based-restriction-pro/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Restrict products and payment gateways by customer country using WooCommerce geolocation.
+* [Zorem Returns](https://www.zorem.com/product/zorem-returns/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Self-service returns, exchanges, and store credit management for WooCommerce.
 
 Explore the full catalog at [zorem.com →](https://www.zorem.com/)
 
@@ -102,10 +133,18 @@ Explore the full catalog at [zorem.com →](https://www.zorem.com/)
 
 1. Go to **Plugins > Add New** in your WordPress admin and search for "Customer Email Verification for WooCommerce".
 2. Click **Install Now**, then **Activate**.
-3. Go to **WooCommerce > Email Verification** to configure the verification settings, customize the popup and email, and set any role exclusions.
+3. Go to **WooCommerce > Email Verification** to configure the verification settings and customize the popup and email.
 4. Test the flow by visiting your registration page — the verification popup should appear after entering an email address.
 
 Alternatively, upload the `customer-email-verification-for-woocommerce` folder to `/wp-content/plugins/` and activate through the Plugins menu.
+
+== Screenshots ==
+
+1. The OTP verification popup your customer sees — it appears inline on the registration form with no page reload, and the account is only created once the correct code is entered.
+2. The verification email, with the subject line, heading and message all editable from the built-in live preview customizer.
+3. Customize the verification popup to match your store — colours, header text, message and footer, with a live preview as you edit and no code required.
+4. The Unverified Users screen: every customer who started signing up but never verified their email address, with verification stats and a resend option for each one.
+5. Signup verification settings — switch email verification on and configure it in a couple of minutes.
 
 == Frequently Asked Questions ==
 
@@ -127,33 +166,77 @@ Yes. The OTP email subject line, heading, and body content are all editable from
 
 = Can I skip verification for administrators or shop managers? =
 
-Yes. The role-based skipping feature lets you exclude any user role from the email verification requirement. Administrators, shop managers, and any custom roles can be excluded.
+Administrators are always skipped automatically. Choosing additional roles to skip is not available in the free version.
 
 = Can I verify guest checkout customers (not just registered users)? =
 
-Guest checkout OTP verification — requiring email verification before a guest can complete a purchase — is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/).
+Guest checkout OTP verification — requiring email verification before a guest can complete a purchase — is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
 
 = Can I require OTP verification at login (2FA)? =
 
-Login authentication with OTP verification for unrecognized devices or browsers is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/).
+Login authentication with OTP verification for unrecognized devices or browsers is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
 
 = Does this work with social login plugins? =
 
-Yes. CEV is compatible with WooCommerce Social Login and Nextend Social Login and Register. See the [full compatibility list](https://docs.zorem.com/docs/customer-email-verification-free/compatibility/) for details.
+Yes. CEV is compatible with WooCommerce Social Login and Nextend Social Login and Register. See the [full compatibility list](https://docs.zorem.com/docs/customer-email-verification-pro/compatibility/) for details.
 
 = Is CEV compatible with HPOS (High-Performance Order Storage)? =
 
 Yes. Customer Email Verification is fully compatible with WooCommerce High-Performance Order Storage (custom order tables).
 
-= Does CEV work with WPML for multilingual stores? =
+= Does CEV work with WPML or Polylang for multilingual stores? =
 
-Yes. CEV has been tested with WPML and the plugin strings are translatable.
+Yes. CEV has been tested with WPML and the plugin strings are translatable. Polylang compatibility is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
 
 = Can I bulk-verify users or resend verification emails in bulk? =
 
 Yes. From the WordPress Users admin panel, you can select multiple users and use the bulk actions to manually verify their email addresses or resend verification emails.
 
+= Will email verification hurt my registration conversion rate? =
+
+The OTP step adds one screen to registration, and the popup appears inline without a page reload, so genuine customers usually complete it in a few seconds. What you lose is the registrations that were never going to buy — bots, throwaway addresses and mistyped emails — and what you gain is a customer list where every address actually receives your order emails.
+
+= Does CEV block disposable or temporary email addresses? =
+
+Disposable email blocking, covering 430+ known temporary email providers, is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq), along with an AI temp-mail matcher that catches new throwaway domains before public blocklists update. The free version verifies that the address is real and reachable, but does not maintain a blocklist of providers.
+
+= Can I verify customers by SMS instead of email? =
+
+Phone verification with an SMS OTP is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq), sent through MSG91, Twilio, Vonage or WhatsApp. The free version verifies by email only.
+
+= Can it stop fake or fraudulent orders, including cash-on-delivery (COD) orders? =
+
+Yes — with checkout verification in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq), which requires a guest to verify their email before the order is placed. This is the usual setup for stores offering cash on delivery, where every fake order becomes a real shipment that comes back as an RTO (return to origin), carrying the courier cost both ways. Verifying before the order is created cuts those out before they reach the courier. The free version verifies at registration, so it protects account creation rather than guest checkout.
+
+= Does it check that an email domain actually exists before sending the code? =
+
+DNS-based MX record validation, which confirms the domain has a working mail server before an OTP is sent, is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
+
 == Changelog ==
+
+= 2.8.2 =
+* Enhancement – OTP length, OTP expiration, verification email resend limit and the resend limit message are now available in the free version.
+* Enhancement – Resend the verification email to any pending signup from the Unverified Users list.
+* Enhancement – Verification stats on the Unverified Users tab: verified this month, verified in total and pending.
+* Enhancement – Setup checklist on the settings page, with a "Send test email" button.
+* Enhancement – PRO-only settings now show an unlock card with a preview, and locked options explain themselves when clicked.
+* Enhancement – Redesigned the Go Pro tab.
+* Enhancement – The upgrade notice now waits 7 days after install, only appears once a customer has verified, and stays dismissed for 90 days.
+* Enhancement – The {customer_email} tag in the verification popup message is now replaced with the customer's email address.
+* Fix – Customers who entered the correct code were saved as unverified once their account was created.
+* Fix – The OTP Length setting was not applied to signup verification codes.
+* Fix – Raw CSS appeared at the top of the email customizer preview.
+* Fix – The email customizer preview always showed the same code, whatever the OTP Length setting.
+* Fix – Opening another section in the customizer published unsaved changes.
+* Fix – Clearing the popup heading, message or footer in the customizer showed a blank instead of the default text.
+* Fix – Typo in the default popup heading ("Verify its you.").
+* Fix – Sorting and paging were missing on the Unverified Users table.
+* Fix – Broken "Go Pro" link on the Plugins page and broken add-on links on the Go Pro tab.
+* Fix – Corrected the disposable email domain count to 430+.
+* Fix – Helper text in the verification widget customizer now reads "You can use HTML tags:".
+* Security – Added capability checks to saving settings, deleting pending signups and changing a user's verification status.
+* Dev – Removed unused legacy admin screens.
+* Dev – Tested with WooCommerce 11.1.2 and WordPress 7.1.3.
 
 = 2.8.1 =
 * Fix – Register button on the My Account registration form gave no feedback while the verification request was processing, so repeat clicks sent multiple verification emails and each new email invalidated the code in the previous one.

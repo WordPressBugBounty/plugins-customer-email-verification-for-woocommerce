@@ -142,8 +142,10 @@ class Wc_Cev_Customizer {
 
 		if ( '1' === $cev_customizer ) {
 			wp_enqueue_style( 'wp-color-picker' );	
-			wp_enqueue_style('cev-customizer-styles', woo_customer_email_verification()->plugin_dir_url() . 'assets/css/customizer-styles.css', array(), woo_customer_email_verification()->version  );
-			wp_enqueue_script('cev-customizer-scripts', woo_customer_email_verification()->plugin_dir_url() . 'assets/js/customizer-scripts.js', array('jquery', 'customize-controls'), woo_customer_email_verification()->version, true);
+			// Version by file time so a changed script/style is never served from a stale browser cache.
+			$cev_path = woo_customer_email_verification()->get_plugin_path();
+			wp_enqueue_style( 'cev-customizer-styles', woo_customer_email_verification()->plugin_dir_url() . 'assets/css/customizer-styles.css', array(), (string) filemtime( $cev_path . '/assets/css/customizer-styles.css' ) );
+			wp_enqueue_script( 'cev-customizer-scripts', woo_customer_email_verification()->plugin_dir_url() . 'assets/js/customizer-scripts.js', array( 'jquery', 'customize-controls' ), (string) filemtime( $cev_path . '/assets/js/customizer-scripts.js' ), true );
 			
 			// Customizer panel name, read-only.
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended

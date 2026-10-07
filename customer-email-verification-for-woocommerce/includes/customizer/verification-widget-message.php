@@ -113,7 +113,7 @@ class Cev_Verification_Widget_Message {
 		$customizer_defaults = array(
 			'cev_verification_popup_background_color'	=> '#f5f5f5',
 			'cev_verification_popup_overlay_background_color' => '#ffffff',
-			'cev_verification_header' => __( 'Verify its you.', 'customer-email-verification-for-woocommerce' ),
+			'cev_verification_header' => __( "Verify it's you.", 'customer-email-verification-for-woocommerce' ),
 			'cev_verification_message'	=> __( 'We sent a verification code. To verify your email address, please check your inbox and enter the code below.', 'customer-email-verification-for-woocommerce' ),
 			'cev_verification_widget_footer'  =>__( "Didn't receive an email? {cev_resend_verification}", 'customer-email-verification-for-woocommerce'),
 		);
@@ -153,7 +153,7 @@ class Cev_Verification_Widget_Message {
 			array(
 				'default' => $this->defaults['cev_verification_popup_background_color'],
 				'transport' => 'refresh',
-				'sanitize_callback' => '',
+				'sanitize_callback' => 'sanitize_hex_color',
 				'type' => 'option',
 			)
 		);
@@ -247,7 +247,8 @@ class Cev_Verification_Widget_Message {
 		$wp_customize->add_control( new WP_Customize_cev_codeinfoblock_Control( $wp_customize, 'cev_widzet_code_block',
 			array(
 				'label' => __( 'Available variables', 'customer-email-verification-for-woocommerce' ),
-				'description' => '<code>{cev_resend_verification}</code><br>You can use HTML tag : &lt;strong&gt;, &lt;i&gt;',
+				// The escaped translation turns the example tags into entities so they show as text.
+				'description' => '<code>{cev_resend_verification}</code><br>' . esc_html__( 'You can use HTML tags: <strong>, <i>', 'customer-email-verification-for-woocommerce' ),
 				'section' => 'cev_verification_widget_messages',			
 			)		
 		)

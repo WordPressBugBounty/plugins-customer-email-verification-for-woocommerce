@@ -2,16 +2,16 @@
 /**
  * @wordpress-plugin
  * Plugin Name: Customer Email Verification for WooCommerce 
- * Plugin URI: https://www.zorem.com/products/customer-email-verification-for-woocommerce/ 
+ * Plugin URI: https://www.zorem.com/product/customer-email-verification/
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.8.1
+ * Version: 2.8.2
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
  * License URI: 
  * Text Domain: customer-email-verification-for-woocommerce
  * Domain Path: /lang/
- * WC tested up to: 11.1.0
+ * WC tested up to: 11.1.2
  * Requires Plugins: woocommerce
 */
 
@@ -26,7 +26,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.8.1';
+	public $version = '2.8.2';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
@@ -241,7 +241,10 @@ class Zorem_Woo_Customer_Email_Verification {
 		require_once $this->get_plugin_path() . '/includes/customizer/class-cev-customizer.php';
 		require_once $this->get_plugin_path() . '/includes/customizer/verification-widget-style.php';	
 		require_once $this->get_plugin_path() . '/includes/customizer/verification-widget-message.php';	
-		require_once $this->get_plugin_path() . '/includes/cev-wc-admin-notices.php';		
+		require_once $this->get_plugin_path() . '/includes/cev-wc-admin-notices.php';
+
+		require_once $this->get_plugin_path() . '/includes/class-wc-customer-email-verification-stats.php';
+		cev_verification_stats()->init();		
 	}
 
 	
@@ -449,11 +452,45 @@ class Zorem_Woo_Customer_Email_Verification {
 		
 		if ( !class_exists( 'customer_email_verification_pro' ) ) {
 			$links = array_merge( $links, array(
-				'<a target="_blank" style="color: green; font-weight: bold;" href="' . esc_url( 'https://www.zorem.com/product/customer-verification-for-woocommerce/?utm_source=wp-admin&utm_medium=CEVPRO&utm_campaign=add-ons') . '">' . __( 'Go Pro', 'customer-email-verification-for-woocommerce' ) . '</a>'
+				'<a target="_blank" style="color: green; font-weight: bold;" href="' . esc_url( $this->get_pro_upgrade_url( 'plugins-list' ) ) . '">' . __( 'Go Pro', 'customer-email-verification-for-woocommerce' ) . '</a>'
 			) );
 		}
-		
+
 		return $links;
+	}
+
+	/**
+	 * Build a CEV PRO product-page link carrying the in-plugin UTM convention.
+	 *
+	 * Every upgrade link in the Free plugin goes through here so the GA4
+	 * report can tell the placements apart by `utm_content`.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $content Placement slug, e.g. 'plugin-setting', 'locked-checkout'.
+	 * @return string Unescaped URL — escape at the output site.
+	 */
+	public function get_pro_upgrade_url( $content = 'plugin-setting' ) {
+		$url = add_query_arg(
+			array(
+				'utm_source'   => 'cev-free',
+				'utm_medium'   => 'in-plugin',
+				'utm_campaign' => 'upgrade-to-pro',
+				'utm_content'  => sanitize_key( $content ),
+			),
+			'https://www.zorem.com/product/customer-email-verification/'
+		);
+
+		/**
+		 * Filter the CEV PRO upgrade URL used by in-plugin prompts.
+		 *
+		 * @since 2.8.2
+		 *
+		 * @param string $url     Upgrade URL including UTM parameters.
+		 * @param string $content Placement slug passed as utm_content.
+		 */
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Plugin's established cev_ hook prefix (public API used by CEV PRO and integrations).
+		return apply_filters( 'cev_pro_upgrade_url', $url, $content );
 	}
 
 }

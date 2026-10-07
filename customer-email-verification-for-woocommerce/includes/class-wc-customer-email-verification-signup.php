@@ -59,8 +59,46 @@ class CEV_Signup_Verification {
 		add_action('wp_ajax_nopriv_resend_otp', array($this, 'resend_otp'));
 
 		// Authenticate user via email link (logged-in check included).
-		add_action( 'wp', array( $this, 'authenticate_user_by_email_link' ) );	
+		add_action( 'wp', array( $this, 'authenticate_user_by_email_link' ) );
 
+		// Mark the new account verified when its email passed the signup OTP.
+		// Priority 20 runs after the email class resets the flag to 'false'
+		// on woocommerce_created_customer_notification (priority 10).
+		add_action( 'woocommerce_created_customer', array( $this, 'mark_otp_verified_customer' ), 20 );
+		add_action( 'woocommerce_created_customer_notification', array( $this, 'mark_otp_verified_customer' ), 20 );
+
+	}
+
+	/**
+	 * Transient key remembering that an address just passed the signup OTP.
+	 *
+	 * @param string $email Email address.
+	 * @return string
+	 */
+	private function otp_verified_key( $email ) {
+		return 'cev_otp_verified_' . md5( strtolower( trim( $email ) ) );
+	}
+
+	/**
+	 * Flag a newly created customer as verified if their email passed the OTP.
+	 *
+	 * The signup OTP runs before the account exists, so the result is held in
+	 * a short-lived transient until WooCommerce creates the customer.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param int $customer_id New customer ID.
+	 */
+	public function mark_otp_verified_customer( $customer_id ) {
+		$user = get_user_by( 'id', $customer_id );
+		if ( ! $user || ! get_transient( $this->otp_verified_key( $user->user_email ) ) ) {
+			return;
+		}
+		update_user_meta( $customer_id, 'customer_email_verified', 'true' );
+		update_user_meta( $customer_id, 'cev_user_resend_times', 0 );
+		if ( 'woocommerce_created_customer_notification' === current_action() ) {
+			delete_transient( $this->otp_verified_key( $user->user_email ) );
+		}
 	}
 
 	/**
@@ -128,6 +166,24 @@ class CEV_Signup_Verification {
 				'message'  => __('Email address is required.', 'customer-email-verification-for-woocommerce'),
 			));
 		}
+		// Verification Email Resend Limit: '0' disables resend, otherwise the
+		// number of resends allowed per signup attempt (counter lives 24h).
+		$resend_limit = (int) get_option( 'cev_redirect_limit_resend', '3' );
+		$resend_key   = 'cev_signup_resend_' . md5( strtolower( $recipient ) );
+		$resend_count = (int) get_transient( $resend_key );
+		if ( 0 === $resend_limit || $resend_count >= $resend_limit ) {
+			$limit_message = get_option( 'cev_resend_limit_message', '' );
+			if ( '' === trim( (string) $limit_message ) ) {
+				$limit_message = __( 'Too many attempts, please contact us for further assistance.', 'customer-email-verification-for-woocommerce' );
+			}
+			wp_send_json_error( array(
+				'verified'      => false,
+				'limit_reached' => true,
+				'message'       => $limit_message,
+			) );
+		}
+		set_transient( $resend_key, $resend_count + 1, DAY_IN_SECONDS );
+
 		 // Send the OTP email.
 		 $result = $this->send_signup_verification_email($recipient);
 
@@ -182,6 +238,9 @@ class CEV_Signup_Verification {
 			));
 		}
 		
+		// A new signup attempt starts a fresh resend allowance.
+		delete_transient( 'cev_signup_resend_' . md5( strtolower( $email ) ) );
+
 		// Send OTP email for verification.
 		$email_sent = $this->send_signup_verification_email($email);
 		if ($email_sent) {
@@ -207,8 +266,10 @@ class CEV_Signup_Verification {
 			wp_send_json_success( array( 'email' => true ) );
 		}
 
-		$verification_pin = WC_customer_email_verification_email_Common()->generate_verification_pin();
-		$cev_initialise_customizer_settings = new cev_initialise_customizer_settings();	
+		$verification_pin = $this->get_reusable_pin( $recipient );
+		if ( '' === $verification_pin ) {
+			$verification_pin = WC_customer_email_verification_email_Common()->generate_verification_pin();
+		}
 		$expire_time =  get_option('cev_verification_code_expiration', 'never');
 		$secret_code = md5( $recipient . time() );
 		if ( empty( $expire_time ) ) {
@@ -266,9 +327,100 @@ class CEV_Signup_Verification {
 			);
 			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		}
-		 WC_customer_email_verification_email_Common()->registerd_user_email  = $recipient;
-		$result = false;		
-		
+		$result = $this->send_verification_email_message( $recipient );
+
+		// Return result.
+		wp_send_json_success(array('email' => $result));
+	}
+
+	/**
+	 * Return the pending code for this address when it was issued recently.
+	 *
+	 * Lets a customer use the code from an earlier email (for example one the
+	 * store manager resent from the Unverified Users list) when they come back
+	 * and register again, instead of every new attempt invalidating it.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $recipient Email address.
+	 * @return string Existing PIN, or '' when a new one should be generated.
+	 */
+	public function get_reusable_pin( $recipient ) {
+		/**
+		 * Filter how long (seconds) a pending signup code stays reusable. 0 disables reuse.
+		 *
+		 * @since 2.8.2
+		 */
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Plugin's established cev_ filter prefix.
+		$reuse_window = (int) apply_filters( 'cev_signup_pin_reuse_window', DAY_IN_SECONDS, $recipient );
+		// Never hand out a code past its OTP Expiration.
+		$lifetime = $this->get_code_lifetime();
+		if ( 0 < $lifetime ) {
+			$reuse_window = min( $reuse_window, $lifetime );
+		}
+		if ( 1 > $reuse_window ) {
+			return '';
+		}
+
+		global $wpdb;
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT pin, last_updated FROM {$wpdb->prefix}cev_user_log WHERE email = %s", $recipient ) );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+
+		if ( ! $row || '' === (string) $row->pin ) {
+			return '';
+		}
+
+		$elapsed = strtotime( current_time( 'mysql' ) ) - strtotime( $row->last_updated );
+		return ( 0 <= $elapsed && $elapsed < $reuse_window ) ? (string) $row->pin : '';
+	}
+
+	/**
+	 * OTP Expiration setting in seconds; 0 means codes never expire.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @return int
+	 */
+	public function get_code_lifetime() {
+		$expiration = get_option( 'cev_verification_code_expiration', 'never' );
+		return ( 'never' === $expiration || '' === (string) $expiration ) ? 0 : absint( $expiration );
+	}
+
+	/**
+	 * Whether a code issued at $issued_at (MySQL time) is past its expiry.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $issued_at cev_user_log.last_updated value.
+	 * @return bool
+	 */
+	public function is_code_expired( $issued_at ) {
+		$lifetime = $this->get_code_lifetime();
+		if ( 0 === $lifetime || empty( $issued_at ) ) {
+			return false;
+		}
+		return ( strtotime( current_time( 'mysql' ) ) - strtotime( $issued_at ) ) > $lifetime;
+	}
+
+	/**
+	 * Build and send the signup verification email to one address.
+	 *
+	 * The PIN merge tag reads the pending code for this address from
+	 * cev_user_log; an address with no pending row gets a sample code
+	 * (used by the admin test email).
+	 *
+	 * @since 2.8.2
+	 *
+	 * @param string $recipient Email address.
+	 * @return bool Whether WooCommerce accepted the email for sending.
+	 */
+	public function send_verification_email_message( $recipient ) {
+		$cev_initialise_customizer_settings = new cev_initialise_customizer_settings();
+
+		WC_customer_email_verification_email_Common()->registerd_user_email  = $recipient;
+		$result = false;
+
 		$email_subject = get_option( 'cev_verification_email_subject', $cev_initialise_customizer_settings->defaults['cev_verification_email_subject'] );
 		$email_subject = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_subject );
 		
@@ -302,8 +454,7 @@ class CEV_Signup_Verification {
 		
 		$result = $mailer->send( $recipient, $email_subject, $email_body );
 
-		// Return result.
-		wp_send_json_success(array('email' => $result));
+		return (bool) $result;
 	}
 
 	/**
@@ -393,6 +544,10 @@ class CEV_Signup_Verification {
 		$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}cev_user_log WHERE email = %s AND pin = %s", $email, $otp));
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		
+		if ( $row && $this->is_code_expired( $row->last_updated ) ) {
+			wp_send_json_error( array( 'verified' => false, 'message' => __( 'This code has expired. Click Resend to get a new code.', 'customer-email-verification-for-woocommerce' ) ) );
+		}
+
 		if ($row) {
 			if ($row->verified) {
 				wp_send_json_error(array('verified' => false, 'message' => __('Already verified.', 'customer-email-verification-for-woocommerce')));
@@ -404,6 +559,9 @@ class CEV_Signup_Verification {
 					array('%d')
 				);
 				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+				// The account is created by the registration form submit that
+				// follows; mark_otp_verified_customer() picks this up.
+				set_transient( $this->otp_verified_key( $email ), 1, 15 * MINUTE_IN_SECONDS );
 				wp_send_json_success(array('verified' => true, 'message' => __('Registration and verification successful', 'customer-email-verification-for-woocommerce'), 'redirect_url' =>  home_url() . '/my-account/'));
 						
 				
@@ -472,15 +630,8 @@ class CEV_Signup_Verification {
 	
 	public function generate_verification_pin() {
 		
-		$code_length = get_option('cev_verification_code_length', 4);
-		
-		if ( '1' == $code_length ) {
-			$digits = 4;
-		} else if ( '2' == $code_length ) {
-			$digits = 6;
-		} else {
-			$digits = 9;
-		}
+		// OTP Length setting: '2' = 6 digits, anything else (incl. unset) = 4 digits.
+		$digits = '2' === (string) get_option( 'cev_verification_code_length', '1' ) ? 6 : 4;
 		
 		$i = 0; //counter
 		$pin = ''; //our default pin is blank.

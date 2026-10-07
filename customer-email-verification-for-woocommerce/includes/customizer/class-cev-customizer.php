@@ -202,17 +202,57 @@ class Cev_Initialise_Customizer_Settings {
 	}
 
 	/**
-	 * Preview email content.
+	 * Output the email preview.
+	 *
+	 * The styled email is a complete HTML document whose <style> block holds
+	 * the @media rules Emogrifier cannot inline. It is rendered inside an
+	 * iframe via srcdoc so those styles apply (instead of printing as text
+	 * after a tag-stripping sanitizer) and stay isolated from the preview
+	 * page. The sandbox blocks scripts and navigation inside the email.
 	 */
 	public function preview_account_email() {
+		?>
+		<iframe id="cev-email-preview-frame" title="<?php esc_attr_e( 'Verification email preview', 'customer-email-verification-for-woocommerce' ); ?>" sandbox="allow-same-origin" style="display:block;width:100%;min-height:600px;border:0;" srcdoc="<?php echo esc_attr( $this->get_preview_account_email_html() ); ?>"></iframe>
+		<script>
+			( function () {
+				var frame = document.getElementById( 'cev-email-preview-frame' );
+				if ( ! frame ) {
+					return;
+				}
+				// Grow the frame to the email's height so the preview pane scrolls as one page.
+				frame.addEventListener( 'load', function () {
+					try {
+						frame.style.height = frame.contentDocument.documentElement.scrollHeight + 'px';
+					} catch ( e ) {}
+				} );
+			} )();
+		</script>
+		<?php
+	}
+
+	/**
+	 * Build the styled verification email exactly as it is sent.
+	 *
+	 * @since 2.8.2
+	 *
+	 * @return string Complete HTML email document.
+	 */
+	public function get_preview_account_email_html() {
 		$wc_emails = WC_Emails::instance();
 		$emails    = $wc_emails->get_emails();
 		WC_customer_email_verification_email_Common()->wuev_user_id = 1;
 
+		// Sample code generated with the current OTP Length setting. Without
+		// this the {cev_user_verification_pin} tag would show whatever code
+		// happens to be stored on user #1, whatever its length.
+		$sample_pin = '<span>' . esc_html( WC_customer_email_verification_email_Common()->generate_verification_pin() ) . '</span>';
+
 		$email_heading = get_option( 'cev_verification_email_heading', $this->defaults['cev_verification_email_heading'] );
+		$email_heading = str_replace( '{cev_user_verification_pin}', $sample_pin, $email_heading );
 		$email_heading = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_heading );
 
 		$email_content = get_option( 'cev_verification_email_body', $this->defaults['cev_verification_email_body'] );
+		$email_content = str_replace( '{cev_user_verification_pin}', $sample_pin, $email_content );
 		$email_content = WC_customer_email_verification_email_Common()->maybe_parse_merge_tags( $email_content );
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$email_content = apply_filters( 'cev_verification_email_content', $email_content );
@@ -228,7 +268,10 @@ class Cev_Initialise_Customizer_Settings {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 		$message = apply_filters( 'wc_cev_decode_html_content', $message );
 
-		echo wp_kses_post( $message );
+		// No wp_kses_post() here: it strips <html>/<head>/<style> and leaves the
+		// CSS as visible text. The editable body was already sanitized above,
+		// and the caller escapes the whole document into an iframe srcdoc.
+		return $message;
 	}
 }
 

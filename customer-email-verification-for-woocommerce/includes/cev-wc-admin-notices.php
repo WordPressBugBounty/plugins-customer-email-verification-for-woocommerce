@@ -38,10 +38,107 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	*/
 	public function init() {
 		add_action( 'admin_notices', array( $this, 'admin_notice_pro_update' ) );
-		
+
 		// Handle dismiss action for the Pro version update notice.
 		add_action('admin_init', array( $this, 'cev_pro_notice_ignore' ) );
 
+		// Remember when the plugin was first seen, for the notice grace period.
+		add_action( 'admin_init', array( $this, 'record_first_seen' ) );
+
+	}
+
+	/**
+	 * Days after install before the upgrade notice may appear.
+	 */
+	const NOTICE_GRACE_DAYS = 7;
+
+	/**
+	 * Days a dismissed upgrade notice stays hidden.
+	 */
+	const NOTICE_SNOOZE_DAYS = 90;
+
+	/**
+	 * Option holding the timestamp the plugin was first seen in wp-admin.
+	 */
+	const FIRST_SEEN_OPTION = 'cev_free_first_seen_at';
+
+	/**
+	 * Option holding the timestamp the upgrade notice was last dismissed.
+	 */
+	const DISMISSED_OPTION = 'cev_pro_notice_dismissed_at';
+
+	/**
+	 * Store the first-seen timestamp once. Existing installs get it on the
+	 * first admin page load after updating.
+	 */
+	public function record_first_seen() {
+		if ( ! get_option( self::FIRST_SEEN_OPTION ) ) {
+			update_option( self::FIRST_SEEN_OPTION, time(), false );
+		}
+	}
+
+	/**
+	 * Whether at least one customer has verified their email.
+	 *
+	 * Once true it is stored permanently; a negative answer is cached for
+	 * 12 hours so the user query runs at most twice a day.
+	 *
+	 * @return bool
+	 */
+	public function has_verified_customer() {
+		if ( get_option( 'cev_has_verified_customer' ) ) {
+			return true;
+		}
+		if ( get_transient( 'cev_has_verified_customer_check' ) ) {
+			return false;
+		}
+
+		$cev_verified = get_users(
+			array(
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Single-row lookup, result cached in an option/transient.
+				'meta_key'    => 'customer_email_verified',
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Single-row lookup, result cached in an option/transient.
+				'meta_value'  => 'true',
+				'number'      => 1,
+				'fields'      => 'ID',
+				'count_total' => false,
+			)
+		);
+
+		if ( ! empty( $cev_verified ) ) {
+			update_option( 'cev_has_verified_customer', 1, false );
+			return true;
+		}
+
+		set_transient( 'cev_has_verified_customer_check', 1, 12 * HOUR_IN_SECONDS );
+		return false;
+	}
+
+	/**
+	 * Whether the upgrade notice should show on this request.
+	 *
+	 * Rules: store managers only, not on the CEV page itself, not in the
+	 * first 7 days, only after the first verified customer, and hidden for
+	 * 90 days after a dismissal.
+	 *
+	 * @return bool
+	 */
+	public function should_show_upgrade_notice() {
+		if ( class_exists( 'customer_email_verification_pro' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+			return false;
+		}
+
+		$cev_first_seen = (int) get_option( self::FIRST_SEEN_OPTION, 0 );
+		if ( 0 === $cev_first_seen || ( time() - $cev_first_seen ) < self::NOTICE_GRACE_DAYS * DAY_IN_SECONDS ) {
+			return false;
+		}
+
+		$cev_dismissed = (int) get_option( self::DISMISSED_OPTION, 0 );
+		if ( 0 !== $cev_dismissed && ( time() - $cev_dismissed ) < self::NOTICE_SNOOZE_DAYS * DAY_IN_SECONDS ) {
+			return false;
+		}
+
+		return $this->has_verified_customer();
 	}
 
 	/*
@@ -49,12 +146,7 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	*/
 	public function admin_notice_pro_update() {
 
-		$version    = woo_customer_email_verification()->version;
-		$option_key = 'wc_cev_pro_ignore_notice_' . $version;
-		$query_arg  = 'wc-cev-pro-ignore-notice-' . $version;
-
-		// Check if the notice has been dismissed for the current plugin version.
-		if ( get_option( $option_key ) ) {
+		if ( ! $this->should_show_upgrade_notice() ) {
 			return;
 		}
 
@@ -68,8 +160,9 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 			return;
 		}
 
-		// Generate the dismissable URL with a query parameter to ignore the notice.
-		$dismissable_url = esc_url( add_query_arg( $query_arg, 'true' ) );
+		// Dismiss link, nonce-protected; handled by cev_pro_notice_ignore().
+		$dismissable_url = wp_nonce_url( add_query_arg( 'cev-pro-notice-dismiss', '1' ), 'cev_pro_notice_dismiss', 'cev_notice_nonce' );
+		$cev_upgrade_url = woo_customer_email_verification()->get_pro_upgrade_url( 'admin-notice' );
 		?>
 		
 		<style>
@@ -145,13 +238,13 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 				<p>
 					✅ <?php esc_html_e( 'Verify emails during signup and checkout', 'customer-email-verification-for-woocommerce' ); ?><br>
 					✅ <?php esc_html_e( 'OTP-based login authentication for secure access', 'customer-email-verification-for-woocommerce' ); ?><br>
-					✅ <?php esc_html_e( 'Customizable verification popup & emails', 'customer-email-verification-for-woocommerce' ); ?><br>
+					✅ <?php esc_html_e( 'Customizable checkout, login and reminder emails', 'customer-email-verification-for-woocommerce' ); ?><br>
 					✅ <?php esc_html_e( 'Block fake registrations and unauthorized activity', 'customer-email-verification-for-woocommerce' ); ?>
 				</p>
 				<p>🎁 <?php esc_html_e( 'Special Offer: Get 20% OFF with coupon code CEVPRO20 – limited time only!', 'customer-email-verification-for-woocommerce' ); ?></p>
 
 				<div class="cev-notice-actions">
-					<a class="cev-notice-btn cev-notice-btn-upgrade" href="https://www.zorem.com/product/customer-email-verification/" target="_blank" rel="noreferrer noopener">
+					<a class="cev-notice-btn cev-notice-btn-upgrade" href="<?php echo esc_url( $cev_upgrade_url ); ?>" target="_blank" rel="noreferrer noopener">
 						👉 <?php esc_html_e( 'Upgrade to CEV PRO Now', 'customer-email-verification-for-woocommerce' ); ?>
 					</a>
 					<a class="cev-notice-btn cev-notice-btn-dismiss" href="<?php echo esc_url( $dismissable_url ); ?>">
@@ -168,23 +261,22 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	* This prevents the notice from being displayed again.
 	*/
 	public function cev_pro_notice_ignore() {
-		$version       = woo_customer_email_verification()->version;
-		$option_key    = 'wc_cev_pro_ignore_notice_' . $version;
-		$query_arg     = 'wc-cev-pro-ignore-notice-' . $version;
-		$query_arg_alt = str_replace( '.', '_', $query_arg );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Nonce is verified below before anything is saved.
+		$cev_dismiss_requested = isset( $_GET['cev-pro-notice-dismiss'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- This is the nonce value itself.
+		$cev_notice_nonce = isset( $_GET['cev_notice_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['cev_notice_nonce'] ) ) : '';
 
-		// WordPress converts dots to underscores in query parameter names,
-		// so check for both forms.
-		// Dismiss link from our own notice; the only effect is setting a user
-		// preference, so there is no form nonce to verify.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
-		$cev_dismiss_requested = isset( $_GET[ $query_arg ] ) || isset( $_GET[ $query_arg_alt ] );
-
-		if ( $cev_dismiss_requested ) {
-			update_option( $option_key, 'true' );
-			wp_safe_redirect( remove_query_arg( array( $query_arg, $query_arg_alt ) ) );
-			exit;
+		if ( ! $cev_dismiss_requested || '' === $cev_notice_nonce ) {
+			return;
 		}
+		if ( ! wp_verify_nonce( $cev_notice_nonce, 'cev_pro_notice_dismiss' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		// Snooze for NOTICE_SNOOZE_DAYS; should_show_upgrade_notice() reads this.
+		update_option( self::DISMISSED_OPTION, time(), false );
+		wp_safe_redirect( remove_query_arg( array( 'cev-pro-notice-dismiss', 'cev_notice_nonce' ) ) );
+		exit;
 	}
 }
 

@@ -266,8 +266,9 @@ class WC_Customer_Email_Verification_Email_Common {
 	}
 	
 	public function generate_verification_pin() {
+		// OTP Length setting: '2' = 6 digits, anything else = 4 digits.
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
-		$digits = apply_filters( 'cev_verification_code_length', 4 );
+		$digits = apply_filters( 'cev_verification_code_length', '2' === (string) get_option( 'cev_verification_code_length', '1' ) ? 6 : 4 );
 		$i = 0; //counter
 		$pin = ''; //our default pin is blank.
 		while ( $i < $digits ) {
