@@ -44,6 +44,175 @@ body.customer-email-verification-for-woocommerce .cev_nav_div > input.cev_tab_in
 	display: none !important;
 }
 
+/* CEV PRO offer banner (Settings + Unverified Users tabs). Sits between the
+   header and the tab panel, aligned to the panel's 24px gutter. */
+.zui-scope.cev-admin .cev-offer {
+	display: flex;
+	align-items: stretch;
+	margin: 24px 24px 0;
+	background: var(--zui-surface, #ffffff);
+	border: 1px solid var(--zui-border, #e2e8f0);
+	border-radius: var(--zui-radius-xl, 12px);
+	box-shadow: var(--zui-shadow-xs, 0 1px 2px rgba(15, 23, 42, 0.04));
+	overflow: hidden;
+}
+
+.zui-scope.cev-admin .cev-offer[hidden] {
+	display: none;
+}
+
+.zui-scope.cev-admin .cev-offer__badge {
+	flex: 0 0 132px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 2px;
+	padding: 20px 12px;
+	background: linear-gradient(160deg, #3b64d3 0%, #2a3fa8 100%);
+	color: #ffffff;
+	text-align: center;
+}
+
+.zui-scope.cev-admin .cev-offer__save {
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	opacity: 0.9;
+}
+
+.zui-scope.cev-admin .cev-offer__pct {
+	font-size: 34px;
+	font-weight: 800;
+	line-height: 1.1;
+}
+
+.zui-scope.cev-admin .cev-offer__pct small {
+	font-size: 18px;
+	font-weight: 700;
+	margin-inline-start: 2px;
+}
+
+.zui-scope.cev-admin .cev-offer__on {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.zui-scope.cev-admin .cev-offer__body {
+	flex: 1 1 auto;
+	min-width: 0;
+	padding: 20px 24px;
+}
+
+.zui-scope.cev-admin .cev-offer__title {
+	margin: 0 0 6px;
+	font-size: 15px;
+	font-weight: 700;
+	line-height: 1.4;
+	color: var(--zui-text-strong, #0f172a);
+}
+
+.zui-scope.cev-admin .cev-offer__text {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.6;
+	color: var(--zui-text, #1e293b);
+}
+
+.zui-scope.cev-admin .cev-offer__code {
+	display: inline-block;
+	padding: 1px 8px;
+	background: var(--zui-bg, #f8fafc);
+	border: 1px solid var(--zui-border, #e2e8f0);
+	border-radius: 4px;
+	color: var(--zui-text-strong, #0f172a);
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	user-select: all;
+}
+
+.zui-scope.cev-admin .cev-offer__foot {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 14px;
+}
+
+.zui-scope.cev-admin .cev-offer__ends {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--zui-text, #1e293b);
+}
+
+.zui-scope.cev-admin .cev-offer__ends svg {
+	width: 15px;
+	height: 15px;
+}
+
+.zui-scope.cev-admin .cev-offer__timer {
+	display: inline-flex;
+	gap: 6px;
+}
+
+.zui-scope.cev-admin .cev-offer__unit {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	min-width: 42px;
+	padding: 4px 6px;
+	background: var(--zui-surface, #ffffff);
+	border: 1px solid var(--zui-border, #e2e8f0);
+	border-radius: 6px;
+}
+
+.zui-scope.cev-admin .cev-offer__unit strong {
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var(--zui-text-strong, #0f172a);
+	font-variant-numeric: tabular-nums;
+}
+
+.zui-scope.cev-admin .cev-offer__unit small {
+	font-size: 9px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--zui-text-muted, #94a3b8);
+}
+
+.zui-scope.cev-admin .cev-offer__cta {
+	flex: 0 0 auto;
+	width: auto;
+	padding-inline: 20px;
+	text-decoration: none;
+}
+
+@media (max-width: 782px) {
+	.zui-scope.cev-admin .cev-offer {
+		flex-direction: column;
+		margin: 16px 16px 0;
+	}
+
+	.zui-scope.cev-admin .cev-offer__badge {
+		flex-basis: auto;
+		flex-direction: row;
+		gap: 8px;
+		padding: 12px;
+	}
+
+	.zui-scope.cev-admin .cev-offer__pct {
+		font-size: 24px;
+	}
+}
+
 /* Library .zui-layout already supplies flex + 16px gap + padding 0.
    We just zero its margin so all spacing comes from .cev-tab-panel. */
 .zui-scope.cev-admin .zui-layout {

@@ -3,7 +3,7 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: email verification, customer verification, otp verification, fake accounts, spam registrations
 Requires at least: 5.3
 Tested up to: 7.1
-Stable tag: 2.8.2
+Stable tag: 2.8.3
 Requires PHP: 7.2
 WC requires at least: 5.0
 WC tested up to: 11.1.2
@@ -213,6 +213,13 @@ Yes — with checkout verification in [CEV PRO](https://www.zorem.com/product/cu
 DNS-based MX record validation, which confirms the domain has a working mail server before an OTP is sent, is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
 
 == Changelog ==
+
+= 2.8.3 =
+* Enhancement – Limited-time CEV PRO offer banner with a live countdown on the Settings and Unverified Users tabs.
+* Enhancement – Added a dismissible AI Agent OS launch notice in wp-admin (hidden on the CEV settings page).
+* Security – Verification links now use a random code instead of one built from the email address and the time.
+* Security – Verification codes are now compared in constant time.
+* Security – Wrong signup OTP guesses are now capped per email address (5 by default, filterable with cev_signup_otp_max_attempts).
 
 = 2.8.2 =
 * Enhancement – OTP length, OTP expiration, verification email resend limit and the resend limit message are now available in the free version.

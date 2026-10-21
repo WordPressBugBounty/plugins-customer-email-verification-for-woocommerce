@@ -58,9 +58,6 @@ class CEV_Signup_Verification {
 		add_action('wp_ajax_resend_otp', array($this, 'resend_otp'));
 		add_action('wp_ajax_nopriv_resend_otp', array($this, 'resend_otp'));
 
-		// Authenticate user via email link (logged-in check included).
-		add_action( 'wp', array( $this, 'authenticate_user_by_email_link' ) );
-
 		// Mark the new account verified when its email passed the signup OTP.
 		// Priority 20 runs after the email class resets the flag to 'false'
 		// on woocommerce_created_customer_notification (priority 10).
@@ -271,7 +268,8 @@ class CEV_Signup_Verification {
 			$verification_pin = WC_customer_email_verification_email_Common()->generate_verification_pin();
 		}
 		$expire_time =  get_option('cev_verification_code_expiration', 'never');
-		$secret_code = md5( $recipient . time() );
+		// Random, unguessable value. Never derive it from the email or the clock.
+		$secret_code = wp_generate_password( 32, false, false );
 		if ( empty( $expire_time ) ) {
 			$expire_time = 'never';
 		}
@@ -540,6 +538,14 @@ class CEV_Signup_Verification {
 			echo wp_json_encode( array( 'success' => 'false' ));
 			die();
 		}
+
+		// Cap wrong guesses per address so the short PIN cannot be brute-forced.
+		$attempts_key = $this->otp_attempts_key( $email );
+		$attempts     = (int) get_transient( $attempts_key );
+		if ( $attempts >= $this->get_max_otp_attempts() ) {
+			wp_send_json_error( array( 'verified' => false, 'message' => __( 'Too many incorrect attempts. Please wait a while, then request a new code.', 'customer-email-verification-for-woocommerce' ) ) );
+		}
+
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 		$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}cev_user_log WHERE email = %s AND pin = %s", $email, $otp));
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
@@ -559,6 +565,7 @@ class CEV_Signup_Verification {
 					array('%d')
 				);
 				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+				delete_transient( $attempts_key );
 				// The account is created by the registration form submit that
 				// follows; mark_otp_verified_customer() picks this up.
 				set_transient( $this->otp_verified_key( $email ), 1, 15 * MINUTE_IN_SECONDS );
@@ -567,65 +574,37 @@ class CEV_Signup_Verification {
 				
 			}
 		} else {
+			++$attempts;
+			set_transient( $attempts_key, $attempts, HOUR_IN_SECONDS );
+			if ( $attempts >= $this->get_max_otp_attempts() ) {
+				// Burn the pending code so the next send issues a fresh PIN
+				// instead of reusing the one that was being guessed.
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+				$wpdb->delete( "{$wpdb->prefix}cev_user_log", array( 'email' => $email ), array( '%s' ) );
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+			}
 			wp_send_json_error(array('verified' => false, 'message' =>  __('The OTP you entered is incorrect. Please check your email and try again.', 'customer-email-verification-for-woocommerce')));
 		}
 	}
-	public function authenticate_user_by_email_link() {
-		global $wpdb;
 
-		// Public verification link, not a form post: the token below carries no
-		// privileges on its own and is matched against the secret_code stored in
-		// cev_user_log before anything happens, so there is no nonce to check.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
-		$cusomer_email_verify = isset( $_GET['cusomer_email_verify'] ) ? sanitize_text_field( wp_unslash( $_GET['cusomer_email_verify'] ) ) : '';
+	/**
+	 * Transient key counting wrong OTP guesses for an address.
+	 *
+	 * @param string $email Email address.
+	 * @return string
+	 */
+	private function otp_attempts_key( $email ) {
+		return 'cev_otp_attempts_' . md5( strtolower( trim( $email ) ) );
+	}
 
-		if ( '' !== $cusomer_email_verify ) {
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Decoding our own verification token; matched against cev_user_log below.
-			$user_meta = explode( '@', base64_decode( $cusomer_email_verify ) );
-			$email_secret_code = $user_meta[0];
-	
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
-			$result = $wpdb->get_row(
-				$wpdb->prepare(
-					"SELECT email, password FROM {$wpdb->prefix}cev_user_log WHERE secret_code = %s",
-					$email_secret_code
-				),
-				ARRAY_A
-			);
-			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
-	
-			if ($result) {
-				$email = $result['email'];
-				$password = $result['password'];
-				$user = get_user_by( 'email', $email );
-	
-				if ( $user && !is_wp_error( $user ) ) {
-					// User exists
-					update_user_meta( $user->ID, 'customer_email_verified', 'true' );
-					update_user_meta( $user->ID, 'cev_user_resend_times', 0 );
-					wc_maybe_store_user_agent($user->user_login, $user);
-					wp_send_json_success(array('verified' => true, 'message' => __('Verification successful', 'customer-email-verification-for-woocommerce'), 'redirect_url' => home_url()));
-				} else {
-					// User does not exist, create a new customer
-					$new_customer = wc_create_new_customer( sanitize_email( $email ), '', $password );
-					if ( !is_wp_error($new_customer) ) {
-						update_user_meta($new_customer, 'customer_email_verified', 'true');
-						update_user_meta($new_customer, 'cev_user_resend_times', 0);
-	
-						wp_set_current_user($new_customer);
-						wp_set_auth_cookie($new_customer);
-						// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress/WooCommerce hook, not owned by this plugin.
-						do_action('wp_login', $email, get_userdata($new_customer));
-	
-						// wp_send_json_success(array('verified' => true, 'message' => 'Registration and verification successful', 'redirect_url' => home_url() . '/my-account/'));
-						wp_safe_redirect( home_url() . '/my-account/' );
-						exit;
-					} else {
-						wp_send_json_error(array('verified' => false, 'message' =>  __('Error creating user', 'customer-email-verification-for-woocommerce')));
-					}
-				}	
-			}
-		}
+	/**
+	 * Wrong OTP guesses allowed per address within an hour.
+	 *
+	 * @return int
+	 */
+	private function get_max_otp_attempts() {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Plugin's established cev_ filter prefix.
+		return max( 1, (int) apply_filters( 'cev_signup_otp_max_attempts', 5 ) );
 	}
 	
 	public function generate_verification_pin() {

@@ -131,7 +131,7 @@ class WC_Customer_Email_Verification_Email {
 			$is_secret_code_present                = get_user_meta( $this->user_id, 'customer_email_verification_code', true );
 	
 			if ( '' === $is_secret_code_present ) {
-				$secret_code = md5( $this->user_id . time() );
+				$secret_code = wp_generate_password( 32, false, false );
 				update_user_meta( $user_id, 'customer_email_verification_code', $secret_code );
 			}
 
@@ -188,7 +188,7 @@ class WC_Customer_Email_Verification_Email {
 
 			$verified_code = get_user_meta( (int) $user_meta[1], 'customer_email_verification_code', true );
 			
-			if ( ! empty( $verified_code ) && $verified_code === $user_meta[0] ) {
+			if ( ! empty( $verified_code ) && isset( $user_meta[1] ) && hash_equals( (string) $verified_code, (string) $user_meta[0] ) ) {
 				
 				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Established public filter of this plugin; renaming breaks existing integrations.
 				$cev_email_link_expired = apply_filters( 'cev_email_link_expired', false, (int) $user_meta[1] );

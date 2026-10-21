@@ -414,6 +414,15 @@ class WC_Customer_Email_Verification_Admin {
 
 			<?php include $plugin_path . '/includes/views/zui-page-header.php'; ?>
 
+			<?php
+			// CEV PRO 30% offer banner on the Settings + Unverified Users tabs.
+			$cev_offer_end_ts = ( new DateTimeImmutable( '2026-11-15 23:59:59', wp_timezone() ) )->getTimestamp();
+			if ( time() < $cev_offer_end_ts ) {
+				$cev_offer_visible = in_array( $tab, array( 'email-verification', 'unverified-users' ), true );
+				include $plugin_path . '/includes/views/zui-pro-offer-banner.php';
+			}
+			?>
+
 			<?php /* All three tab panels live in the DOM at once; the inline JS
 			        below toggles their visibility on tab click so navigating
 			        between tabs does NOT reload the page. */ ?>
@@ -456,6 +465,11 @@ class WC_Customer_Email_Verification_Admin {
 						t.removeAttribute( 'aria-current' );
 					}
 				} );
+				var offer = document.getElementById( 'cev-offer-banner' );
+				if ( offer && ! offer.hasAttribute( 'data-cev-offer-expired' ) ) {
+					offer.hidden = 'add-ons' === slug;
+				}
+
 				var activePanel = null;
 				panels.forEach( function ( p ) {
 					if ( p.getAttribute( 'data-cev-tab' ) === slug ) {
@@ -2308,7 +2322,7 @@ class WC_Customer_Email_Verification_Admin {
 				$is_secret_code_present = get_user_meta( $user_id, 'customer_email_verification_code', true );
 	
 				if ( '' === $is_secret_code_present ) {
-					$secret_code = md5( $user_id . time() );
+					$secret_code = wp_generate_password( 32, false, false );
 					update_user_meta( $user_id, 'customer_email_verification_code', $secret_code );
 				}					
 				
@@ -2355,7 +2369,7 @@ class WC_Customer_Email_Verification_Admin {
 			$is_secret_code_present = get_user_meta( $user_id, 'customer_email_verification_code', true );
 
 			if ( '' === $is_secret_code_present ) {
-				$secret_code = md5( $user_id . time() );
+				$secret_code = wp_generate_password( 32, false, false );
 				update_user_meta( $user_id, 'customer_email_verification_code', $secret_code );
 			}					
 			
@@ -2586,7 +2600,7 @@ class WC_Customer_Email_Verification_Admin {
 				$is_secret_code_present                = get_user_meta( $this->user_id, 'customer_email_verification_code', true );
 		
 				if ( '' === $is_secret_code_present ) {
-					$secret_code = md5( $this->user_id . time() );
+					$secret_code = wp_generate_password( 32, false, false );
 					update_user_meta( $user_id, 'customer_email_verification_code', $secret_code );
 				}
 				
