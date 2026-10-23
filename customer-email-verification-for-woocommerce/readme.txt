@@ -1,8 +1,8 @@
 === Customer Email Verification for WooCommerce ===
 Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
-Tags: email verification, customer verification, otp verification, fake accounts, spam registrations
+Tags: email verification, customer verification, otp verification, fake accounts, signup verification
 Requires at least: 5.3
-Tested up to: 7.1
+Tested up to: 7.1.3
 Stable tag: 2.8.3
 Requires PHP: 7.2
 WC requires at least: 5.0
@@ -101,6 +101,21 @@ Email verification is the cheapest defence a WooCommerce store has against junk 
 * **Fake and fraudulent orders, including fake cash-on-delivery (COD) orders** — unverified COD orders become failed deliveries and returns to origin (RTO), and each one costs you a real shipment in both directions. Verify a guest's email before the order is placed. Available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-description).
 * **Account takeover at login** — OTP and two-factor authentication on unrecognized devices. Available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-description).
 
+= Who Uses Customer Email Verification =
+
+Any WooCommerce store with open registration collects junk accounts, but some business models pay for them more than others:
+
+* **Cash-on-delivery stores** — in India, Southeast Asia and the Middle East, a fake COD order becomes a real shipment that comes back as an RTO, costing the courier fee in both directions. Verifying the buyer before the order is placed is checkout verification, available in CEV PRO; registration verification in the free version cuts the fake accounts those orders are placed from.
+* **Stores running a welcome coupon or first-order discount** — a discount on registration is an invitation to register repeatedly. Verification means each code costs a working inbox.
+* **Free trials and digital downloads** — when the product is delivered instantly by email, an address that cannot receive mail is a delivery failure, not just a bad record.
+* **Membership sites and online courses** — every password reset, renewal notice and course email depends on the address being real.
+* **Wholesale and B2B stores** — registration should be a real buyer at a real company. Restricting signups to approved domains is available in CEV PRO.
+* **High-ticket and made-to-order stores** — one fraudulent order is expensive enough to justify verifying before it enters production.
+* **Dropshipping and print-on-demand stores** — a bad address means a supplier ships to nowhere and you absorb the cost.
+* **Any store whose order emails have to land** — order confirmations, shipment tracking and delivery updates are worthless if the address behind the account was never real.
+
+Email verification is not a spam filter and it is not fraud screening. It proves one thing well: that the address attached to an account can actually receive mail.
+
 = Compatible With =
 
 Customer Email Verification is built to work smoothly with plugins that follow WooCommerce's standard registration and checkout templates. The following plugins have been tested and confirmed compatible:
@@ -123,7 +138,7 @@ Customer Email Verification is built to work smoothly with plugins that follow W
 
 * [Advanced Shipment Tracking for WooCommerce](https://www.zorem.com/product/woocommerce-advanced-shipment-tracking/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — The #1 WooCommerce shipment tracking plugin. Trusted by 80,000+ stores.
 * [SMS for WooCommerce](https://www.zorem.com/product/sms-for-woocommerce/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Automated SMS order and shipping notifications via Twilio, WhatsApp, and 18 other providers.
-* [Local Pickup PRO](https://www.zorem.com/product/zorem-local-pickup-pro/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Advanced local pickup with multiple locations, appointment scheduling, and ready-for-pickup notifications.
+* [Advanced Local Pickup PRO](https://www.zorem.com/product/zorem-local-pickup-pro/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Advanced local pickup with multiple locations, appointment scheduling, and ready-for-pickup notifications.
 * [Country Based Restrictions PRO](https://www.zorem.com/product/country-based-restriction-pro/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Restrict products and payment gateways by customer country using WooCommerce geolocation.
 * [Zorem Returns](https://www.zorem.com/product/zorem-returns/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Self-service returns, exchanges, and store credit management for WooCommerce.
 
@@ -211,6 +226,27 @@ Yes — with checkout verification in [CEV PRO](https://www.zorem.com/product/cu
 = Does it check that an email domain actually exists before sending the code? =
 
 DNS-based MX record validation, which confirms the domain has a working mail server before an OTP is sent, is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
+
+= Will this reduce my email bounce rate? =
+
+Yes. Every account created after verification has an address that received and acted on a message, so order confirmations and shipping notifications have somewhere to land. Mistyped addresses and dead inboxes never become customer records in the first place, which also protects your sending reputation with mailbox providers.
+
+= Can it stop coupon and free-trial abuse? =
+
+Partly, in the free version. A welcome coupon or free trial tied to registration invites people to register repeatedly, and requiring a working inbox for each signup raises the cost of doing that. Someone with several real mailboxes can still sign up several times. Blocking disposable and throwaway providers outright, which is what closes most of the remaining gap, is available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
+
+= Does verification slow registration down or add a page reload? =
+
+No page reload. The popup opens inline on the registration form as soon as the customer submits their email, and the OTP is sent straight away, so a genuine customer typically finishes in a few seconds. How long a code stays valid, how many resends are allowed and the code length are all configurable in the free version.
+
+= Does it stop bot and automated signups? =
+
+A bot has to receive and read a one-time code sent to the address it submitted, which defeats the ordinary scripted signup. Detecting coordinated attacks across many signups, and scoring each registration for risk before the account is created, are available in [CEV PRO](https://www.zorem.com/product/customer-email-verification/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=upgrade-to-pro&utm_content=readme-faq).
+
+== Upgrade Notice ==
+
+= 2.8.3 =
+Security release. Verification links now use a random code, codes are compared in constant time, and wrong OTP guesses are capped per email address. Upgrading is recommended for all stores.
 
 == Changelog ==
 
