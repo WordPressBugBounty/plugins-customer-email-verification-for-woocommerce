@@ -50,6 +50,11 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 		add_action( 'admin_notices', array( $this, 'admin_notice_agent_os_launch' ) );
 		add_action( 'admin_init', array( $this, 'agent_os_notice_ignore' ) );
 
+		// Estimated Delivery Date PRO launch promotion (ZUI plugin notice).
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_edd_pro_notice_styles' ) );
+		add_action( 'admin_notices', array( $this, 'admin_notice_edd_pro_launch' ) );
+		add_action( 'admin_init', array( $this, 'edd_pro_notice_ignore' ) );
+
 	}
 
 	/**
@@ -72,6 +77,15 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	 */
 	public function should_show_agent_os_notice() {
 		if ( ! current_user_can( 'manage_woocommerce' ) || get_option( self::AGENT_OS_DISMISSED_OPTION ) ) {
+			return false;
+		}
+
+		/*
+		 * Only one zorem launch notice runs at a time. The newer Estimated
+		 * Delivery Date PRO promotion takes priority; this one comes back on
+		 * its own once that notice is dismissed or its offer ends.
+		 */
+		if ( $this->should_show_edd_pro_notice() ) {
 			return false;
 		}
 
@@ -188,6 +202,138 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 
 		update_option( self::AGENT_OS_DISMISSED_OPTION, time(), false );
 		wp_safe_redirect( remove_query_arg( array( 'cev-agent-os-notice-dismiss', 'cev_agent_os_nonce' ) ) );
+		exit;
+	}
+
+	/**
+	 * Option holding the timestamp the Estimated Delivery Date PRO notice was dismissed.
+	 */
+	const EDD_PRO_DISMISSED_OPTION = 'cev_edd_pro_notice_dismissed_at';
+
+	/**
+	 * Last day of the Estimated Delivery Date PRO launch offer (site timezone, inclusive).
+	 */
+	const EDD_PRO_OFFER_END = '2026-11-15 23:59:59';
+
+	/**
+	 * Whether the Estimated Delivery Date PRO launch notice should show on this request.
+	 *
+	 * Rules: store managers only, not on the CEV settings page, hidden once
+	 * dismissed and after the offer ends.
+	 *
+	 * @return bool
+	 */
+	public function should_show_edd_pro_notice() {
+		if ( ! current_user_can( 'manage_woocommerce' ) || get_option( self::EDD_PRO_DISMISSED_OPTION ) ) {
+			return false;
+		}
+
+		$cev_offer_end = new DateTimeImmutable( self::EDD_PRO_OFFER_END, wp_timezone() );
+		if ( time() > $cev_offer_end->getTimestamp() ) {
+			return false;
+		}
+
+		// Read-only check of which admin screen we are on, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		if ( 'customer-email-verification-for-woocommerce' === $cev_current_page ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Load the ZUI plugin-notice component on screens that show the notice.
+	 */
+	public function enqueue_edd_pro_notice_styles() {
+		if ( ! $this->should_show_edd_pro_notice() ) {
+			return;
+		}
+
+		$cev_zui_url = woo_customer_email_verification()->plugin_dir_url() . 'assets/zui/';
+		$cev_zui_dir = woo_customer_email_verification()->get_plugin_path() . '/assets/zui/';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local VERSION file of the bundled library.
+		$cev_zui_ver = is_readable( $cev_zui_dir . 'VERSION' ) ? trim( file_get_contents( $cev_zui_dir . 'VERSION' ) ) : woo_customer_email_verification()->version;
+
+		wp_enqueue_style( 'zui-plugin-notice', $cev_zui_url . 'css/components/plugin-notice.css', array(), $cev_zui_ver );
+		wp_add_inline_style(
+			'zui-plugin-notice',
+			'.cev-edd-notice .zui-pnotice__text strong{color:var(--zui-text-strong,#0f172a)}'
+			. '.cev-edd-notice .zui-pnotice__text.cev-edd-notice__offer{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-block-start:10px;padding:8px 14px;background:#fff7ed;border:1px solid #fdba74;border-radius:8px;color:#7c2d12;font-size:13px}'
+			. '.cev-edd-notice .cev-edd-notice__offer strong{color:#c2410c;font-size:14px}'
+			. '.cev-edd-notice__coupon{display:inline-block;padding:2px 10px;border:1px dashed #ea580c;border-radius:6px;background:#ffffff;color:#c2410c;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;font-weight:700;letter-spacing:.06em;user-select:all}'
+			. '.cev-edd-notice .zui-pnotice__close{text-decoration:none}'
+		);
+	}
+
+	/**
+	 * Estimated Delivery Date PRO launch notice - 40% off with coupon EDDPRO40.
+	 */
+	public function admin_notice_edd_pro_launch() {
+		if ( ! $this->should_show_edd_pro_notice() ) {
+			return;
+		}
+
+		if ( ! function_exists( 'Zorem\UI\icon' ) ) {
+			require_once woo_customer_email_verification()->get_plugin_path() . '/assets/zui/icons.php';
+		}
+
+		$cev_dismiss_url = wp_nonce_url( add_query_arg( 'cev-edd-pro-notice-dismiss', '1' ), 'cev_edd_pro_notice_dismiss', 'cev_edd_pro_nonce' );
+		$cev_product_url = add_query_arg(
+			array(
+				'utm_source'   => 'cev-free',
+				'utm_medium'   => 'admin-notice',
+				'utm_campaign' => 'edd-pro-launch',
+			),
+			'https://www.zorem.com/product/estimated-delivery-date-pro/'
+		);
+		?>
+		<div class="zui-pnotice cev-edd-notice" role="status">
+			<span class="zui-pnotice__avatar" aria-hidden="true">
+				<?php \Zorem\UI\icon( 'truck' ); ?>
+			</span>
+
+			<div class="zui-pnotice__body">
+				<strong class="zui-pnotice__title"><?php esc_html_e( 'New from zorem: Estimated Delivery Date PRO for WooCommerce', 'customer-email-verification-for-woocommerce' ); ?></strong>
+				<p class="zui-pnotice__text"><?php esc_html_e( 'Show accurate delivery dates on your product, cart and checkout pages, worked out from postal-code distance, your working days and a live order cut-off countdown. Fewer delivery questions from customers, and less cart abandonment.', 'customer-email-verification-for-woocommerce' ); ?></p>
+				<p class="zui-pnotice__text cev-edd-notice__offer">
+					<strong><?php esc_html_e( 'Launch offer: 40% off', 'customer-email-verification-for-woocommerce' ); ?></strong>
+					&mdash;
+					<?php esc_html_e( 'use coupon code', 'customer-email-verification-for-woocommerce' ); ?>
+					<code class="cev-edd-notice__coupon">EDDPRO40</code>
+					<?php esc_html_e( 'Valid until November 15, 2026.', 'customer-email-verification-for-woocommerce' ); ?>
+				</p>
+
+				<div class="zui-pnotice__actions">
+					<a class="zui-pnotice__btn" href="<?php echo esc_url( $cev_product_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Get Estimated Delivery Date PRO', 'customer-email-verification-for-woocommerce' ); ?></a>
+					<a class="zui-pnotice__link" href="<?php echo esc_url( $cev_dismiss_url ); ?>"><?php esc_html_e( 'No thanks', 'customer-email-verification-for-woocommerce' ); ?></a>
+				</div>
+			</div>
+
+			<a class="zui-pnotice__close" href="<?php echo esc_url( $cev_dismiss_url ); ?>" aria-label="<?php esc_attr_e( 'Dismiss this notice.', 'customer-email-verification-for-woocommerce' ); ?>">&times;</a>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Permanently hide the Estimated Delivery Date PRO notice after a nonce-checked dismiss.
+	 */
+	public function edd_pro_notice_ignore() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Nonce is verified below before anything is saved.
+		$cev_dismiss_requested = isset( $_GET['cev-edd-pro-notice-dismiss'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- This is the nonce value itself.
+		$cev_notice_nonce = isset( $_GET['cev_edd_pro_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['cev_edd_pro_nonce'] ) ) : '';
+
+		if ( ! $cev_dismiss_requested || '' === $cev_notice_nonce ) {
+			return;
+		}
+		if ( ! wp_verify_nonce( $cev_notice_nonce, 'cev_edd_pro_notice_dismiss' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		update_option( self::EDD_PRO_DISMISSED_OPTION, time(), false );
+		wp_safe_redirect( remove_query_arg( array( 'cev-edd-pro-notice-dismiss', 'cev_edd_pro_nonce' ) ) );
 		exit;
 	}
 

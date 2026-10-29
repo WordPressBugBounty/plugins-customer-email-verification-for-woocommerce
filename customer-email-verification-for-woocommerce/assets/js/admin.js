@@ -141,9 +141,9 @@ jQuery(document).on("click", ".cev_tab_input", function(){
 	window.history.pushState({path:url},'',url);	
 });
 
-jQuery(document).click(function(){
+jQuery(document).click(function(e){
 	var $trigger = jQuery(".cev_dropdown");
-    if($trigger !== event.target && !$trigger.has(event.target).length){
+    if(!$trigger.is(e.target) && !$trigger.has(e.target).length){
 		jQuery(".cev-dropdown-content").hide();
     }   
 });
@@ -222,9 +222,9 @@ jQuery( document ).on( "click", "#activity-panel-tab-help", function() {
 	jQuery( '.woocommerce-layout__activity-panel-wrapper' ).addClass( 'is-open is-switching' );
 });
 
-jQuery(document).click(function(){
+jQuery(document).click(function(e){
 	var $trigger = jQuery(".woocommerce-layout__activity-panel");
-    if($trigger !== event.target && !$trigger.has(event.target).length){
+    if(!$trigger.is(e.target) && !$trigger.has(e.target).length){
 		jQuery('#activity-panel-tab-help').removeClass( 'is-active' );
 		jQuery( '.woocommerce-layout__activity-panel-wrapper' ).removeClass( 'is-open is-switching' );
     }   

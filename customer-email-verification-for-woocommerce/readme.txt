@@ -1,12 +1,12 @@
-=== Customer Email Verification for WooCommerce ===
+=== Customer Email Verification for WooCommerce – OTP Verification, Block Fake Signups ===
 Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: email verification, customer verification, otp verification, fake accounts, signup verification
 Requires at least: 5.3
-Tested up to: 7.1.3
-Stable tag: 2.8.3
+Tested up to: 7.1
+Stable tag: 2.8.4
 Requires PHP: 7.2
 WC requires at least: 5.0
-WC tested up to: 11.1.2
+WC tested up to: 11.2.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,7 +136,7 @@ Customer Email Verification is built to work smoothly with plugins that follow W
 
 = More Plugins by Zorem =
 
-* [Advanced Shipment Tracking for WooCommerce](https://www.zorem.com/product/woocommerce-advanced-shipment-tracking/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — The #1 WooCommerce shipment tracking plugin. Trusted by 80,000+ stores.
+* [Advanced Shipment Tracking for WooCommerce](https://www.zorem.com/product/woocommerce-advanced-shipment-tracking/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — The #1 WooCommerce shipment tracking plugin. Trusted by 70,000+ stores.
 * [SMS for WooCommerce](https://www.zorem.com/product/sms-for-woocommerce/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Automated SMS order and shipping notifications via Twilio, WhatsApp, and 18 other providers.
 * [Advanced Local Pickup PRO](https://www.zorem.com/product/zorem-local-pickup-pro/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Advanced local pickup with multiple locations, appointment scheduling, and ready-for-pickup notifications.
 * [Country Based Restrictions PRO](https://www.zorem.com/product/country-based-restriction-pro/?utm_source=cev-free&utm_medium=wp-org-readme&utm_campaign=add-ons) — Restrict products and payment gateways by customer country using WooCommerce geolocation.
@@ -245,10 +245,19 @@ A bot has to receive and read a one-time code sent to the address it submitted, 
 
 == Upgrade Notice ==
 
+= 2.8.4 =
+The plugin is now listed as "Customer Email Verification for WooCommerce – OTP Verification, Block Fake Signups". Settings, data and the plugin slug are unchanged — nothing to reconfigure.
+
 = 2.8.3 =
 Security release. Verification links now use a random code, codes are compared in constant time, and wrong OTP guesses are capped per email address. Upgrading is recommended for all stores.
 
 == Changelog ==
+
+= 2.8.4 =
+* Improved – Renamed the plugin to "Customer Email Verification for WooCommerce – OTP Verification, Block Fake Signups". The plugin slug, settings and all existing data are unchanged.
+* Improved – Updated the plugin readme.
+* Fix – A JavaScript error on the Customer Email Verification settings screen could stop other click handlers on the page from running.
+* Dev – Tested with WooCommerce 11.2.1 and WordPress 7.1.4.
 
 = 2.8.3 =
 * Enhancement – Limited-time CEV PRO offer banner with a live countdown on the Settings and Unverified Users tabs.

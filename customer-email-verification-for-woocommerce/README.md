@@ -1,1 +1,0 @@
-# customer-email-verification-for-woocommerce
