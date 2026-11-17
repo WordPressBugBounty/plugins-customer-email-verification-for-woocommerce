@@ -3,10 +3,10 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: email verification, customer verification, otp verification, fake accounts, signup verification
 Requires at least: 5.3
 Tested up to: 7.1
-Stable tag: 2.8.4
+Stable tag: 2.8.5
 Requires PHP: 7.2
 WC requires at least: 5.0
-WC tested up to: 11.2.1
+WC tested up to: 11.3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -252,6 +252,11 @@ The plugin is now listed as "Customer Email Verification for WooCommerce – OTP
 Security release. Verification links now use a random code, codes are compared in constant time, and wrong OTP guesses are capped per email address. Upgrading is recommended for all stores.
 
 == Changelog ==
+
+= 2.8.5 =
+* Enhancement – Added a dismissible notice introducing the free Zorem AI Agent Connector plugin, with a one-click Install or Activate button.
+* Fix – WPML: the verification popup header, popup footer and resend limit message can now be translated in WPML String Translation.
+* Dev – Tested with WooCommerce 11.3.0 and WordPress 7.1.4.
 
 = 2.8.4 =
 * Improved – Renamed the plugin to "Customer Email Verification for WooCommerce – OTP Verification, Block Fake Signups". The plugin slug, settings and all existing data are unchanged.

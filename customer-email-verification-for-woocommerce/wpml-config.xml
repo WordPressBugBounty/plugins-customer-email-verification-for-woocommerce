@@ -7,6 +7,9 @@
 		<key name="cev_verification_success_message"/>
 		<key name="cev_resend_verification_email_message"/>
 		<key name="cev_verified_user_message"/>
-		<key name="cev_re_verification_message"/>		
+		<key name="cev_re_verification_message"/>
+		<key name="cev_verification_header"/>
+		<key name="cev_verification_widget_footer"/>
+		<key name="cev_resend_limit_message"/>		
 	</admin-texts>	
 </wpml-config>

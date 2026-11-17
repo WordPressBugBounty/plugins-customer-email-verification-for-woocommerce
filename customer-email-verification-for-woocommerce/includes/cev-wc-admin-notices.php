@@ -55,6 +55,219 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 		add_action( 'admin_notices', array( $this, 'admin_notice_edd_pro_launch' ) );
 		add_action( 'admin_init', array( $this, 'edd_pro_notice_ignore' ) );
 
+		// Zorem AI Agent Connector (free, WordPress.org) notice.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_ai_connector_notice_styles' ) );
+		add_action( 'admin_notices', array( $this, 'admin_notice_ai_connector' ) );
+		add_action( 'admin_init', array( $this, 'ai_connector_notice_ignore' ) );
+
+	}
+
+	/**
+	 * Option holding the timestamp the AI Agent Connector notice was dismissed.
+	 */
+	const AI_CONNECTOR_DISMISSED_OPTION = 'cev_ai_connector_notice_dismissed_at';
+
+	/**
+	 * WordPress.org slug of the Zorem AI Agent Connector plugin.
+	 */
+	const AI_CONNECTOR_SLUG = 'zorem-ai-agent-connector';
+
+	/**
+	 * WordPress.org page of the Zorem AI Agent Connector plugin.
+	 */
+	const AI_CONNECTOR_URL = 'https://wordpress.org/plugins/zorem-ai-agent-connector/';
+
+	/**
+	 * Minimum WordPress version the connector supports.
+	 */
+	const AI_CONNECTOR_MIN_WP = '6.9';
+
+	/**
+	 * Minimum PHP version the connector supports.
+	 */
+	const AI_CONNECTOR_MIN_PHP = '8.0';
+
+	/**
+	 * Plugin file of the installed connector ('folder/file.php'), or '' when
+	 * it is not installed.
+	 *
+	 * @return string
+	 */
+	public function get_ai_connector_plugin_file() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		foreach ( array_keys( get_plugins() ) as $cev_plugin_file ) {
+			if ( 0 === strpos( $cev_plugin_file, self::AI_CONNECTOR_SLUG . '/' ) ) {
+				return $cev_plugin_file;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Whether the AI Agent Connector notice should show on this request.
+	 *
+	 * Rules: dashboard, Plugins and WooCommerce screens only (not the CEV
+	 * settings page), hidden once dismissed or once the connector is active,
+	 * never offered on a site that cannot run it, and only to users who can
+	 * install (or, when already installed, activate) plugins.
+	 *
+	 * @return bool
+	 */
+	public function should_show_ai_connector_notice() {
+		if ( get_option( self::AI_CONNECTOR_DISMISSED_OPTION ) ) {
+			return false;
+		}
+
+		/*
+		 * Other zorem plugins show the same notice. Let Subscriptions Analytics
+		 * show its copy when it is active, and respect a dismissal made there.
+		 */
+		if ( class_exists( 'Zorem_Subs_AI_Connector_Notice' ) || get_option( 'zorem_subs_ai_connector_notice_dismissed' ) ) {
+			return false;
+		}
+
+		if ( version_compare( get_bloginfo( 'version' ), self::AI_CONNECTOR_MIN_WP, '<' ) || version_compare( PHP_VERSION, self::AI_CONNECTOR_MIN_PHP, '<' ) ) {
+			return false;
+		}
+
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+		$cev_screen = get_current_screen();
+		if ( ! $cev_screen ) {
+			return false;
+		}
+
+		// Read-only check of which admin screen we are on, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		if ( 'customer-email-verification-for-woocommerce' === $cev_current_page ) {
+			return false;
+		}
+
+		$cev_allowed_screen = in_array( $cev_screen->id, array( 'dashboard', 'plugins' ), true )
+			|| ( function_exists( 'wc_get_screen_ids' ) && in_array( $cev_screen->id, wc_get_screen_ids(), true ) )
+			|| 0 === strpos( $cev_screen->id, 'woocommerce_page_' );
+		if ( ! $cev_allowed_screen ) {
+			return false;
+		}
+
+		$cev_plugin_file = $this->get_ai_connector_plugin_file();
+		if ( '' === $cev_plugin_file ) {
+			return current_user_can( 'install_plugins' );
+		}
+		if ( is_plugin_active( $cev_plugin_file ) ) {
+			return false;
+		}
+
+		return current_user_can( 'activate_plugins' );
+	}
+
+	/**
+	 * Load the ZUI plugin-notice component on screens that show the notice.
+	 */
+	public function enqueue_ai_connector_notice_styles() {
+		if ( ! $this->should_show_ai_connector_notice() ) {
+			return;
+		}
+
+		$cev_zui_url = woo_customer_email_verification()->plugin_dir_url() . 'assets/zui/';
+		$cev_zui_dir = woo_customer_email_verification()->get_plugin_path() . '/assets/zui/';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local VERSION file of the bundled library.
+		$cev_zui_ver = is_readable( $cev_zui_dir . 'VERSION' ) ? trim( file_get_contents( $cev_zui_dir . 'VERSION' ) ) : woo_customer_email_verification()->version;
+
+		wp_enqueue_style( 'zui-plugin-notice', $cev_zui_url . 'css/components/plugin-notice.css', array(), $cev_zui_ver );
+		/*
+		 * The `notice` class lets WordPress move the card below the page heading,
+		 * full width like core notices. Undo the bits of core `.notice` styling
+		 * (padding, `.notice p` spacing, `div.notice a` color + underline) that
+		 * would otherwise beat the ZUI component.
+		 */
+		wp_add_inline_style(
+			'zui-plugin-notice',
+			'.notice.cev-aic-notice{padding:18px 20px}'
+			. '.notice.cev-aic-notice .zui-pnotice__text{margin:0;padding:0}'
+			. 'div.notice.cev-aic-notice a.zui-pnotice__btn,div.notice.cev-aic-notice a.zui-pnotice__btn:hover,div.notice.cev-aic-notice a.zui-pnotice__btn:focus{color:#ffffff;text-decoration:none}'
+			. 'div.notice.cev-aic-notice a.zui-pnotice__btn--ghost{color:var(--zui-text,#1e293b)}'
+			. 'div.notice.cev-aic-notice a.zui-pnotice__btn--ghost:hover,div.notice.cev-aic-notice a.zui-pnotice__btn--ghost:focus{color:var(--zui-text-strong,#0f172a)}'
+			. 'div.notice.cev-aic-notice a.zui-pnotice__link{color:var(--zui-text-soft,#475569)}'
+			. 'div.notice.cev-aic-notice a.zui-pnotice__link:hover,div.notice.cev-aic-notice a.zui-pnotice__link:focus{color:var(--zui-text-strong,#0f172a)}'
+			. 'div.notice.cev-aic-notice a.zui-pnotice__close{color:var(--zui-text-muted,#94a3b8);text-decoration:none}'
+			. 'div.notice.cev-aic-notice a.zui-pnotice__close:hover,div.notice.cev-aic-notice a.zui-pnotice__close:focus{color:var(--zui-text-strong,#0f172a)}'
+		);
+	}
+
+	/**
+	 * Zorem AI Agent Connector notice — "Install now" when the plugin is not
+	 * installed, "Activate" when it is installed but inactive.
+	 */
+	public function admin_notice_ai_connector() {
+		if ( ! $this->should_show_ai_connector_notice() ) {
+			return;
+		}
+
+		$cev_plugin_file = $this->get_ai_connector_plugin_file();
+		if ( '' === $cev_plugin_file ) {
+			$cev_action_url   = wp_nonce_url( self_admin_url( 'update.php?action=install-plugin&plugin=' . self::AI_CONNECTOR_SLUG ), 'install-plugin_' . self::AI_CONNECTOR_SLUG );
+			$cev_action_label = __( 'Install now', 'customer-email-verification-for-woocommerce' );
+		} else {
+			$cev_action_url   = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=' . rawurlencode( $cev_plugin_file ) ), 'activate-plugin_' . $cev_plugin_file );
+			$cev_action_label = __( 'Activate', 'customer-email-verification-for-woocommerce' );
+		}
+
+		if ( ! function_exists( 'Zorem\UI\icon' ) ) {
+			require_once woo_customer_email_verification()->get_plugin_path() . '/assets/zui/icons.php';
+		}
+
+		$cev_dismiss_url = wp_nonce_url( add_query_arg( 'cev-ai-connector-notice-dismiss', '1' ), 'cev_ai_connector_notice_dismiss', 'cev_ai_connector_nonce' );
+		?>
+		<div class="notice zui-pnotice cev-aic-notice" role="status">
+			<span class="zui-pnotice__avatar" aria-hidden="true">
+				<?php \Zorem\UI\icon( 'sparkles' ); ?>
+			</span>
+
+			<div class="zui-pnotice__body">
+				<strong class="zui-pnotice__title"><?php esc_html_e( 'New and free: Zorem AI Agent Connector', 'customer-email-verification-for-woocommerce' ); ?></strong>
+				<p class="zui-pnotice__text"><?php esc_html_e( 'Let AI apps such as Claude, ChatGPT and Codex work on your WordPress site through their own agent account. You choose which tools each agent can use. New content is saved as a draft, and destructive actions stay off until you turn them on.', 'customer-email-verification-for-woocommerce' ); ?></p>
+
+				<div class="zui-pnotice__actions">
+					<a class="zui-pnotice__btn" href="<?php echo esc_url( $cev_action_url ); ?>"><?php echo esc_html( $cev_action_label ); ?></a>
+					<a class="zui-pnotice__btn zui-pnotice__btn--ghost" href="<?php echo esc_url( self::AI_CONNECTOR_URL ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn more', 'customer-email-verification-for-woocommerce' ); ?></a>
+					<a class="zui-pnotice__link" href="<?php echo esc_url( $cev_dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'customer-email-verification-for-woocommerce' ); ?></a>
+				</div>
+			</div>
+
+			<a class="zui-pnotice__close" href="<?php echo esc_url( $cev_dismiss_url ); ?>" aria-label="<?php esc_attr_e( 'Dismiss this notice.', 'customer-email-verification-for-woocommerce' ); ?>">&times;</a>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Permanently hide the AI Agent Connector notice after a nonce-checked dismiss.
+	 */
+	public function ai_connector_notice_ignore() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Nonce is verified below before anything is saved.
+		$cev_dismiss_requested = isset( $_GET['cev-ai-connector-notice-dismiss'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- This is the nonce value itself.
+		$cev_notice_nonce = isset( $_GET['cev_ai_connector_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['cev_ai_connector_nonce'] ) ) : '';
+
+		if ( ! $cev_dismiss_requested || '' === $cev_notice_nonce ) {
+			return;
+		}
+		if ( ! wp_verify_nonce( $cev_notice_nonce, 'cev_ai_connector_notice_dismiss' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'install_plugins' ) && ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
+		update_option( self::AI_CONNECTOR_DISMISSED_OPTION, time(), false );
+		wp_safe_redirect( remove_query_arg( array( 'cev-ai-connector-notice-dismiss', 'cev_ai_connector_nonce' ) ) );
+		exit;
 	}
 
 	/**
