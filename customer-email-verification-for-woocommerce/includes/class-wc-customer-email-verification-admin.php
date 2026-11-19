@@ -415,9 +415,9 @@ class WC_Customer_Email_Verification_Admin {
 			<?php include $plugin_path . '/includes/views/zui-page-header.php'; ?>
 
 			<?php
-			// CEV PRO 30% offer banner on the Settings + Unverified Users tabs.
-			$cev_offer_end_ts = ( new DateTimeImmutable( '2026-11-15 23:59:59', wp_timezone() ) )->getTimestamp();
-			if ( time() < $cev_offer_end_ts ) {
+			// Black Friday CEV PRO banner on the Settings + Unverified Users tabs,
+			// shown only while the sale runs (Nov 19 – Dec 1, 2026).
+			if ( WC_CEV_Admin_Notices_Under_WC_Admin::is_bfcm_running() ) {
 				$cev_offer_visible = in_array( $tab, array( 'email-verification', 'unverified-users' ), true );
 				include $plugin_path . '/includes/views/zui-pro-offer-banner.php';
 			}

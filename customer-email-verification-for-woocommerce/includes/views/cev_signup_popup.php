@@ -42,7 +42,7 @@ $overlay_color    = get_option( 'cev_verification_popup_overlay_background_color
 $cev_button_color_widget_header      = get_option( 'cev_button_color_widget_header', '#212121' );
 $cev_widget_header_image_width       = get_option( 'cev_widget_header_image_width', '150' );
 $cev_button_text_header_font_size    = get_option( 'cev_button_text_header_font_size', '22' );
-$cev_enable_email_verification       = get_option( 'cev_enable_email_verification' );
+$cev_enable_email_verification       = get_option( 'cev_enable_email_verification', 1 );
 $password_setup_link_enabled         = get_option( 'woocommerce_registration_generate_password', 'no' );
 
 $heading = get_option( 'cev_verification_header', $cev_verification_widget_message->defaults['cev_verification_header'] );

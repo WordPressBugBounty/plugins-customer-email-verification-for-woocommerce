@@ -1,10 +1,10 @@
 <?php
 /**
  * @wordpress-plugin
- * Plugin Name: Customer Email Verification for WooCommerce 
+ * Plugin Name: Customer Email Verification for WooCommerce – OTP Verification, Block Fake Signups
  * Plugin URI: https://www.zorem.com/product/customer-email-verification/
  * Description: The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area.
- * Version: 2.8.5
+ * Version: 2.8.6
  * Author: zorem
  * Author URI: https://www.zorem.com 
  * License: GPL-2.0+
@@ -26,7 +26,7 @@ class Zorem_Woo_Customer_Email_Verification {
 	 *
 	 * @var string
 	 */
-	public $version = '2.8.5';
+	public $version = '2.8.6';
 	public $plugin_file;
 	public $plugin_path;
 	public $my_account;
@@ -41,8 +41,10 @@ class Zorem_Woo_Customer_Email_Verification {
 	public function __construct() {
 		
 		$this->plugin_file = __FILE__;
-		// Add your templates to this array.
-		
+
+		// The instance is created on 'init', so the bundled /lang/ files can be registered right away.
+		$this->load_textdomain();
+
 		if ( !defined( 'CUSTOMER_EMAIL_VERIFICATION_PATH' ) ) {
 			define( 'CUSTOMER_EMAIL_VERIFICATION_PATH', $this->get_plugin_path() );
 		}
@@ -75,6 +77,21 @@ class Zorem_Woo_Customer_Email_Verification {
 	
 	
 	
+	/**
+	 * Register the translations bundled in /lang/.
+	 *
+	 * Current WordPress also finds these files on its own through the plugin's
+	 * Domain Path header; registering the path explicitly keeps older WordPress
+	 * versions working too. Files in wp-content/languages/ (translate.wordpress.org,
+	 * Loco Translate) still take priority over the bundled ones.
+	 *
+	 * @since 2.8.5
+	 */
+	public function load_textdomain() {
+		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- Loads the translations bundled in /lang/ (not only translate.wordpress.org ones) and keeps them working on WordPress 5.3+, the plugin's minimum.
+		load_plugin_textdomain( 'customer-email-verification-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+	}
+
 	/**
 	 * Check Customer email verification pro version
 	 *	 

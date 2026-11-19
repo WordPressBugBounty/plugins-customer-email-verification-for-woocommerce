@@ -1,531 +1,1936 @@
-#, fuzzy
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Customer Email verification for WooCommerce\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 09:40+0000\n"
+"Project-Id-Version: Customer Email Verification for WooCommerce\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/customer-email-verification-for-woocommerce\n"
+"POT-Creation-Date: 2026-11-18 04:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
 "Language: \n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.3.1; wp-5.3.2"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Domain: customer-email-verification-for-woocommerce\n"
 
-#: includes/views/admin_options_settings.php:147
+#. translators: 1: number of completed steps, 2: total number of steps.
+#: includes/views/zui-settings-page.php:150
+#, php-format
+msgid "%1$d of %2$d steps done"
+msgstr ""
+
+#. translators: %d: number of days.
+#: includes/views/zui-addons-tab.php:135
+#, php-format
+msgid "%d days"
+msgstr ""
+
+#. translators: %d: number of days in the money-back guarantee.
+#: includes/views/zui-addons-tab.php:66
+#, php-format
+msgid "%d-day money-back guarantee"
+msgstr ""
+
+#. translators: %s: human-readable time difference (e.g. "3 hours")
+#: includes/views/zui-users-tab.php:240
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1328
+msgid "1 Hour"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1325
 msgid "10 min"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:260
-msgid "15 Days"
+#: includes/class-wc-customer-email-verification-admin.php:1326
+msgid "15 min"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:129
+#: includes/class-wc-customer-email-verification-admin.php:1329
+msgid "24 Hours"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1327
+msgid "30 min"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1311
 msgid "4-digit"
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:78
+#: includes/views/cev_admin_endpoint_popup_template.php:88
 msgid "4-digit code"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:657
+#: includes/views/zui-addons-tab.php:211
+msgid "430+ disposable domains are blocked before an account is created"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1312
+msgid "6-digit"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1330
+msgid "72 Hours"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1194
+msgid "8 characters"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1413
+msgid "A logged-in customer whose email is not verified is shown a verification popup until they confirm. Administrators, editors and shop managers are never prompted."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email.php:310
+msgid "A new verification link is sent. Check email. {{cev_resend_email_link}}"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1636
+msgid "A reminder is sent at most once per interval per user, capped at 50 sends per cron run. Customize the email subject, heading, body and CTA via the email customizer."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:200
+msgid "A stolen password is enough to sign in to a customer account"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1565
+msgid "A verified customer is kept in a \"pending paid order\" state — counted as verified for login and checkout, but not fully activated — until their first genuinely paid order completes."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:201
+msgid "Abandoned signups pile up until you delete them by hand"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2137
+msgid "Access token"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1619
+msgid "Account-age threshold for deletion. Minimum 30 days is enforced server-side. 90 days is the recommended balance."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1618
+msgid "Account-age threshold for deletion. Minimum is 30 days (enforced server-side)."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2251 includes/views/zui-users-tab.php:199
 msgid "Actions"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:601
+#: includes/cev-wc-admin-notices.php:219
+msgid "Activate"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:456 includes/views/zui-addons-tab.php:496
 msgid "Active"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:166
+#: includes/views/zui-addons-tab.php:497
+msgid "Active in this store"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:112
+msgid "Active installs on WordPress.org"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1476
+msgid "Add extra domains to block on top of the built-in disposable list. Wildcards like \"*.ru\" are allowed."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1120
+msgid "Add the Smart Form to any page"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:242
+msgid "Add tracking info to WooCommerce orders, automate fulfillment workflows and keep customers informed — fulfill orders straight from the Orders page."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:459
+msgid "Add-ons"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1474
+msgid "Additional blocked domains"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1233
+msgid "Adds the OTP step to the cart page so the customer is already verified by the time they reach checkout."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1001
+msgid "Advanced"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1451
+msgid "After a successful 2FA verification, skip the 6-digit code prompt on the same browser/device for this many days."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1452
+msgid "After a successful 2FA, the same browser/device is trusted for this many days — the customer is not asked for the 6-digit code again during that window."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:453
+msgid "All"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1342
+msgid "Allow 1 Attempt"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1343
 msgid "Allow 3 Attempts"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:534
-msgid "API Protection"
+#: includes/class-wc-customer-email-verification-admin.php:1520
+msgid "Allowed domains (only these can sign up)"
 msgstr ""
 
-#: includes/customizer/class-cev-customizer.php:173
-#: includes/customizer/verification-widget-message.php:237
+#: includes/class-wc-customer-email-verification-admin.php:1528
+msgid "Allowlist rejection message"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:560
+msgid "Already verified."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:124 includes/class-wc-customer-email-verification-signup.php:222
+msgid "An account with this email address already exists. Please use a different email or log in to your existing account."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:185
+msgid "Analytics & Automation"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:182
+msgid "Apply"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1381
+msgid "Ask for a one-time code only when a sign-in looks unfamiliar."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:158
+msgid "Ask for a one-time code when someone signs in from a new device or location, or after a long time away."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1684
+msgid "Ask for a one-time code when someone signs in from a new device or location. Upgrade to CEV PRO to unlock these options."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:151
+msgid "Ask guests to confirm their email before they pay, on the classic and the block checkout. Stops fake and cash-on-delivery fraud orders."
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:48
+msgid "at checkout — valid until November 15, 2026."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:346
+msgid "Auto-cleanup unverified records"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:353
+msgid "Auto-delete unverified user accounts"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1585
+msgid "Automatically delete pending (unverified) records that have been sitting in the verification log past the retention window below."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1782
+msgid "Available in CEV PRO"
+msgstr ""
+
+#: includes/customizer/class-cev-customizer.php:185 includes/customizer/verification-widget-message.php:249
 msgid "Available variables"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:491
-msgid "CEV FREE"
+#: includes/views/zui-addons-tab.php:127
+msgid "Average Rating"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:495
-msgid "CEV PRO"
+#: includes/views/zui-addons-tab.php:384
+msgid "Before / After"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:39
-msgid ""
-"Check our documentation or contact our support team if you have any "
-"questions."
+#: includes/views/zui-addons-tab.php:172
+msgid "Block 430+ disposable email domains, mistyped domains and known abusers, and score every signup for risk."
 msgstr ""
 
-#: includes/views/admin_options_settings.php:63
+#: includes/class-wc-customer-email-verification-admin.php:1414
+msgid "Block access to My Account for already-logged-in customers whose email is still unverified until they complete the OTP. Admins/editors/shop managers are exempt."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1462
+msgid "Block disposable / temporary emails"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:997
+msgid "Block disposable emails, bad domains, and known abusers."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1694
+msgid "Block disposable emails, mistyped domains and known abusers before they create an account. Upgrade to CEV PRO to unlock these options."
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:745
+msgid "Block fake registrations and unauthorized activity"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1536
+msgid "Block specific email addresses"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1543
+msgid "Blocked email addresses"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1551
+msgid "Blocked email rejection message"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2074
+msgid "Bordered card with a brand top accent and underline tabs. The only tabbed template."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2089
+msgid "Both visible at once, side by side. No tabs."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2079
+msgid "Brand panel beside a single form. Switch with a link, no tabs."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2084
+msgid "Brand-colored header with the store name, form below. Switch with a link, no tabs."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:179
+msgid "Branded login and registration templates, with phone verification by SMS through Twilio, Vonage, MSG91 or WhatsApp."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:362
+msgid "Bring lapsed sign-ups back. The plugin emails users who never finished verifying — at the intervals you choose — with a styled reminder and a one-click link to complete sign-up."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:120
+msgid "Built into PRO spam protection"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1469
+msgid "Built-in list contains 430+ known disposable email domains."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:175
+msgid "Bulk action"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:176
+msgid "Bulk Action"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:169
+msgid "Bulk actions"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1254
+msgid "Cart amount threshold"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1277
+msgid "Categories that require verification"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:221
+msgid "CEV documentation"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:194
+msgid "CEV Free"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:319
+msgid "CEV Free verifies emails when customers register. CEV PRO extends that to checkout, login and spam protection, and automates the clean-up."
+msgstr ""
+
+#: includes/views/zui-page-header.php:74
+msgid "CEV modules"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:198
+msgid "Check the Unverified Users list"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:976 includes/views/zui-addons-tab.php:150
+msgid "Checkout Verification"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1216
 msgid "Checkout Verification Type"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:137
-msgid "Choose if you wish to set expiry time to the OTP."
+#: includes/class-wc-customer-email-verification-admin.php:1217
+msgid "Choose between a popup overlay or an inline form element."
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:490
-msgid "Current"
+#: includes/class-wc-customer-email-verification-admin.php:1320
+msgid "Choose if you wish to set an expiry time on the OTP. After this period, the code is invalid and the customer must request a fresh one."
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:516
-msgid "Custom Limits"
+#: includes/class-wc-customer-email-verification-admin.php:1095
+msgid "Choose the standard WooCommerce form or a modern, ready-made Smart Form."
 msgstr ""
 
-#. Name of the plugin
+#: includes/class-wc-customer-email-verification-admin.php:1709
+msgid "Clean up abandoned signups automatically and email reminders to customers who never verified. Upgrade to CEV PRO to unlock these options."
+msgstr ""
+
+#: includes/customizer/class-customer-verification-new-customizer.php:164
+msgid "Clear"
+msgstr ""
+
+#: includes/customizer/class-customer-verification-new-customizer.php:165
+msgid "Clear color"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1784 includes/class-wc-customer-email-verification-admin.php:1793
+msgid "Close"
+msgstr ""
+
+#: includes/customizer/class-customer-verification-new-customizer.php:169
+msgid "Color value"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1262
+msgid "Compare against"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:229
+msgid "Compare Free and PRO"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:972
+msgid "Configure how customer emails are verified at registration."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1499
+msgid "Confirm the email's domain has a mail server before generating an OTP. Catches typos like gmial.com and dead inboxes."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1199
+msgid "Connect a provider to send verification codes by phone. Required for phone verification and Phone OTP login."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:297
+msgid "Control catalog visibility dynamically — allow, restrict or filter product availability across specific countries with safe IP geolocation."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1437
+msgid "Controls who is offered Authenticator-App setup — all customers, only selected roles, or only admins."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1988
+msgid "Copy"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:196
+msgid "Customer"
+msgstr ""
+
+#: includes/views/zui-page-header.php:41
+msgid "Customer Email Verification"
+msgstr ""
+
+#. Plugin Name of the plugin
+#: customer-email-verification-for-woocommerce.php
 msgid "Customer Email Verification for WooCommerce"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:823
+#: includes/class-wc-customer-email-verification-admin.php:2431
 msgid "Customer verification"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:508
-msgid "Customize OTP digit length and set expiration time."
+#: includes/class-wc-customer-email-verification-admin.php:1566
+msgid "Customers are only marked fully active after their first genuinely paid order completes — verification alone is not enough. Useful for stopping coupon/freebie abuse."
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:526
-msgid "Detect new devices, new locations, and inactive logins."
+#: includes/class-wc-customer-email-verification-admin.php:1232
+msgid "Customers can verify their email before proceeding to checkout."
 msgstr ""
 
-#: includes/views/cev_signup_popup.php:25
-#: includes/customizer/verification-widget-message.php:106
+#: includes/views/zui-users-tab.php:139
+msgid "Customers who started signing up but never verified their email address."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1210
+msgid "Customers will need to confirm their email to place an order."
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:744
+msgid "Customizable checkout, login and reminder emails"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:607 includes/class-wc-customer-email-verification-admin.php:613
+msgid "Customize"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:193
+msgid "Customize the verification email and popup"
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:30
+msgid "Days"
+msgstr ""
+
+#: includes/customizer/class-customer-verification-new-customizer.php:166
+msgid "Default"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:177 includes/views/zui-users-tab.php:282
+msgid "Delete"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1617
+msgid "Delete accounts after"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1590
+msgid "Delete pending records after"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1002
+msgid "Developer and data-handling options."
+msgstr ""
+
+#: includes/customizer/verification-widget-message.php:118 includes/views/cev_signup_popup.php:33
 msgid "Didn't receive an email? {cev_resend_verification}"
 msgstr ""
 
-#. %s: Try again link
-#: includes/views/front/preview_cev_popup_page.php:17
+#. translators: %s: Try again link
+#: includes/views/front/preview_cev_popup_page.php:25
 #, php-format
 msgid "Didn’t receive an email? <strong>%s</strong>"
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:12
+#: includes/views/cev_admin_endpoint_popup_template.php:20
 msgid "Didn’t receive an email? Try Again"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:532
-msgid "Disable Store API checkout to prevent bypassing verification."
+#: includes/class-wc-customer-email-verification-admin.php:1344
+msgid "Disable Resend"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:95
+#: includes/class-wc-customer-email-verification-admin.php:1293
 msgid "Disable WooCommerce Store API Checkout"
 msgstr ""
 
-#: includes/customizer/class-cev-customizer.php:125
+#: includes/cev-wc-admin-notices.php:240 includes/cev-wc-admin-notices.php:754
+msgid "Dismiss"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:244 includes/cev-wc-admin-notices.php:395 includes/cev-wc-admin-notices.php:527 includes/cev-wc-admin-notices.php:736
+msgid "Dismiss this notice."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1156
+msgid "Display a phone number field on the registration form. It is always shown and required when Phone (SMS) verification is the registration method."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:119
+msgid "Disposable Domains Blocked"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1490
+msgid "Disposable rejection message"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1500
+msgid "Do a DNS MX lookup before sending the OTP — rejects typos like gmial.com and dead domains where the OTP would never arrive."
+msgstr ""
+
+#: includes/views/zui-page-header.php:68
+msgid "Docs Portal"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:431
+msgid "Documentation & Help"
+msgstr ""
+
+#: includes/views/zui-settings-page.php:162
+msgid "Done"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:364
+msgid "Each one closes a gap that fake accounts, fraud orders and account takeovers slip through today."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1643
+msgid "Each user gets at most one email per interval, ever."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:163
+msgid "Email address is required."
+msgstr ""
+
+#: includes/customizer/class-cev-customizer.php:137
 msgid "Email Heading"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:656
+#: includes/class-wc-customer-email-verification-signup.php:123
+msgid "Email is required."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1173
+msgid "Email OTP"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1637
+msgid "Email registered users who never finished verifying — at the chosen intervals after sign-up — to bring them back. The email content is fully customizable through the email customizer."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1144 includes/class-wc-customer-email-verification-admin.php:2250
 msgid "Email verification"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:501
-msgid "Email Verification at Checkout"
+#: includes/class-wc-customer-email-verification-email.php:166
+msgid "Email verification link"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:21
-msgid "Email verification at checkout"
+#: includes/class-wc-customer-email-verification-admin.php:977
+msgid "Email verification rules applied during checkout."
 msgstr ""
 
-#: includes/views/admin_options_settings.php:27
-msgid "Email verification settings"
-msgstr ""
-
-#: includes/class-wc-customer-email-verification-admin.php:825
+#: includes/class-wc-customer-email-verification-admin.php:2433
 msgid "Email verification status:"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:191
-msgid "Email Verification Success Message"
-msgstr ""
-
-#: includes/class-wc-customer-email-verification-admin.php:513
-#: includes/class-wc-customer-email-verification-admin.php:580
+#: includes/class-wc-customer-email-verification-admin.php:822 includes/class-wc-customer-email-verification-admin.php:890
 msgid "Email verification success message"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:53
+#: includes/class-wc-customer-email-verification-admin.php:1359
+msgid "Email Verification Success Message"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1428
+msgid "Enable Authenticator App 2FA"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1610
+msgid "Enable auto-delete of unverified accounts"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1209
 msgid "Enable Checkout Verification"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:219
+#: includes/class-wc-customer-email-verification-admin.php:1583
+msgid "Enable daily auto-cleanup"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1373
 msgid "Enable Login Authentication"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:41
+#: includes/class-wc-customer-email-verification-admin.php:1085
 msgid "Enable Signup Verification"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:580
-msgid "Extend your store's capabilities with our ecosystem"
+#: includes/class-wc-customer-email-verification-admin.php:1231
+msgid "Enable the email verification on the cart page"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:488
-msgid "Feature Comparison"
+#: includes/class-wc-customer-email-verification-admin.php:1239
+msgid "Ensure free orders are tied to valid email addresses."
 msgstr ""
 
-#: includes/customizer/verification-widget-message.php:216
+#: includes/class-wc-customer-email-verification-signup.php:125
+msgid "Enter a valid email address."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1492
+msgid "Error text shown on the signup/checkout form when the email is rejected as a disposable address."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1553
+msgid "Error text shown on the signup/checkout form when the email matches one of the addresses in your ban list."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1530
+msgid "Error text shown on the signup/checkout form when the email's domain is not in the Allowlist."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1507
+msgid "Error text shown on the signup/checkout form when the MX check fails for the customer's email domain."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:129
+msgid "Error:"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:207
+msgid "Every step is verified"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1135
+msgid "Every template shows Login and Register. Template 1 uses tabs, the others switch with a link (or show both columns). Design and content for the selected template are tuned in the Customizer."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:301
+msgid "Everyone who signed up has verified their email — nothing pending right now."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1482
+msgid "Excluded domains (always allowed)"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:448
+msgid "Extend your store's capabilities with our ecosystem."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email.php:325
+msgid "failed"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:196
+msgid "Failed to resend OTP. Please try again."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2508
+msgid "Filter"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:451
+msgid "Filter add-ons"
+msgstr ""
+
+#: includes/customizer/verification-widget-message.php:228
 msgid "Footer content"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:504
-msgid "Full Checkout Verification"
+#: includes/views/zui-users-tab.php:377
+msgid "Force re-verify all customers"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:510
-msgid "Fully Configurable"
+#: includes/views/zui-users-tab.php:372
+msgid "Force re-verify your customer base — e.g. after a spam attack, or on a fresh install over legacy accounts. Every verified customer is marked unverified and must re-confirm their email on their next login. Administrators, editors and shop managers are never affected."
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:25
-msgid "Fully customizable verification emails"
+#: includes/views/zui-addons-tab.php:340
+msgid "Free Edition"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:111
-msgid "General Settings"
+#. translators: %s: average star rating out of 5, e.g. 4.4.
+#: includes/views/zui-addons-tab.php:63
+#, php-format
+msgid "Free plugin rated %s out of 5 on WordPress.org"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:568
-msgid "GET STARTED WITH PRO"
+#. translators: 1: yearly price incl. currency symbol, e.g. $119. 2: number of days in the money-back guarantee.
+#: includes/views/zui-addons-tab.php:60
+#, php-format
+msgid "From %1$s per year (plus applicable tax) · %2$d-day money-back guarantee"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:317
-#: includes/class-wc-customer-email-verification-admin.php:321
+#: includes/class-wc-customer-email-verification-admin.php:981
+msgid "General"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:740
+msgid "Get advanced verification features to protect your store from spam, fake signups, and fraudulent orders:"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:390
+msgid "Get AI Agent OS"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:325
+msgid "Get CEV PRO"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:522
+msgid "Get Estimated Delivery Date PRO"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:500
+msgid "Get Extension"
+msgstr ""
+
+#: includes/views/zui-settings-page.php:146
+msgid "Get started with email verification"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:422
+msgid "Get Started With PRO"
+msgstr ""
+
+#: includes/views/zui-settings-page.php:108 includes/views/zui-users-tab.php:99
+msgid "Get Support"
+msgstr ""
+
+#: customer-email-verification-for-woocommerce.php:471 includes/class-wc-customer-email-verification-admin.php:408 includes/class-wc-customer-email-verification-admin.php:626 includes/class-wc-customer-email-verification-admin.php:630
 msgid "Go Pro"
 msgstr ""
 
-#: includes/customizer/verification-widget-message.php:169
+#: includes/class-wc-customer-email-verification-admin.php:1224
+msgid "Guest checkouts will bypass email verification."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:198
+msgid "Guests can check out with any email address, real or not"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:210
+msgid "Guests confirm their email before the order is placed"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2083
+msgid "Header banner"
+msgstr ""
+
+#: includes/customizer/verification-widget-message.php:181
 msgid "Header text"
 msgstr ""
 
+#: includes/views/zui-settings-page.php:174
+msgid "Hide checklist"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1247
+msgid "High-value orders can require extra verification."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1142
+msgid "How a new customer proves they own their contact detail at sign-up. Email verification sends a one-time code to their email; Phone (SMS) verification sends it to their phone (needs an SMS gateway)."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1319
+msgid "How long the one-time code stays valid before it expires."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1338
+msgid "How many times a customer can request a fresh code before resending is blocked — protects against email/SMS flooding."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1337
+msgid "How many times a customer can request a fresh code before resending is blocked."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1170
+msgid "How returning customers sign in on the Smart Form. Enable any combination: Password, Email OTP (a one-time code by email, no password) or Phone OTP (a code by SMS). When more than one is enabled, the login form shows a tab for each."
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:31
+msgid "Hrs"
+msgstr ""
+
 #. Author URI of the plugin
+#: customer-email-verification-for-woocommerce.php
 msgid "https://www.zorem.com"
 msgstr ""
 
-#. URI of the plugin
-msgid ""
-"https://www.zorem.com/products/customer-email-verification-for-woocommerce/"
+#. Plugin URI of the plugin
+#: customer-email-verification-for-woocommerce.php
+msgid "https://www.zorem.com/product/customer-email-verification/"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:67
-msgid "Inline"
+#: includes/views/zui-addons-tab.php:375
+msgid "Included in PRO"
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:3
-#: includes/views/cev_signup_popup.php:3
-#: includes/views/front/preview_cev_popup_page.php:3
+#: includes/cev-wc-admin-notices.php:216
+msgid "Install now"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:215
+msgid "Invalid email address."
+msgstr ""
+
+#: includes/views/cev_admin_endpoint_popup_template.php:11 includes/views/cev_signup_popup.php:11 includes/views/front/preview_cev_popup_page.php:11
 msgid "johny@example.com"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:258
+#: includes/views/zui-addons-tab.php:264
+msgid "Keep customers informed with automated SMS messages for order & delivery updates, status changes and out-for-delivery alerts."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:331
+msgid "Keep your verification log and user list tidy with automated cleanup, account deletion, re-engagement emails and admin tools."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1405
 msgid "Last login more than"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:603
-msgid "Learn More"
+#: includes/views/zui-users-tab.php:197
+msgid "Last Updated"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:514
-msgid "Limit the number of resend attempts to prevent abuse."
+#: includes/cev-wc-admin-notices.php:382 includes/cev-wc-admin-notices.php:514
+msgid "Launch offer: 40% off"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:174
-msgid "Limit the number of resend attempts."
+#: includes/views/zui-settings-page.php:100 includes/views/zui-users-tab.php:91
+msgid "Learn how to configure Customer Email Verification for best results."
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:519
-#: includes/views/admin_options_settings.php:207
+#: includes/cev-wc-admin-notices.php:239
+msgid "Learn more"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:235
+msgid "Let AI apps such as Claude, ChatGPT and Codex work on your WordPress site through their own agent account. You choose which tools each agent can use. New content is saved as a draft, and destructive actions stay off until you turn them on."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1689
+msgid "Let customers protect their account with an authenticator app. Upgrade to CEV PRO to unlock these options."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:165
+msgid "Let customers protect their account with Google Authenticator, Authy or 1Password."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:992
+msgid "Let customers secure their account with an authenticator app."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1424
+msgid "Let users add an extra layer of security with an Authenticator App."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2088
+msgid "Login & Register columns"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:986 includes/views/zui-addons-tab.php:157
 msgid "Login Authentication"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:243
+#: includes/class-wc-customer-email-verification-admin.php:1391
 msgid "Login from a new device"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:250
+#: includes/class-wc-customer-email-verification-admin.php:1398
 msgid "Login from a new location"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:38
-msgid "Need help?"
+#: includes/class-wc-customer-email-verification-admin.php:1169
+msgid "Login method"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:503 includes/views/cev_addons_tab.php:509
-#: includes/views/cev_addons_tab.php:515 includes/views/cev_addons_tab.php:521
-#: includes/views/cev_addons_tab.php:527 includes/views/cev_addons_tab.php:533
-msgid "Not Available"
+#: includes/class-wc-customer-email-verification-admin.php:1538
+msgid "Maintain a personal ban list of full email addresses — useful for blocking scrapers, abusers, or banned customers."
 msgstr ""
 
-#: includes/views/admin_options_settings.php:136
+#: includes/views/zui-users-tab.php:82 includes/views/zui-users-tab.php:326
+msgid "Maintenance"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1163
+msgid "Make the phone number mandatory on the registration form."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:275
+msgid "Manage local pickup orders: multiple pickup locations, split business hours, per-location discounts, pickup messages and more."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1211
+msgid "Master switch for checkout verification — when on, customers must confirm their email with an OTP before the order can be placed."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1375
+msgid "Master switch for the login OTP flow — when off, none of the conditions below are evaluated."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1430
+msgid "Master switch — shows the Authenticator-App setup card on the My Account page. Enrolment is voluntary; no user is locked out."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1087
+msgid "Master switch — when on, every new account must verify the email address before the signup completes."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1374
+msgid "Master switch — when on, returning customers may be asked for a one-time code at login."
+msgstr ""
+
+#: includes/customizer/verification-widget-message.php:205
+msgid "Message"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1352
+msgid "Message displayed to the customer once they hit the resend limit and can no longer request a fresh OTP."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1361
+msgid "Message shown on the My Account or checkout page right after a customer successfully verifies their email."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1491
+msgid "Message shown to the customer when their email is blocked as disposable."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1529
+msgid "Message shown when a customer's email domain is not in the Allowlist."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1552
+msgid "Message shown when a customer's email is on the personal ban list."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1506
+msgid "Message shown when the email's domain has no mail server."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1351
+msgid "Message shown when the resend limit is reached."
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:32
+msgid "Min"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1191
+msgid "Minimum password length"
+msgstr ""
+
+#. translators: %d: number of days.
+#: includes/views/zui-addons-tab.php:136
+msgid "Money-Back Guarantee"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1505
+msgid "MX rejection message"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:233
+msgid "N/A"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2138
+msgid "Namespace"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1324
+msgid "Never"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:234
+msgid "New and free: Zorem AI Agent Connector"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:379
+msgid "New from zorem: AI Agent OS — MCP Governance for WordPress AI Agents"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:511
+msgid "New from zorem: Estimated Delivery Date PRO for WooCommerce"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:510
+msgid "No plugins matched your search."
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:391 includes/cev-wc-admin-notices.php:523
+msgid "No thanks"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:298
+msgid "No unverified users"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2505
+msgid "Non verified"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:154 includes/class-wc-customer-email-verification-signup.php:208 includes/class-wc-customer-email-verification-signup.php:529
+msgid "Nonce verification failed."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1307
+msgid "Number of digits in the one-time code sent to customers — 4 is quicker to type, 6 is harder to guess."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1306
+msgid "Number of digits in the one-time code sent to customers."
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:54
+msgid "Offer ends in"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1429
+msgid "Offer Google Authenticator / Authy / 1Password setup on the customer account page. Setup is optional — no user is forced to enrol or blocked from logging in."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:213
+msgid "Old signups are cleaned up and reminded automatically"
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:40
+msgid "on CEV Pro"
+msgstr ""
+
+#. translators: %d: number of days.
+#: includes/views/zui-addons-tab.php:137
+msgid "On every CEV PRO license"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1185
+msgid "On: registration passwords must include upper- and lower-case letters, a number and a symbol (plus the minimum length below). Off: only the minimum length is required."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1128
+msgid "On: the Smart Form takes over the My Account login/registration page. Off: the standard WooCommerce form stays and you add the Smart Form with the [cev_smart_form] shortcode."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1483
+msgid "One domain per line. Always allowed, even if on the blocked list."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1521
+msgid "One domain per line. Wildcard supported: \"*.acme.com\" matches subdomains."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1475
+msgid "One domain per line. Wildcard supported: \"*.ru\" blocks every .ru domain."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1545
+msgid "One full email address per line — exact match only, no wildcards."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1544
+msgid "One full email address per line. Exact match only."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1272
+msgid "Only ask for the OTP when the cart contains products from the categories you flag below."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1248
+msgid "Only ask for the OTP when the cart total is above the threshold you set below — useful for high-fraud-risk orders."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1225
+msgid "Only ask for the OTP when the customer ticks \"Create an account\" — guest orders skip verification."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1699
+msgid "Only fully activate customers after their first paid order, to stop coupon and freebie abuse. Upgrade to CEV PRO to unlock this option."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1382
+msgid "Only prompt for the OTP when the sign-in matches one of the \"unrecognized\" conditions below — known browsers/devices skip it."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1278
+msgid "Only require OTP verification when the cart contains items from these categories."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1240
+msgid "Only show the OTP step on $0 / fully discounted orders — paid orders skip verification."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1522
+msgid "Only these domains can sign up. One per line; wildcards like \"*.acme.com\" match every subdomain."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1444
+msgid "Only users with these roles will see the Authenticator-App setup card."
+msgstr ""
+
+#: includes/views/zui-settings-page.php:168
+msgid "Open"
+msgstr ""
+
+#. translators: %s: customer email address
+#: includes/views/zui-users-tab.php:272
+#, php-format
+msgid "Open actions menu for %s"
+msgstr ""
+
+#: includes/views/zui-page-header.php:51
+msgid "Open settings menu"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1287
+msgid "Optionally customise the message shown above the OTP field per category — e.g. \"Age-restricted item: please verify your email\"."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1318
 msgid "OTP Expiration"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:23
-msgid "OTP expiration & resend limits"
+#: includes/class-wc-customer-email-verification-signup.php:191
+msgid "OTP has been resent successfully."
 msgstr ""
 
-#: includes/views/admin_options_settings.php:119
+#: includes/class-wc-customer-email-verification-admin.php:1305
 msgid "OTP Length"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:507
-msgid "OTP Length & Expiration"
+#: includes/views/cev_signup_popup.php:129
+msgid "Otp Sent Successfully"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:522
-msgid "OTP-Based Login"
+#: includes/cev-wc-admin-notices.php:743
+msgid "OTP-based login authentication for secure access"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:22
-msgid "OTP-based login authentication"
-msgstr ""
-
-#: includes/customizer/verification-widget-message.php:132
+#: includes/customizer/verification-widget-message.php:144
 msgid "Overlay background Color"
 msgstr ""
 
-#. %s: search WooCommerce plugin link
-#: customer-email-verification-for-woocommerce.php:144
+#: includes/class-wc-customer-email-verification-admin.php:1172
+msgid "Password"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:122
+msgid "Password is required."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1121
+msgid "Paste this shortcode where you want the form to appear."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1591
+msgid "Pending records older than this are deleted on the next daily cleanup run."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1592
+msgid "Pending records older than this are deleted on the next daily cleanup run. 14 days is the recommended balance between giving real customers time to come back and not letting bots pile up."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:158
+msgid "pending verifications"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1285
+msgid "Per-category verification message (optional)"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1612
+msgid "Permanently deletes WP user accounts that never verified their email. DESTRUCTIVE. Built-in safeguards keep verified users, users with orders, active subscriptions, elevated roles, or recent login activity safe."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1537
+msgid "Personal ban list. Useful for scrapers, abusers, or banned customers who keep re-signing up."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1146
+msgid "Phone (SMS) verification"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1175
+msgid "Phone OTP"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1279
+msgid "Pick one or more product categories — any cart that contains an item from these will trigger the OTP step."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1644
+msgid "Pick whatever cadence matches your brand voice — each customer is emailed at most once per interval."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1264
+msgid "Pick which cart value the threshold is compared against — subtotal (items only) or total (with shipping and taxes)."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1436
+msgid "Pick which users see the Authenticator-App setup card on their account page."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:339
+msgid "Plan Status"
+msgstr ""
+
+#. translators: %s: search WooCommerce plugin link
+#: customer-email-verification-for-woocommerce.php:163
 #, php-format
-msgid ""
-"Please install and activate %1$sWooCommerce%2$s for Customer Email "
-"Verification for WooCommerce!"
+msgid "Please install and activate %1$sWooCommerce%2$s for Customer Email Verification for WooCommerce!"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:68
-msgid "Popup"
+#: includes/class-wc-customer-email-verification-signup.php:130 includes/views/cev_signup_popup.php:80
+msgid "Please wait..."
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:579
+#: includes/class-wc-customer-email-verification-admin.php:1218
+msgid "Popup blocks the page until verified; inline embeds the OTP step in the checkout form itself."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:447
 msgid "Powerful Add-ons"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:537
-msgid "Premium Support"
+#: includes/views/zui-addons-tab.php:331
+msgid "Priority email support"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:540
-msgid "Priority Support"
-msgstr ""
-
-#: includes/views/cev_addons_tab.php:538
-msgid "Priority ticket handling and dedicated help center access."
-msgstr ""
-
-#: includes/views/admin_options_settings.php:56
-#: includes/views/admin_options_settings.php:98
-#: includes/views/admin_options_settings.php:122
-#: includes/views/admin_options_settings.php:140
-#: includes/views/admin_options_settings.php:159
-#: includes/views/admin_options_settings.php:177
-#: includes/views/admin_options_settings.php:222
+#: includes/class-wc-customer-email-verification-admin.php:1755 includes/class-wc-customer-email-verification-admin.php:2040 includes/views/zui-settings-page.php:90 includes/views/zui-settings-page.php:198 includes/views/zui-users-tab.php:83 includes/views/zui-users-tab.php:328
 msgid "PRO"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:494
+#: includes/views/zui-settings-page.php:99 includes/views/zui-users-tab.php:90
+msgid "Quick Help"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:360
+msgid "Re-engagement reminder emails"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:378
+msgid "Re-verify runs in the background; large stores are processed in batches."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:415
+msgid "Ready when you are"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:286
+msgid "Receive elegant daily, weekly or monthly sales reports by email — charts, average-cart metrics and order analytics on auto-pilot."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:244
 msgid "Recommended"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:83
+#: includes/class-wc-customer-email-verification-signup.php:573
+msgid "Registration and verification successful"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1141
+msgid "Registration verification method"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1464
+msgid "Reject signups and checkouts from known throw-away email services like mailinator, 10minutemail and tempmail."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1463
+msgid "Reject signups and guest checkouts using known temporary email services (mailinator, 10minutemail, tempmail, etc.)."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1450
+msgid "Remember this device for"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1127
+msgid "Replace the My Account page form with the Smart Form"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1704
+msgid "Replace the WooCommerce login and registration forms with a modern, ready-made Smart Form: four templates, email or phone (SMS) verification, password or one-time-code login, and password rules. Upgrade to CEV PRO to unlock these options."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:987
+msgid "Require a one-time code at login for risky sign-ins."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1564
+msgid "Require a paid order to finish verification"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1184
+msgid "Require a strong password"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1238
 msgid "Require checkout verification only for free orders"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:502
-msgid "Require email verification before completing checkout."
+#: includes/class-wc-customer-email-verification-admin.php:1223
+msgid "Require email verification only when Create an account during checkout is selected"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:76
-msgid ""
-"Require email verification only when Create an account during checkout is "
-"selected"
+#: includes/class-wc-customer-email-verification-admin.php:1086
+msgid "Require new users to confirm their email during signup."
 msgstr ""
 
-#: includes/views/admin_options_settings.php:230
+#: includes/class-wc-customer-email-verification-admin.php:1380
 msgid "Require OTP verification for unrecognized login"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:520
-msgid "Require OTP verification for unrecognized login attempts."
+#: includes/class-wc-customer-email-verification-admin.php:1255
+msgid "Require OTP verification only when the cart total exceeds this amount."
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-email-common.php:185
+#: includes/class-wc-customer-email-verification-admin.php:1162
+msgid "Require the phone number"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1412
+msgid "Require unverified logged-in customers to verify"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1246
+msgid "Require verification only above a cart amount"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1270
+msgid "Require verification only for flagged product categories"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1147
+msgid "Requires an SMS gateway (e.g. SMS for WooCommerce)."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1176
+msgid "Requires an SMS gateway. Customers without a phone keep using the Email OTP fallback until they add one."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email-common.php:189
 msgid "Resend Confirmation Email"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-email-common.php:233
+#: includes/class-wc-customer-email-verification-email-common.php:238
 msgid "Resend confirmation email"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:173
+#: includes/class-wc-customer-email-verification-admin.php:1350
 msgid "Resend Limit Message"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:806
-#: includes/class-wc-customer-email-verification-admin.php:854
+#: includes/class-wc-customer-email-verification-admin.php:2414 includes/class-wc-customer-email-verification-admin.php:2462 includes/views/zui-users-tab.php:278
 msgid "Resend verification email"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:273
+#: includes/class-wc-customer-email-verification-admin.php:1513
+msgid "Restrict signups to specific domains (B2B mode)"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1442
+msgid "Roles"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2030
+msgid "Run now"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1584
+msgid "Runs once per day in the background. Only PENDING records are deleted — verified records stay forever as proof of verification."
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:38
 msgid "Save"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:950
+#: includes/views/zui-settings-page.php:207 includes/views/zui-settings-page.php:212 includes/views/zui-users-tab.php:337
+msgid "Save changes"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:466
+msgid "Search companion plugins…"
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:33
+msgid "Sec"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:380
+msgid "See every tool your plugins expose to AI agents and set clear permissions for each agent. Customer details stay hidden from agents that don't need them, and every action is logged."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:186
+msgid "See signups, verifications and blocked spam over time, and clean up or remind customers who never verified, automatically."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:161
+msgid "See your verification funnel, spam blocked and top blocked domains in the CEV PRO analytics dashboard."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:192
+msgid "Select all entries"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:172
+msgid "Select bulk action"
+msgstr ""
+
+#: includes/customizer/class-customer-verification-new-customizer.php:168
+msgid "Select Color"
+msgstr ""
+
+#: includes/customizer/class-customer-verification-new-customizer.php:167
+msgid "Select default color"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:249
+msgid "Select this entry"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2167
+msgid "Send a test SMS"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1642
+msgid "Send reminder at"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1635
+msgid "Send reminder emails"
+msgstr ""
+
+#: includes/views/zui-settings-page.php:164
+msgid "Send test email"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2168
+msgid "Send test SMS"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2570
 msgid "Send verification email"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:289
-#: includes/class-wc-customer-email-verification-admin.php:293
+#: includes/class-wc-customer-email-verification-admin.php:189
+msgid "Send yourself a test verification email"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2139
+msgid "Sender / Phone number ID"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:359
+msgid "Sending…"
+msgstr ""
+
+#: customer-email-verification-for-woocommerce.php:466 includes/class-wc-customer-email-verification-admin.php:404 includes/class-wc-customer-email-verification-admin.php:598 includes/class-wc-customer-email-verification-admin.php:602
 msgid "Settings"
 msgstr ""
 
-#: customer-email-verification-for-woocommerce.php:331
+#: includes/views/zui-settings-page.php:81
+msgid "Settings sections"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1435
+msgid "Show 2FA option to"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1286
+msgid "Show a custom OTP-required message per flagged category."
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:512
+msgid "Show accurate delivery dates on your product, cart and checkout pages, worked out from postal-code distance, your working days and a live order cut-off countdown. Fewer delivery questions from customers, and less cart abandonment."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1155
+msgid "Show phone number field"
+msgstr ""
+
+#: customer-email-verification-for-woocommerce.php:345
 msgid "Sign up email verification"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-email-common.php:193
-msgid "Site Title"
+#: includes/class-wc-customer-email-verification-admin.php:1094
+msgid "Signup form type"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:524
-#: includes/class-wc-customer-email-verification-admin.php:591
-msgid "Skip email verification for the selected user roles:"
-msgstr ""
-
-#: includes/views/cev_addons_tab.php:528
-msgid "Smart Detection"
-msgstr ""
-
-#: includes/views/cev_addons_tab.php:539
-msgid "Standard Only"
-msgstr ""
-
-#: includes/views/cev_addons_tab.php:476
-msgid ""
-"Stop worrying about fake registrations and unauthorized access. Switch from "
-"<strong>basic email verification</strong> to a <a href=\"https://www.zorem."
-"com/product/customer-email-verification/?utm_source=wp-admin&utm_medium=cev-"
-"go-pro&utm_campaign=hero\" target=\"_blank\">fully secured verification "
-"powerhouse</a>."
-msgstr ""
-
-#: includes/customizer/class-cev-customizer.php:101
-msgid "Subject"
-msgstr ""
-
-#: includes/views/cev_addons_tab.php:472
-msgid "Take Your Email Verification to the Next Level"
-msgstr ""
-
-#. Description of the plugin
-msgid ""
-"The Customer verification helps WooCommerce store owners to reduce "
-"registration spam by requiring customers to verify their email address when "
-"they register an account on your store, before they can access their account "
-"area."
-msgstr ""
-
-#: includes/views/admin_options_settings.php:192
-msgid ""
-"The message that will appear on the top of the my-account or checkout page "
-"after successful email verification"
-msgstr ""
-
-#: includes/class-wc-customer-email-verification-admin.php:515
-#: includes/class-wc-customer-email-verification-admin.php:582
-msgid ""
-"the message that will appear on the top of the my-account or checkout page "
-"after successful email verification"
-msgstr ""
-
-#: includes/views/admin_options_settings.php:183
-msgid "Too many attempts, please contact us for further assistance"
+#: includes/class-wc-customer-email-verification-admin.php:971
+msgid "Signup Verification"
 msgstr ""
 
 #: includes/class-wc-customer-email-verification-email-common.php:197
-#: includes/class-wc-customer-email-verification-email-common.php:288
-#: includes/views/front/preview_cev_popup_page.php:4
+msgid "Site Title"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:363
+msgid "Six upgrades your store security is missing"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:833 includes/class-wc-customer-email-verification-admin.php:901
+msgid "Skip email verification for the selected user roles:"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1611
+msgid "Skip rules (always applied): verified users, users with any orders, active subscriptions, non-customer roles, or login activity in the last 30 days are never deleted."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1099
+msgid "Smart Form"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:178
+msgid "Smart Form & SMS"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1198
+msgid "SMS Gateway"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2148
+msgid "SMS provider"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:358
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:171
+msgid "Spam & Fraud Protection"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:996
+msgid "Spam Protection"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:747
+msgid "Special Offer: Get 20% OFF with coupon code CEVPRO20 – limited time only!"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1679
+msgid "Stop fake guest orders by asking guests to confirm their email before they can pay. Upgrade to CEV PRO to unlock these options."
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:44
+msgid "Stop fake signups with CEV Pro"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:317
+msgid "Stop Fake Signups. Block Fraud Orders. Secure Every Login."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:111
+msgid "Stores Use CEV"
+msgstr ""
+
+#: includes/customizer/class-cev-customizer.php:113
+msgid "Subject"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1263
+msgid "Subtotal excludes shipping and taxes; total includes them."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2073
+msgid "Tabbed login & register"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:253
+msgid "Take control of post-shipping workflows, reduce customer-service time and deliver a premium branded post-purchase tracking experience."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1134
+msgid "Template"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2072
+msgid "Template 1 — Tabbed card"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2077
+msgid "Template 2 — Split / brand panel"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2082
+msgid "Template 3 — Brand header banner"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2087
+msgid "Template 4 — Side-by-side"
+msgstr ""
+
+#. translators: %s: admin email address the test was sent to.
+#: includes/class-wc-customer-email-verification-admin.php:146
+#, php-format
+msgid "Test email sent to %s."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-installation.php:87
+msgid "Thank you for signing up for {site_title}. To activate your account, we need to verify your email address. <p>Your verification code: <strong>{cev_user_verification_pin}</strong></p>"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1256
+msgid "The cart total above which the OTP step is shown. Enter a plain number in your store currency."
+msgstr ""
+
+#. Description of the plugin
+#: customer-email-verification-for-woocommerce.php
+msgid "The Customer verification helps WooCommerce store owners to reduce registration spam by requiring customers to verify their email address when they register an account on your store, before they can access their account area."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:110
+msgid "The email could not be sent. Check your store email settings."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1360
+msgid "The message that will appear after successful email verification on My Account or checkout."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:824 includes/class-wc-customer-email-verification-admin.php:892
+msgid "the message that will appear on the top of the my-account or checkout page after successful email verification"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1192
+msgid "The minimum number of characters a registration password must have."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:587
+msgid "The OTP you entered is incorrect. Please check your email and try again."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1443
+msgid "The roles the policy above applies to."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:140
+msgid "The test email could not be sent. Check your store email settings."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:555
+msgid "This code has expired. Click Resend to get a new code."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:104
+msgid "This signup no longer exists."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:199
+msgid "Throwaway inboxes from disposable email services can still sign up"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1355 includes/class-wc-customer-email-verification-signup.php:174
+msgid "Too many attempts, please contact us for further assistance."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:547
+msgid "Too many incorrect attempts. Please wait a while, then request a new code."
+msgstr ""
+
+#: includes/views/zui-users-tab.php:370
+msgid "Tools"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1407
+msgid "Treat the login as unrecognized when the customer has not signed in for longer than the period you pick."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1406
+msgid "Trigger a one-time code when the customer has not logged in for longer than the selected period."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1392
+msgid "Trigger a one-time code when the customer signs in from a browser or device not seen before."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1399
+msgid "Trigger a one-time code when the customer signs in from a new IP address or location."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1393
+msgid "Trigger an OTP when the customer signs in from a browser fingerprint we have not seen before for this account."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1400
+msgid "Trigger an OTP when the IP geolocation differs from previously trusted ones for this account."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email-common.php:201 includes/class-wc-customer-email-verification-email-common.php:294 includes/class-wc-customer-email-verification-email-common.php:301 includes/views/front/preview_cev_popup_page.php:12
 msgid "Try Again"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:858
+#: includes/class-wc-customer-email-verification-admin.php:1295
+msgid "Turn off the block-based checkout REST API so only the classic shortcode checkout is used — needed when the block checkout cannot enforce the OTP."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:185
+msgid "Turn on signup verification"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1515
+msgid "Turn the signup into a whitelist: only emails whose domain is in the Allowlist below can register — perfect for B2B / wholesale stores."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2078
+msgid "Two-column hero"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:991 includes/views/zui-addons-tab.php:164
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2466
 msgid "Un-verify email"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:18
-msgid "Unlock Advanced Email Verification with CEV PRO"
+#: includes/views/zui-addons-tab.php:212
+msgid "Unfamiliar sign-ins need a one-time code or an authenticator app"
 msgstr ""
 
-#: includes/views/admin_options_settings.php:237
+#: includes/class-wc-customer-email-verification-admin.php:1678
+msgid "Unlock Checkout Verification"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:416
+msgid "Unlock every feature for your store today"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1683
+msgid "Unlock Login Authentication"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1708
+msgid "Unlock Maintenance"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1698
+msgid "Unlock Paid-Order Gatekeeping"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1693
+msgid "Unlock Spam Protection"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1703
+msgid "Unlock the Smart Form"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1688
+msgid "Unlock Two-Factor Authentication"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1387
 msgid "Unrecognized Login Conditions:"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:525
-msgid "Unrecognized Login Detection"
+#: includes/views/zui-users-tab.php:187
+msgid "Unverified user log entries"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:24
-msgid "Unrecognized login detection"
+#: includes/class-wc-customer-email-verification-admin.php:406 includes/class-wc-customer-email-verification-admin.php:617 includes/class-wc-customer-email-verification-admin.php:621 includes/views/zui-users-tab.php:135
+msgid "Unverified Users"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:19
-msgid ""
-"Upgrade to CEV PRO to secure your WooCommerce store with advanced email "
-"verification and login authentication beyond the basics."
+#: includes/views/zui-users-tab.php:75
+msgid "Unverified Users sections"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:28
-msgid "UPGRADE TO CEV PRO→"
+#: includes/views/zui-pro-offer-banner.php:64
+msgid "Upgrade now"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-email-common.php:173
-msgid "User display name"
+#: includes/views/zui-addons-tab.php:315
+msgid "Upgrade to CEV PRO"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:751
+msgid "Upgrade to CEV PRO Now"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:739
+msgid "Upgrade to Customer Email Verification PRO – Secure Every Step of the Customer Journey!"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1759 includes/class-wc-customer-email-verification-admin.php:1794 includes/views/zui-users-tab.php:162
+msgid "Upgrade to PRO"
+msgstr ""
+
+#: includes/cev-wc-admin-notices.php:384 includes/cev-wc-admin-notices.php:516
+msgid "use coupon code"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1294
+msgid "Use if you rely entirely on the classic shortcode checkout."
+msgstr ""
+
+#: includes/views/zui-settings-page.php:166
+msgid "Use the switch below, then save."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1271
+msgid "Useful for digital goods, gift cards, or age-restricted items."
 msgstr ""
 
 #: includes/class-wc-customer-email-verification-email-common.php:177
+msgid "User display name"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email-common.php:181
 msgid "User email"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-email-common.php:169
+#: includes/views/zui-users-tab.php:78
+msgid "User List"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email-common.php:173
 msgid "User login"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:794
+#: includes/class-wc-customer-email-verification-admin.php:2402
 msgid "User unverified."
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:786
+#: includes/class-wc-customer-email-verification-admin.php:2503
+msgid "User verification"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2394
 msgid "User verified successfully."
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:95
+#: includes/cev-wc-admin-notices.php:386 includes/cev-wc-admin-notices.php:518
+msgid "Valid until November 15, 2026."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1498
+msgid "Validate email domain (MX check)"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:195
+msgid "Verification at signup only"
+msgstr ""
+
+#: includes/views/cev_admin_endpoint_popup_template.php:105
 msgid "Verification code does not match"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:982
+msgid "Verification code, expiry, resend limits, and customer messages."
 msgstr ""
 
 #: includes/customizer/class-customer-verification-new-customizer.php:35
 msgid "Verification email"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:513
-#: includes/views/admin_options_settings.php:156
+#: includes/class-wc-customer-email-verification-signup.php:247
+msgid "Verification email has been sent."
+msgstr ""
+
+#: includes/customizer/class-cev-customizer.php:215
+msgid "Verification email preview"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1336
 msgid "Verification Email Resend Limit"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:777
+#. translators: %s: number of users the verification email was sent to.
+#: includes/class-wc-customer-email-verification-admin.php:2643
+#, php-format
+msgid "Verification email sent to %s user."
+msgid_plural "Verification email sent to %s users."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: customer email address.
+#: includes/class-wc-customer-email-verification-admin.php:118
+#, php-format
+msgid "Verification email sent to %s."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2385
 msgid "Verification email successfully sent."
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:53
-#: includes/views/cev_signup_popup.php:74
-#: includes/views/front/preview_cev_popup_page.php:66
+#: includes/views/cev_admin_endpoint_popup_template.php:61 includes/views/cev_signup_popup.php:100 includes/views/front/preview_cev_popup_page.php:81
 msgid "Verification icon"
 msgstr ""
 
@@ -533,74 +1938,167 @@ msgstr ""
 msgid "Verification in new account email"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-email-common.php:181
+#: includes/class-wc-customer-email-verification-email-common.php:185
 msgid "Verification link"
 msgstr ""
 
-#: includes/customizer/class-cev-customizer.php:149
+#: includes/customizer/class-cev-customizer.php:161
 msgid "Verification Message"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-email-common.php:189
+#: includes/class-wc-customer-email-verification-email-common.php:193
 msgid "Verification Pin"
 msgstr ""
+
+#. translators: %s: number of users whose verification status was updated.
+#: includes/class-wc-customer-email-verification-admin.php:2632
+#, php-format
+msgid "Verification Status updated for  %s user."
+msgid_plural "Verification Status updated for  %s users."
+msgstr[0] ""
+msgstr[1] ""
 
 #: includes/customizer/class-customer-verification-new-customizer.php:27
 msgid "Verification widget"
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:114
+#: includes/class-wc-customer-email-verification-admin.php:2504
+msgid "Verified"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:155
+msgid "verified in total"
+msgstr ""
+
+#: includes/views/zui-users-tab.php:152
+msgid "verified this month"
+msgstr ""
+
+#: includes/views/cev_signup_popup.php:127
+msgid "Verify"
+msgstr ""
+
+#: includes/views/cev_admin_endpoint_popup_template.php:124
 msgid "Verify code"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:850
+#: includes/class-wc-customer-email-verification-admin.php:2458
 msgid "Verify email manually"
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:11
-#: includes/views/cev_signup_popup.php:23
-#: includes/views/front/preview_cev_popup_page.php:15
+#: includes/cev-wc-admin-notices.php:742
+msgid "Verify emails during signup and checkout"
+msgstr ""
+
+#: includes/views/zui-pro-offer-banner.php:46
+msgid "Verify emails during signup and checkout, secure logins with one-time codes, send customizable reminder emails and block fake registrations before they reach your store. Apply coupon"
+msgstr ""
+
+#: includes/customizer/verification-widget-message.php:116 includes/views/cev_admin_endpoint_popup_template.php:19 includes/views/cev_signup_popup.php:31 includes/views/front/preview_cev_popup_page.php:23
 msgid "Verify it's you."
 msgstr ""
 
-#: includes/customizer/verification-widget-message.php:104
-msgid "Verify its you."
-msgstr ""
-
-#: includes/class-wc-customer-email-verification-admin.php:949
+#: includes/class-wc-customer-email-verification-admin.php:2569
 msgid "Verify users email"
 msgstr ""
 
-#: includes/views/cev_pro_sidebar.php:41
-msgid "View Documentation →"
+#: includes/views/zui-settings-page.php:104 includes/views/zui-users-tab.php:95
+msgid "View Documentation"
 msgstr ""
 
-#: includes/views/cev_admin_endpoint_popup_template.php:65
-#: includes/views/cev_signup_popup.php:24
-#: includes/customizer/verification-widget-message.php:105
-#: includes/views/front/preview_cev_popup_page.php:76
-msgid ""
-"We sent a verification code. To verify your email address, please check your "
-"inbox and enter the code below."
+#: includes/class-wc-customer-email-verification-installation.php:82 includes/customizer/verification-widget-message.php:117 includes/views/cev_admin_endpoint_popup_template.php:73 includes/views/cev_signup_popup.php:32 includes/views/front/preview_cev_popup_page.php:91
+msgid "We sent a verification code. To verify your email address, please check your inbox and enter the code below."
 msgstr ""
 
-#: includes/customizer/verification-widget-message.php:150
+#: includes/class-wc-customer-email-verification-email.php:246
+msgid "We sent you a verification email. Check and verify your account."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:385
+msgid "What changes the day you upgrade"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2151
+msgid "WhatsApp Business"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:2155
+msgid "WhatsApp Business, Twilio, Vonage (Nexmo) or MSG91."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1514
+msgid "When enabled with a non-empty Allowlist, ONLY the listed domains can sign up. Perfect for B2B / wholesale stores."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1484
+msgid "Whitelist — domains here are always allowed through, even if they match the built-in or custom blocklist."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:362
+msgid "Why CEV PRO"
+msgstr ""
+
+#: includes/customizer/verification-widget-message.php:162
 msgid "Widget background Color"
 msgstr ""
 
-#: includes/views/cev_addons_tab.php:531
-msgid "WooCommerce Store API Checkout"
+#: includes/views/zui-addons-tab.php:206
+msgid "With CEV PRO"
 msgstr ""
 
-#: includes/class-wc-customer-email-verification-admin.php:516
-#: includes/class-wc-customer-email-verification-admin.php:518
-#: includes/class-wc-customer-email-verification-admin.php:583
-#: includes/class-wc-customer-email-verification-admin.php:585
-#: includes/views/admin_options_settings.php:195
-#: includes/views/admin_options_settings.php:195
+#: includes/views/zui-addons-tab.php:486
+msgid "WOO EXTENSION"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1098
+msgid "WooCommerce Form"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:1096
+msgid "WooCommerce Form keeps the default registration/login form. Smart Form swaps in a modern, branded form with built-in email/phone verification."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:128
+msgid "WordPress.org reviews"
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:225
+msgid "WordPress.org support forum"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:93 includes/class-wc-customer-email-verification-admin.php:128
+msgid "You are not allowed to do this."
+msgstr ""
+
+#: includes/customizer/verification-widget-message.php:251
+msgid "You can use HTML tags: <strong>, <i>"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email.php:255
+msgid "You need to verify your account before login. {{cev_resend_email_link}}"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-email.php:284
+msgid "Your email is already verified"
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-signup.php:128
+msgid "Your email is verified successfully."
+msgstr ""
+
+#: includes/class-wc-customer-email-verification-admin.php:825 includes/class-wc-customer-email-verification-admin.php:827 includes/class-wc-customer-email-verification-admin.php:893 includes/class-wc-customer-email-verification-admin.php:895 includes/class-wc-customer-email-verification-admin.php:1364 includes/class-wc-customer-email-verification-email.php:204 includes/class-wc-customer-email-verification-email.php:345
 msgid "Your email is verified!"
 msgstr ""
 
+#: includes/class-wc-customer-email-verification-email.php:197
+msgid "Your email verification link is expired."
+msgstr ""
+
+#: includes/views/zui-addons-tab.php:332
+msgid "Your settings carry over from Free"
+msgstr ""
+
 #. Author of the plugin
+#: customer-email-verification-for-woocommerce.php
 msgid "zorem"
 msgstr ""

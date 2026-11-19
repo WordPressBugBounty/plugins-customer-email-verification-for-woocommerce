@@ -3,7 +3,7 @@ Contributors: zorem,gaurav1092,eranzorem,yashpatel1007
 Tags: email verification, customer verification, otp verification, fake accounts, signup verification
 Requires at least: 5.3
 Tested up to: 7.1
-Stable tag: 2.8.5
+Stable tag: 2.8.6
 Requires PHP: 7.2
 WC requires at least: 5.0
 WC tested up to: 11.3.0
@@ -252,6 +252,9 @@ The plugin is now listed as "Customer Email Verification for WooCommerce – OTP
 Security release. Verification links now use a random code, codes are compared in constant time, and wrong OTP guesses are capped per email address. Upgrading is recommended for all stores.
 
 == Changelog ==
+
+= 2.8.6 =
+* Enhancement – Black Friday sale: 40% off CEV PRO with coupon BFCM40 (Nov 19 – Dec 1, 2026). Adds a dismissible admin notice and a banner on the plugin settings page; both hide automatically after the sale ends.
 
 = 2.8.5 =
 * Enhancement – Added a dismissible notice introducing the free Zorem AI Agent Connector plugin, with a one-click Install or Activate button.

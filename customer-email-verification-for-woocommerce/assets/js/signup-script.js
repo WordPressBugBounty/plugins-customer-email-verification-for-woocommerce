@@ -2,9 +2,39 @@ jQuery(document).ready(function($) {
     if (cev_ajax.enableEmailVerification) {
         var otpVerified = false;
 
+        // Escape plain text before it is shown as HTML.
+        function escapeHtml(text) {
+            return $('<div>').text(null == text ? '' : String(text)).html();
+        }
+
+        // Show an error the way WooCommerce does: a <ul class="woocommerce-error">
+        // in the notices area above the login/register columns. It must never go
+        // inside #customer_login, which is the two-column container, or the theme
+        // treats it as a column and the layout breaks.
+        // `message` is HTML: localized strings, or server messages run through wp_kses_post().
         function displayError(message) {
-            var $form = $('#customer_login');
-            $form.prepend('<div class="woocommerce-error">' + message + '</div>');
+            clearErrors();
+
+            var $notice = $('<ul class="woocommerce-error cev-signup-error" role="alert"><li></li></ul>');
+            $notice.find('li').html(message);
+
+            var $columns = $('#customer_login');
+            var $scope = $columns.length ? $columns.closest('.woocommerce') : $();
+            var $wrapper = $scope.find('.woocommerce-notices-wrapper').first();
+
+            if ($wrapper.length) {
+                $wrapper.append($notice);
+            } else if ($columns.length) {
+                $notice.insertBefore($columns);
+            } else {
+                $('.woocommerce-form-register').first().before($notice);
+            }
+
+            // Bring the notice into view when it was added above the visible area.
+            var top = $notice.offset() ? $notice.offset().top - 100 : 0;
+            if (top < $(window).scrollTop()) {
+                $('html, body').animate({ scrollTop: Math.max(top, 0) }, 300);
+            }
         }
 
         // Fill the {customer_email} tag in the popup message with the address
@@ -22,8 +52,9 @@ jQuery(document).ready(function($) {
             $desc.html(String($desc.data('cevTemplate')).split('{customer_email}').join(safeEmail));
         }
 
+        // Remove only the errors this script added, never WooCommerce's own notices.
         function clearErrors() {
-            $('.woocommerce-error').remove();
+            $('.cev-signup-error').remove();
         }
 
         // Set the value of email_verification hidden field to false
@@ -107,7 +138,7 @@ jQuery(document).ready(function($) {
                         var data = (response && response.data) ? response.data : {};
 
                         if (data.exists) {
-                            displayError(cev_ajax.cev_email_exists_validation);
+                            displayError(data.message || cev_ajax.cev_email_exists_validation);
                             stopProcessing($button);
                         } else if (data.not_valid) {
                             displayError(cev_ajax.cev_valid_email_validation);
@@ -131,7 +162,7 @@ jQuery(document).ready(function($) {
                         }
                     },
                     error: function(xhr, status, error) {
-                        displayError(cev_ajax.cev_error_prefix + ' ' + error);
+                        displayError(escapeHtml(cev_ajax.cev_error_prefix + ' ' + error));
                         stopProcessing($button);
                     }
                 });
@@ -219,14 +250,14 @@ jQuery(document).ready(function($) {
                             $form.find('input[name="email_verification"]').val('true');
                             $form.find('button[name="register"]').trigger('click');
                         } else {
-                            displayError(response.data.message);
+                            displayError(escapeHtml(response.data.message));
                         }
                     } else {
                         $('.error_mesg').text(response.data.message).css('display', 'block');
                     }
                 },
                 error: function(xhr, status, error) {
-                    displayError(cev_ajax.cev_error_prefix + ' ' + error);
+                    displayError(escapeHtml(cev_ajax.cev_error_prefix + ' ' + error));
                 },
                 complete: function() {
                     cevOtpInFlight = false;
@@ -271,7 +302,7 @@ jQuery(document).ready(function($) {
                     }
                 },
                 error: function(xhr, status, error) {
-                    displayError(cev_ajax.cev_error_prefix + ' ' + error);
+                    displayError(escapeHtml(cev_ajax.cev_error_prefix + ' ' + error));
                 },
                 complete: function() {
                     cevResendInFlight = false;

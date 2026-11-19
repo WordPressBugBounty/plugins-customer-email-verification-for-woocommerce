@@ -60,6 +60,237 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 		add_action( 'admin_notices', array( $this, 'admin_notice_ai_connector' ) );
 		add_action( 'admin_init', array( $this, 'ai_connector_notice_ignore' ) );
 
+		// Black Friday 2026 CEV PRO sale (ZUI plugin notice, dismissible per user).
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_bfcm_notice_styles' ) );
+		add_action( 'admin_notices', array( $this, 'admin_notice_bfcm' ) );
+		add_action( 'admin_init', array( $this, 'bfcm_notice_ignore' ) );
+
+	}
+
+	/**
+	 * First moment of the Black Friday sale (site timezone).
+	 */
+	const BFCM_START = '2026-11-19 00:00:00';
+
+	/**
+	 * Last moment of the Black Friday sale (site timezone, inclusive). Both the
+	 * admin notice and the settings banner hide on their own after this.
+	 */
+	const BFCM_END = '2026-12-01 23:59:59';
+
+	/**
+	 * Black Friday coupon code.
+	 */
+	const BFCM_COUPON = 'BFCM40';
+
+	/**
+	 * Black Friday discount, as shown to the customer.
+	 */
+	const BFCM_DISCOUNT = '40%';
+
+	/**
+	 * Regular CEV PRO single-site yearly price (zorem.com).
+	 */
+	const BFCM_REGULAR_PRICE = '$119';
+
+	/**
+	 * CEV PRO price after the Black Friday discount.
+	 */
+	const BFCM_SALE_PRICE = '$71.40';
+
+	/**
+	 * User meta key set when a user dismisses the Black Friday notice.
+	 */
+	const BFCM_DISMISSED_META = 'cev_bfcm_2026_notice_dismissed';
+
+	/**
+	 * Black Friday sale end as a Unix timestamp.
+	 *
+	 * @return int
+	 */
+	public static function get_bfcm_end_ts() {
+		return ( new DateTimeImmutable( self::BFCM_END, wp_timezone() ) )->getTimestamp();
+	}
+
+	/**
+	 * Whether the Black Friday sale is running right now.
+	 *
+	 * @return bool
+	 */
+	public static function is_bfcm_running() {
+		$cev_start = ( new DateTimeImmutable( self::BFCM_START, wp_timezone() ) )->getTimestamp();
+		$cev_now   = time();
+
+		return $cev_now >= $cev_start && $cev_now <= self::get_bfcm_end_ts();
+	}
+
+	/**
+	 * CEV PRO product link for a Black Friday placement.
+	 *
+	 * @param string $placement Placement slug for utm_content.
+	 * @return string
+	 */
+	public static function get_bfcm_url( $placement ) {
+		return add_query_arg( 'utm_campaign', 'black-friday-2026', woo_customer_email_verification()->get_pro_upgrade_url( $placement ) );
+	}
+
+	/**
+	 * Upgrade button label, e.g. "Upgrade → $71.40".
+	 *
+	 * @return string
+	 */
+	public static function get_bfcm_button_label() {
+		/* translators: %s: CEV PRO price after the Black Friday discount, e.g. $71.40. */
+		$cev_label = __( 'Upgrade → %s', 'customer-email-verification-for-woocommerce' );
+		return sprintf( $cev_label, self::BFCM_SALE_PRICE );
+	}
+
+	/**
+	 * Black Friday headline, e.g. "Black Friday: 40% off CEV PRO — only sale of the year".
+	 *
+	 * @return string
+	 */
+	public static function get_bfcm_title() {
+		/* translators: %s: discount, e.g. 40%. */
+		$cev_title = __( 'Black Friday: %s off Customer Email Verification PRO — only sale of the year', 'customer-email-verification-for-woocommerce' );
+		return sprintf( $cev_title, self::BFCM_DISCOUNT );
+	}
+
+	/**
+	 * Print the offer detail line: coupon, price, terms and end date.
+	 */
+	public static function render_bfcm_meta() {
+		/* translators: %s: date the Black Friday sale ends. */
+		$cev_ends = __( 'Ends %s', 'customer-email-verification-for-woocommerce' );
+		$cev_ends = sprintf( $cev_ends, date_i18n( get_option( 'date_format' ), self::get_bfcm_end_ts() ) );
+		?>
+		<span class="cev-bfcm-meta">
+			<span class="cev-bfcm-meta__item">
+				<?php esc_html_e( 'Use code', 'customer-email-verification-for-woocommerce' ); ?>
+				<code class="cev-bfcm-meta__code"><?php echo esc_html( self::BFCM_COUPON ); ?></code>
+				<?php esc_html_e( 'at checkout', 'customer-email-verification-for-woocommerce' ); ?>
+			</span>
+			<span class="cev-bfcm-meta__item">
+				<s class="cev-bfcm-meta__was"><?php echo esc_html( self::BFCM_REGULAR_PRICE ); ?></s>
+				&rarr;
+				<strong class="cev-bfcm-meta__now"><?php echo esc_html( self::BFCM_SALE_PRICE ); ?></strong>
+			</span>
+			<span class="cev-bfcm-meta__item"><?php esc_html_e( 'New purchases only', 'customer-email-verification-for-woocommerce' ); ?></span>
+			<span class="cev-bfcm-meta__item"><?php echo esc_html( $cev_ends ); ?></span>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Whether the Black Friday notice should show on this request.
+	 *
+	 * Rules: only during the sale, store managers only, not when CEV PRO is
+	 * active, not on the CEV settings page (it has its own banner there) and
+	 * hidden for a user once they dismiss it.
+	 *
+	 * @return bool
+	 */
+	public function should_show_bfcm_notice() {
+		if ( ! self::is_bfcm_running() || class_exists( 'customer_email_verification_pro' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+			return false;
+		}
+
+		if ( get_user_meta( get_current_user_id(), self::BFCM_DISMISSED_META, true ) ) {
+			return false;
+		}
+
+		// Read-only check of which admin screen we are on, not form processing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
+		$cev_current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		if ( 'customer-email-verification-for-woocommerce' === $cev_current_page ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Load the ZUI plugin-notice component on screens that show the notice.
+	 */
+	public function enqueue_bfcm_notice_styles() {
+		if ( ! $this->should_show_bfcm_notice() ) {
+			return;
+		}
+
+		$cev_zui_url = woo_customer_email_verification()->plugin_dir_url() . 'assets/zui/';
+		$cev_zui_dir = woo_customer_email_verification()->get_plugin_path() . '/assets/zui/';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local VERSION file of the bundled library.
+		$cev_zui_ver = is_readable( $cev_zui_dir . 'VERSION' ) ? trim( file_get_contents( $cev_zui_dir . 'VERSION' ) ) : woo_customer_email_verification()->version;
+
+		wp_enqueue_style( 'zui-plugin-notice', $cev_zui_url . 'css/components/plugin-notice.css', array(), $cev_zui_ver );
+		wp_add_inline_style(
+			'zui-plugin-notice',
+			// Full width: clear the floated Screen Options / Help tabs (a flex box would
+			// otherwise shrink beside them) and keep core's 20px right gutter.
+			'.zui-pnotice.cev-bfcm-notice{clear:both;width:auto;margin-inline-end:20px;--zui-pnotice-accent:#0f172a;--zui-pnotice-avatar-bg:#0f172a;--zui-pnotice-avatar-color:#fbbf24}'
+			. '@media (max-width:782px){.zui-pnotice.cev-bfcm-notice{margin-inline-end:10px}}'
+			. '.cev-bfcm-notice .zui-pnotice__close{text-decoration:none}'
+			. '.cev-bfcm-meta{display:flex;flex-wrap:wrap;align-items:center;column-gap:6px;row-gap:4px;font-size:13px;line-height:1.6;color:var(--zui-text-muted,#64748b)}'
+			. '.cev-bfcm-meta__item{display:inline-flex;align-items:center;gap:5px}'
+			. '.cev-bfcm-meta__item+.cev-bfcm-meta__item:before{content:"\00b7";margin-inline-end:6px;color:var(--zui-text-muted,#94a3b8)}'
+			. '.cev-bfcm-meta__code{display:inline-block;margin:0;padding:1px 8px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:4px;color:#0f172a;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:700;letter-spacing:.06em;user-select:all}'
+			. '.cev-bfcm-meta__was{color:#94a3b8}'
+			. '.cev-bfcm-meta__now{color:#0f172a;font-weight:700}'
+		);
+	}
+
+	/**
+	 * Black Friday notice - 40% off CEV PRO with coupon BFCM40.
+	 */
+	public function admin_notice_bfcm() {
+		if ( ! $this->should_show_bfcm_notice() ) {
+			return;
+		}
+
+		if ( ! function_exists( 'Zorem\UI\icon' ) ) {
+			require_once woo_customer_email_verification()->get_plugin_path() . '/assets/zui/icons.php';
+		}
+
+		$cev_dismiss_url = wp_nonce_url( add_query_arg( 'cev-bfcm-notice-dismiss', '1' ), 'cev_bfcm_notice_dismiss', 'cev_bfcm_nonce' );
+		?>
+		<div class="zui-pnotice cev-bfcm-notice" role="status">
+			<span class="zui-pnotice__avatar" aria-hidden="true">
+				<?php \Zorem\UI\icon( 'zap' ); ?>
+			</span>
+
+			<div class="zui-pnotice__body">
+				<strong class="zui-pnotice__title"><?php echo esc_html( self::get_bfcm_title() ); ?></strong>
+				<p class="zui-pnotice__text"><?php self::render_bfcm_meta(); ?></p>
+
+				<div class="zui-pnotice__actions">
+					<a class="zui-pnotice__btn" href="<?php echo esc_url( self::get_bfcm_url( 'bfcm-admin-notice' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( self::get_bfcm_button_label() ); ?></a>
+				</div>
+			</div>
+
+			<a class="zui-pnotice__close" href="<?php echo esc_url( $cev_dismiss_url ); ?>" aria-label="<?php esc_attr_e( 'Dismiss this notice.', 'customer-email-verification-for-woocommerce' ); ?>">&times;</a>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Hide the Black Friday notice for the current user after a nonce-checked dismiss.
+	 */
+	public function bfcm_notice_ignore() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Nonce is verified below before anything is saved.
+		$cev_dismiss_requested = isset( $_GET['cev-bfcm-notice-dismiss'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- This is the nonce value itself.
+		$cev_notice_nonce = isset( $_GET['cev_bfcm_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['cev_bfcm_nonce'] ) ) : '';
+
+		if ( ! $cev_dismiss_requested || '' === $cev_notice_nonce ) {
+			return;
+		}
+		if ( ! wp_verify_nonce( $cev_notice_nonce, 'cev_bfcm_notice_dismiss' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		update_user_meta( get_current_user_id(), self::BFCM_DISMISSED_META, time() );
+		wp_safe_redirect( remove_query_arg( array( 'cev-bfcm-notice-dismiss', 'cev_bfcm_nonce' ) ) );
+		exit;
 	}
 
 	/**
@@ -628,6 +859,11 @@ class WC_CEV_Admin_Notices_Under_WC_Admin {
 	 */
 	public function should_show_upgrade_notice() {
 		if ( class_exists( 'customer_email_verification_pro' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+			return false;
+		}
+
+		// The Black Friday notice replaces this nudge while the sale runs.
+		if ( self::is_bfcm_running() ) {
 			return false;
 		}
 

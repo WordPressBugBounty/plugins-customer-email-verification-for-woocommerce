@@ -115,7 +115,8 @@ class CEV_Signup_Verification {
 			'ajax_url' => admin_url('admin-ajax.php'), // URL for AJAX requests.
 			'nonce' => wp_create_nonce('verify_otp_nonce'), // Nonce for security.
 			'loaderImage' => plugins_url('assets/images/Eclipse.svg', dirname(__FILE__)), // Use dirname(__FILE__) to get the correct path
-			'enableEmailVerification' => (bool) get_option('cev_enable_email_verification'), // Email verification toggle.
+			// Email verification toggle. Defaults to on, matching the settings screen, so a store that never saved settings is still protected.
+			'enableEmailVerification' => 1 === (int) get_option( 'cev_enable_email_verification', 1 ),
 			'password_setup_link_enabled' =>  get_option('woocommerce_registration_generate_password', 'no'), // Password setup option.
 
 			// Validation messages.
@@ -219,7 +220,7 @@ class CEV_Signup_Verification {
 		if (email_exists($email)) {
 			wp_send_json_success(array(
 				'exists'  => true,
-				'message' => __('An account with this email already exists.', 'customer-email-verification-for-woocommerce'),
+				'message' => __( 'An account with this email address already exists. Please use a different email or log in to your existing account.', 'customer-email-verification-for-woocommerce' ),
 			));
 		}
 		$errors = new WP_Error();		
@@ -231,7 +232,8 @@ class CEV_Signup_Verification {
 		if ( $errors->has_errors() ) {			
 			wp_send_json_success(array(
 				'validation' => false,
-				'message' => $errors->get_error_message(),
+				// Messages from other plugins may carry markup (links, <strong>); the front end renders it as HTML.
+				'message'    => wp_kses_post( $errors->get_error_message() ),
 			));
 		}
 		

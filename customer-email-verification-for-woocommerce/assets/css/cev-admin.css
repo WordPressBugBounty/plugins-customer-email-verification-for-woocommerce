@@ -113,79 +113,11 @@ body.customer-email-verification-for-woocommerce .cev_nav_div > input.cev_tab_in
 	color: var(--zui-text-strong, #0f172a);
 }
 
-.zui-scope.cev-admin .cev-offer__text {
-	margin: 0;
-	font-size: 13px;
-	line-height: 1.6;
-	color: var(--zui-text, #1e293b);
-}
-
-.zui-scope.cev-admin .cev-offer__code {
-	display: inline-block;
-	padding: 1px 8px;
-	background: var(--zui-bg, #f8fafc);
-	border: 1px solid var(--zui-border, #e2e8f0);
-	border-radius: 4px;
-	color: var(--zui-text-strong, #0f172a);
-	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-	font-size: 12px;
-	font-weight: 700;
-	letter-spacing: 0.04em;
-	user-select: all;
-}
-
-.zui-scope.cev-admin .cev-offer__foot {
+.zui-scope.cev-admin .cev-offer__action {
+	flex: 0 0 auto;
 	display: flex;
 	align-items: center;
-	flex-wrap: wrap;
-	gap: 12px;
-	margin-top: 14px;
-}
-
-.zui-scope.cev-admin .cev-offer__ends {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	font-size: 13px;
-	font-weight: 500;
-	color: var(--zui-text, #1e293b);
-}
-
-.zui-scope.cev-admin .cev-offer__ends svg {
-	width: 15px;
-	height: 15px;
-}
-
-.zui-scope.cev-admin .cev-offer__timer {
-	display: inline-flex;
-	gap: 6px;
-}
-
-.zui-scope.cev-admin .cev-offer__unit {
-	display: inline-flex;
-	flex-direction: column;
-	align-items: center;
-	min-width: 42px;
-	padding: 4px 6px;
-	background: var(--zui-surface, #ffffff);
-	border: 1px solid var(--zui-border, #e2e8f0);
-	border-radius: 6px;
-}
-
-.zui-scope.cev-admin .cev-offer__unit strong {
-	font-size: 14px;
-	font-weight: 700;
-	line-height: 1.3;
-	color: var(--zui-text-strong, #0f172a);
-	font-variant-numeric: tabular-nums;
-}
-
-.zui-scope.cev-admin .cev-offer__unit small {
-	font-size: 9px;
-	font-weight: 600;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--zui-text-muted, #94a3b8);
+	padding: 20px 24px 20px 0;
 }
 
 .zui-scope.cev-admin .cev-offer__cta {
@@ -193,6 +125,70 @@ body.customer-email-verification-for-woocommerce .cev_nav_div > input.cev_tab_in
 	width: auto;
 	padding-inline: 20px;
 	text-decoration: none;
+	white-space: nowrap;
+}
+
+/* Black Friday variant: dark badge, vertically centred body. */
+.zui-scope.cev-admin .cev-offer--bfcm .cev-offer__badge {
+	background: linear-gradient(160deg, #1e293b 0%, #020617 100%);
+}
+
+.zui-scope.cev-admin .cev-offer--bfcm .cev-offer__save {
+	font-size: 11px;
+}
+
+.zui-scope.cev-admin .cev-offer--bfcm .cev-offer__body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/* Offer line shared with the Black Friday admin notice. */
+.zui-scope.cev-admin .cev-bfcm-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 6px;
+	row-gap: 4px;
+	font-size: 13px;
+	line-height: 1.6;
+	color: var(--zui-text-muted, #64748b);
+}
+
+.zui-scope.cev-admin .cev-bfcm-meta__item {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.zui-scope.cev-admin .cev-bfcm-meta__item + .cev-bfcm-meta__item::before {
+	content: "\00b7";
+	margin-inline-end: 6px;
+	color: var(--zui-text-muted, #94a3b8);
+}
+
+.zui-scope.cev-admin .cev-bfcm-meta__code {
+	display: inline-block;
+	margin: 0;
+	padding: 1px 8px;
+	background: var(--zui-bg, #f8fafc);
+	border: 1px dashed var(--zui-border-strong, #cbd5e1);
+	border-radius: 4px;
+	color: var(--zui-text-strong, #0f172a);
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	user-select: all;
+}
+
+.zui-scope.cev-admin .cev-bfcm-meta__was {
+	color: var(--zui-text-muted, #94a3b8);
+}
+
+.zui-scope.cev-admin .cev-bfcm-meta__now {
+	color: var(--zui-text-strong, #0f172a);
+	font-weight: 700;
 }
 
 @media (max-width: 782px) {
@@ -210,6 +206,10 @@ body.customer-email-verification-for-woocommerce .cev_nav_div > input.cev_tab_in
 
 	.zui-scope.cev-admin .cev-offer__pct {
 		font-size: 24px;
+	}
+
+	.zui-scope.cev-admin .cev-offer__action {
+		padding: 0 24px 20px;
 	}
 }
 
